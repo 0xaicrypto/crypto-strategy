@@ -1,29 +1,12 @@
 {
-  "timestamp": 1791201137719,
+  "timestamp": 1791202617327,
   "candidates": [
-    {
-      "symbol": "FET",
-      "name": "Artificial Superintelligence Alliance",
-      "coingeckoId": "fetch-ai",
-      "category": "TRENDING",
-      "currentPrice": 0.2626087719905541,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #106）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "RISKY"
-    },
     {
       "symbol": "PENGU",
       "name": "Pudgy Penguins",
       "coingeckoId": "pudgy-penguins",
       "category": "TRENDING",
-      "currentPrice": 0.009914031215765895,
+      "currentPrice": 0.009900140644045898,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
@@ -36,11 +19,28 @@
       "safetyRating": "RISKY"
     },
     {
+      "symbol": "FET",
+      "name": "Artificial Superintelligence Alliance",
+      "coingeckoId": "fetch-ai",
+      "category": "TRENDING",
+      "currentPrice": 0.26211853166953714,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #106）",
+        "具备当下市场主线叙事关注度"
+      ],
+      "safetyRating": "RISKY"
+    },
+    {
       "symbol": "PUMP",
       "name": "Pump.fun",
       "coingeckoId": "pump-fun",
       "category": "TRENDING",
-      "currentPrice": 0.006451585405391185,
+      "currentPrice": 0.006449736273650431,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
@@ -57,7 +57,7 @@
       "name": "Cardano",
       "coingeckoId": "cardano",
       "category": "TRENDING",
-      "currentPrice": 0.27179873632368917,
+      "currentPrice": 0.2723111303185733,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
@@ -70,28 +70,11 @@
       "safetyRating": "MEDIUM"
     },
     {
-      "symbol": "ONDO",
-      "name": "Ondo",
-      "coingeckoId": "ondo-finance",
-      "category": "TRENDING",
-      "currentPrice": 0.5038588603406791,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #45）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
-    },
-    {
       "symbol": "ENA",
       "name": "Ethena",
       "coingeckoId": "ethena",
       "category": "TRENDING",
-      "currentPrice": 0.25941364154009194,
+      "currentPrice": 0.26168134691719985,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
@@ -99,6 +82,23 @@
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #43）",
+        "具备当下市场主线叙事关注度"
+      ],
+      "safetyRating": "MEDIUM"
+    },
+    {
+      "symbol": "HYPE",
+      "name": "Hyperliquid",
+      "coingeckoId": "hyperliquid",
+      "category": "TRENDING",
+      "currentPrice": 93.32108263847815,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #11）",
         "具备当下市场主线叙事关注度"
       ],
       "safetyRating": "MEDIUM"

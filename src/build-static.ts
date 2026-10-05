@@ -97,9 +97,11 @@ async function buildStaticData() {
     fs.copyFileSync(path.join(PUBLIC_DIR, 'fonts', font), path.join(DIST_DIR, 'fonts', font));
   }
 
-  // Create .nojekyll in dist
+  // Create .nojekyll & CNAME in dist and public
   fs.writeFileSync(path.join(DIST_DIR, '.nojekyll'), '', 'utf-8');
   fs.writeFileSync(path.join(PUBLIC_DIR, '.nojekyll'), '', 'utf-8');
+  fs.writeFileSync(path.join(DIST_DIR, 'CNAME'), 'alphanalyzor.trade\n', 'utf-8');
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'CNAME'), 'alphanalyzor.trade\n', 'utf-8');
 
   console.log('✅ Static build complete in dist/ and public/data!');
 }

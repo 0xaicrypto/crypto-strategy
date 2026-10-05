@@ -1,7 +1,7 @@
 {
-  "timestamp": 1791201137634,
+  "timestamp": 1791202617250,
   "cycle": {
-    "currentPrice": 86048,
+    "currentPrice": 86117,
     "ma200w": 55508.85,
     "ma200d": 75043,
     "ratioTo200w": 1.55,
@@ -25,7 +25,7 @@
     {
       "symbol": "STRK",
       "name": "Starknet",
-      "currentPrice": 0.056982,
+      "currentPrice": 0.055898,
       "dilutionRiskScore": 45,
       "ecosystemTractionScore": 35,
       "relativeValuationScore": 80,
@@ -43,7 +43,7 @@
     {
       "symbol": "ARB",
       "name": "Arbitrum",
-      "currentPrice": 0.206455,
+      "currentPrice": 0.20641,
       "dilutionRiskScore": 45,
       "ecosystemTractionScore": 85,
       "relativeValuationScore": 80,
@@ -61,7 +61,7 @@
     {
       "symbol": "ZEC",
       "name": "Zcash",
-      "currentPrice": 1324.62,
+      "currentPrice": 1331.54,
       "dilutionRiskScore": 25,
       "ecosystemTractionScore": 50,
       "relativeValuationScore": 50,
@@ -79,7 +79,7 @@
     {
       "symbol": "NEAR",
       "name": "NEAR Protocol",
-      "currentPrice": 5.02,
+      "currentPrice": 5,
       "dilutionRiskScore": 25,
       "ecosystemTractionScore": 50,
       "relativeValuationScore": 50,
