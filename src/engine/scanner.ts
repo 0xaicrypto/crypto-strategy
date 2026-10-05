@@ -1,11 +1,13 @@
 import { STRATEGY_CONFIG } from '../config/index.ts';
 import { WATCHED_ASSETS } from '../config/assets.ts';
+import { fetchAllWatchedStocks } from '../data/stocks/yahoo-finance.ts';
 
 export interface DiscoveredCandidate {
   symbol: string;
   name: string;
   coingeckoId: string;
-  category: 'L1/L2' | 'DEFI' | 'TRENDING' | 'BREAKOUT';
+  category: 'L1/L2' | 'DEFI' | 'TRENDING' | 'BREAKOUT' | 'CRYPTO_PROXY' | 'TECH_GROWTH' | 'STOCK';
+  assetType: 'CRYPTO' | 'STOCK';
   currentPrice: number;
   marketCap: number;
   fdv: number;
@@ -16,6 +18,9 @@ export interface DiscoveredCandidate {
   relativeStrengthVsBtc: number; // % performance above BTC over 30d
   discoveryReasons: string[];
   safetyRating: 'HIGH' | 'MEDIUM' | 'RISKY';
+  ratioTo200d?: number;
+  drawdownFromHighPct?: number;
+  peRatio?: number;
 }
 
 interface DefiLlamaProtocolItem {
@@ -85,6 +90,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
           name: p.name,
           coingeckoId: p.gecko_id || p.name.toLowerCase().replace(/\s+/g, '-'),
           category: isL2 ? 'L1/L2' : 'DEFI',
+          assetType: 'CRYPTO',
           currentPrice: 0,
           marketCap: p.mcap ?? 0,
           fdv: 0,
@@ -134,6 +140,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
           name: item.name,
           coingeckoId: item.id,
           category: 'TRENDING',
+          assetType: 'CRYPTO',
           currentPrice: item.data?.price ?? 0,
           marketCap: 0,
           fdv: 0,
@@ -175,6 +182,68 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
     }
   }
 
+  // 4. Scan US Equities & Crypto Proxies (Yahoo Finance)
+  console.log('📡 正在全网雷达扫描：美股高动量与加密影子股异动 (Yahoo Finance)...');
+  try {
+    const liveStocks = await fetchAllWatchedStocks();
+    for (const s of liveStocks) {
+      if (s.category === 'INDEX') continue; // Skip broad indices like SPY/QQQ
+
+      const is200dSurge = s.ratioTo200d >= 1.08;
+      const isNear52wHigh = s.drawdownFromHighPct >= -5.0;
+      const isDailySurge = s.change24hPct >= 1.5;
+      const isCryptoProxy = s.category === 'CRYPTO_PROXY';
+
+      // Identify candidates triggering momentum / breakout / proxy indicators
+      if (is200dSurge || isNear52wHigh || isDailySurge || isCryptoProxy) {
+        const reasons: string[] = [];
+        if (isNear52wHigh) {
+          reasons.push(`突破/逼近 52 周新高（距峰值仅 ${s.drawdownFromHighPct.toFixed(1)}%）`);
+        }
+        if (is200dSurge) {
+          reasons.push(`站上 200 日牛熊线 ${s.ratioTo200d.toFixed(2)}x（多头强动量加速）`);
+        }
+        if (s.change24hPct >= 1.5) {
+          reasons.push(`日内强势上涨 +${s.change24hPct.toFixed(1)}%`);
+        }
+        if (s.category === 'CRYPTO_PROXY') {
+          reasons.push(`华尔街核心加密强相关资产（${s.sector}）`);
+        }
+        if (s.netAntiDilutionYieldPct > 0) {
+          reasons.push(`股东净反稀释率 +${s.netAntiDilutionYieldPct.toFixed(1)}%（大额回购注销保护）`);
+        }
+
+        const safetyRating: 'HIGH' | 'MEDIUM' | 'RISKY' =
+          ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'IBIT'].includes(s.symbol)
+            ? 'HIGH'
+            : ['COIN', 'MSTR', 'PLTR', 'TSLA'].includes(s.symbol)
+            ? 'MEDIUM'
+            : 'RISKY';
+
+        candidates.push({
+          symbol: s.symbol,
+          name: s.name,
+          coingeckoId: s.symbol.toLowerCase(),
+          category: s.category === 'CRYPTO_PROXY' ? 'CRYPTO_PROXY' : 'TECH_GROWTH',
+          assetType: 'STOCK',
+          currentPrice: s.currentPrice,
+          marketCap: 0,
+          fdv: 0,
+          volume24h: 0,
+          priceChange30d: s.change24hPct,
+          relativeStrengthVsBtc: 0,
+          discoveryReasons: reasons.length > 0 ? reasons : [`${s.sector} 核心标的异动`],
+          safetyRating,
+          ratioTo200d: s.ratioTo200d,
+          drawdownFromHighPct: s.drawdownFromHighPct,
+          peRatio: s.forwardPe,
+        });
+      }
+    }
+  } catch (err) {
+    console.warn(`[Scanner] US Equities scan skipped: ${(err as Error).message}`);
+  }
+
   // Fallback high-value candidates if network APIs return few results
   if (candidates.length === 0) {
     candidates.push(
@@ -183,6 +252,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
         name: 'Sui Network',
         coingeckoId: 'sui',
         category: 'L1/L2',
+        assetType: 'CRYPTO',
         currentPrice: 1.85,
         marketCap: 5200000000,
         fdv: 18200000000,
@@ -202,6 +272,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
         name: 'Aave',
         coingeckoId: 'aave',
         category: 'DEFI',
+        assetType: 'CRYPTO',
         currentPrice: 155.0,
         marketCap: 2300000000,
         fdv: 2480000000,
@@ -225,29 +296,30 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
 export function formatDiscoveryReport(candidates: DiscoveredCandidate[]): string {
   const lines: string[] = [];
 
-  lines.push(`## 🔍 全网高潜力资产自动扫描雷达 (Automated Asset Discovery)`);
-  lines.push(`> 扫描策略：**过滤伪概念垃圾币 ➔ 识别链上真实 TVL 资金流入 ➔ 抓取全网热度突破**\n`);
+  lines.push(`## 🔍 全网高潜力资产自动扫描雷达 (Automated Multi-Asset Discovery)`);
+  lines.push(`> 扫描策略：**过滤伪概念垃圾币 ➔ 识别链上真实 TVL 资金流入 ➔ 抓取全网热度突破 ➔ 监测美股与加密影子股强动量**\n`);
 
   if (candidates.length === 0) {
     lines.push(`暂未发现符合严苛风控标准的新候选资产。`);
     return lines.join('\n');
   }
 
-  lines.push(`| 标的 | 类型 | 安全评级 | 链上/市场核心异动信号 | 建议配置硬上限 | 一键关注代码 |`);
-  lines.push(`| :--- | :---: | :---: | :--- | :---: | :--- |`);
+  lines.push(`| 标的 | 类型 | 领域 | 安全评级 | 链上/市场/宏观核心异动信号 | 建议配置硬上限 |`);
+  lines.push(`| :--- | :---: | :---: | :---: | :--- | :---: |`);
 
   for (const c of candidates) {
     const safetyBadge = c.safetyRating === 'HIGH' ? '🟢 稳健' : c.safetyRating === 'MEDIUM' ? '🟡 中等' : '🔴 投机';
+    const typeBadge = c.assetType === 'STOCK' ? '📈 美股/概念' : '🌐 Crypto';
     const reasonSummary = c.discoveryReasons.join('；');
     const suggestedCap = c.safetyRating === 'HIGH' ? '3% ~ 5%' : c.safetyRating === 'MEDIUM' ? '2%' : '1% (轻仓)';
-    const snippet = `\`{ symbol: '${c.symbol}', enabled: true }\``;
 
-    lines.push(`| **${c.name} ($${c.symbol})** | \`${c.category}\` | ${safetyBadge} | ${reasonSummary} | ${suggestedCap} | ${snippet} |`);
+    lines.push(`| **${c.name} ($${c.symbol})** | ${typeBadge} | \`${c.category}\` | ${safetyBadge} | ${reasonSummary} | ${suggestedCap} |`);
   }
 
   lines.push('');
   lines.push(`### 💡 如何将扫描到的资产加入关注列表？`);
-  lines.push(`如果你决定追踪上述某个资产，只需打开 \`src/config/assets.ts\`，将其添加到 \`WATCHED_ASSETS\` 数组中，系统便会自动接管其后续的动态估值与定投风控。`);
+  lines.push(`- **Crypto 标的**：添加到 \`src/config/assets.ts\` 中的 \`WATCHED_ASSETS\` 数组；`);
+  lines.push(`- **美股/概念股标的**：添加到 \`src/config/stock-assets.ts\` 中的 \`WATCHED_STOCKS\` 数组。`);
 
   return lines.join('\n');
 }

@@ -24,12 +24,16 @@ interface YahooChartResponse {
 const FALLBACK_PRICES: Record<string, { price: number; ma200d: number; high: number; low: number }> = {
   SPY: { price: 588.5, ma200d: 545.2, high: 598.0, low: 495.0 },
   QQQ: { price: 508.2, ma200d: 472.0, high: 518.5, low: 418.0 },
-  NVDA: { price: 138.5, ma200d: 118.0, high: 140.7, low: 45.0 },
+  NVDA: { price: 237.0, ma200d: 201.0, high: 237.8, low: 164.0 },
   AAPL: { price: 232.0, ma200d: 205.5, high: 237.2, low: 164.0 },
   MSFT: { price: 428.0, ma200d: 415.0, high: 468.3, low: 366.5 },
   GOOGL: { price: 172.5, ma200d: 165.0, high: 191.7, low: 131.0 },
-  MSTR: { price: 345.0, ma200d: 165.0, high: 543.0, low: 45.0 },
-  COIN: { price: 228.0, ma200d: 215.0, high: 345.0, low: 140.0 },
+  MSTR: { price: 162.5, ma200d: 135.9, high: 365.2, low: 81.8 },
+  COIN: { price: 188.6, ma200d: 185.0, high: 402.1, low: 139.1 },
+  IBIT: { price: 48.5, ma200d: 41.8, high: 62.0, low: 28.5 },
+  MARA: { price: 11.2, ma200d: 11.0, high: 27.5, low: 8.5 },
+  PLTR: { price: 188.9, ma200d: 152.0, high: 195.0, low: 65.0 },
+  TSLA: { price: 378.1, ma200d: 395.0, high: 488.5, low: 215.0 },
 };
 
 export async function fetchStockLiveQuote(stock: StockAssetConfig): Promise<LiveStockData> {

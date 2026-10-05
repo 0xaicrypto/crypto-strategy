@@ -1,11 +1,11 @@
 {
-  "timestamp": 1791212962583,
+  "timestamp": 1791214115331,
   "macroRates": {
-    "timestamp": 1791212962582,
+    "timestamp": 1791214115331,
     "us10yYield": 0.53,
     "us2yYield": 0.28,
     "yieldCurveSpread": 0.25,
-    "vixIndex": 15.52,
+    "vixIndex": 15.56,
     "sp500Pe": 22.4,
     "sp500EarningsYield": 4.46,
     "equityRiskPremiumPct": 3.93,
@@ -19,8 +19,8 @@
       "name": "SPDR S&P 500 ETF Trust",
       "category": "INDEX",
       "sector": "Broad Market ETF",
-      "currentPrice": 772.42,
-      "change24hPct": 0.36,
+      "currentPrice": 772.63,
+      "change24hPct": 0.39,
       "ma200d": 720.94,
       "ratioTo200d": 1.07,
       "buybackYieldPct": 2.1,
@@ -51,8 +51,8 @@
       "name": "Invesco QQQ Trust (Nasdaq 100)",
       "category": "INDEX",
       "sector": "Tech Index ETF",
-      "currentPrice": 753.51,
-      "change24hPct": 0.52,
+      "currentPrice": 753.36,
+      "change24hPct": 0.5,
       "ma200d": 669.31,
       "ratioTo200d": 1.13,
       "buybackYieldPct": 2.3,
@@ -83,8 +83,8 @@
       "name": "NVIDIA Corporation",
       "category": "TECH_GROWTH",
       "sector": "Semiconductors & AI",
-      "currentPrice": 237.22,
-      "change24hPct": 1.4,
+      "currentPrice": 236.49,
+      "change24hPct": 1.09,
       "ma200d": 201.01,
       "ratioTo200d": 1.18,
       "buybackYieldPct": 1.8,
@@ -115,8 +115,8 @@
       "name": "Apple Inc.",
       "category": "TECH_GROWTH",
       "sector": "Consumer Tech & Hardware",
-      "currentPrice": 333.75,
-      "change24hPct": 0.02,
+      "currentPrice": 333.35,
+      "change24hPct": -0.1,
       "ma200d": 289.45,
       "ratioTo200d": 1.15,
       "buybackYieldPct": 3.5,
@@ -148,10 +148,10 @@
       "name": "Microsoft Corporation",
       "category": "TECH_GROWTH",
       "sector": "Cloud & Enterprise AI",
-      "currentPrice": 525.56,
-      "change24hPct": 1.55,
+      "currentPrice": 526.51,
+      "change24hPct": 1.74,
       "ma200d": 433.08,
-      "ratioTo200d": 1.21,
+      "ratioTo200d": 1.22,
       "buybackYieldPct": 1.2,
       "sbcDilutionRatePct": 0.6,
       "netAntiDilutionYieldPct": 0.6,
@@ -180,8 +180,8 @@
       "name": "Alphabet Inc.",
       "category": "TECH_GROWTH",
       "sector": "Search, Cloud & AI",
-      "currentPrice": 345.09,
-      "change24hPct": 0.46,
+      "currentPrice": 345.2,
+      "change24hPct": 0.49,
       "ma200d": 339.11,
       "ratioTo200d": 1.02,
       "buybackYieldPct": 3.2,
@@ -214,8 +214,8 @@
       "name": "MicroStrategy Inc.",
       "category": "CRYPTO_PROXY",
       "sector": "Bitcoin Treasury Proxy",
-      "currentPrice": 162.56,
-      "change24hPct": 1.59,
+      "currentPrice": 162.6,
+      "change24hPct": 1.62,
       "ma200d": 135.97,
       "ratioTo200d": 1.2,
       "buybackYieldPct": 0,
@@ -249,8 +249,8 @@
       "name": "Coinbase Global Inc.",
       "category": "CRYPTO_PROXY",
       "sector": "Crypto Infrastructure",
-      "currentPrice": 187.9,
-      "change24hPct": 2.68,
+      "currentPrice": 188.52,
+      "change24hPct": 3.02,
       "ma200d": 185.09,
       "ratioTo200d": 1.02,
       "buybackYieldPct": 1,
@@ -278,6 +278,142 @@
         "回踩 200 日线关键支撑位，适合左侧底仓配置",
         "现金流收益率提供充足安全边际"
       ]
+    },
+    {
+      "symbol": "IBIT",
+      "name": "iShares Bitcoin Trust ETF",
+      "category": "CRYPTO_PROXY",
+      "sector": "Spot Bitcoin ETF",
+      "currentPrice": 48.43,
+      "change24hPct": 1.47,
+      "ma200d": 41.91,
+      "ratioTo200d": 1.16,
+      "buybackYieldPct": 0,
+      "sbcDilutionRatePct": 0,
+      "netAntiDilutionYieldPct": 0,
+      "fcfYieldPct": 0,
+      "grossMarginPct": 100,
+      "pegRatio": 1,
+      "forwardPe": 0,
+      "ttmPe": 0,
+      "antiDilutionScore": 65,
+      "cashFlowQualityScore": 55,
+      "valuationScore": 75,
+      "compositeHealthScore": 65,
+      "verdict": "ACCUMULATE",
+      "dcaAllowed": true,
+      "maxPortfolioCapPct": 0.05,
+      "keyStrengths": [
+        "超高毛利率 100%，拥有不可替代的垄断级行业护城河"
+      ],
+      "riskWarnings": [],
+      "triggersForEntry": [
+        "按周期乘数严格分批执行"
+      ]
+    },
+    {
+      "symbol": "MARA",
+      "name": "MARA Holdings Inc.",
+      "category": "CRYPTO_PROXY",
+      "sector": "Bitcoin Mining & Power",
+      "currentPrice": 10.91,
+      "change24hPct": -2.81,
+      "ma200d": 10.97,
+      "ratioTo200d": 0.99,
+      "buybackYieldPct": 0,
+      "sbcDilutionRatePct": 3,
+      "netAntiDilutionYieldPct": -3,
+      "fcfYieldPct": -2,
+      "grossMarginPct": 45,
+      "pegRatio": 1.8,
+      "forwardPe": 22,
+      "ttmPe": 28,
+      "antiDilutionScore": 15,
+      "cashFlowQualityScore": 31,
+      "valuationScore": 70,
+      "compositeHealthScore": 37,
+      "verdict": "HOLD",
+      "dcaAllowed": false,
+      "maxPortfolioCapPct": 0.05,
+      "keyStrengths": [
+        "核心指数或大盘代表性权重资产"
+      ],
+      "riskWarnings": [
+        "股权激励稀释率 (3%) 超过回购注销率，股本呈现内生膨胀"
+      ],
+      "triggersForEntry": [
+        "回踩 200 日线关键支撑位，适合左侧底仓配置"
+      ]
+    },
+    {
+      "symbol": "PLTR",
+      "name": "Palantir Technologies Inc.",
+      "category": "TECH_GROWTH",
+      "sector": "Enterprise AI & Defense",
+      "currentPrice": 188.99,
+      "change24hPct": 0.13,
+      "ma200d": 152.11,
+      "ratioTo200d": 1.24,
+      "buybackYieldPct": 1,
+      "sbcDilutionRatePct": 2,
+      "netAntiDilutionYieldPct": -1,
+      "fcfYieldPct": 2.5,
+      "grossMarginPct": 81.5,
+      "pegRatio": 2.8,
+      "forwardPe": 68,
+      "ttmPe": 95,
+      "antiDilutionScore": 35,
+      "cashFlowQualityScore": 68,
+      "valuationScore": 50,
+      "compositeHealthScore": 51,
+      "verdict": "ACCUMULATE",
+      "dcaAllowed": true,
+      "maxPortfolioCapPct": 0.1,
+      "keyStrengths": [
+        "超高毛利率 81.5%，拥有不可替代的垄断级行业护城河"
+      ],
+      "riskWarnings": [
+        "股权激励稀释率 (2%) 超过回购注销率，股本呈现内生膨胀",
+        "PEG 偏高 (2.8)，当前估值对未来增长预期透支较多"
+      ],
+      "triggersForEntry": [
+        "按周期乘数严格分批执行"
+      ]
+    },
+    {
+      "symbol": "TSLA",
+      "name": "Tesla Inc.",
+      "category": "TECH_GROWTH",
+      "sector": "Autonomous AI & Energy",
+      "currentPrice": 377.76,
+      "change24hPct": 1.94,
+      "ma200d": 392.62,
+      "ratioTo200d": 0.96,
+      "buybackYieldPct": 0,
+      "sbcDilutionRatePct": 1.5,
+      "netAntiDilutionYieldPct": -1.5,
+      "fcfYieldPct": 1.8,
+      "grossMarginPct": 19.8,
+      "pegRatio": 3.2,
+      "forwardPe": 55,
+      "ttmPe": 72,
+      "antiDilutionScore": 30,
+      "cashFlowQualityScore": 31,
+      "valuationScore": 50,
+      "compositeHealthScore": 36,
+      "verdict": "HOLD",
+      "dcaAllowed": false,
+      "maxPortfolioCapPct": 0.1,
+      "keyStrengths": [
+        "核心指数或大盘代表性权重资产"
+      ],
+      "riskWarnings": [
+        "股权激励稀释率 (1.5%) 超过回购注销率，股本呈现内生膨胀",
+        "PEG 偏高 (3.2)，当前估值对未来增长预期透支较多"
+      ],
+      "triggersForEntry": [
+        "回踩 200 日线关键支撑位，适合左侧底仓配置"
+      ]
     }
   ],
   "crossAssetPlan": {
@@ -295,57 +431,73 @@
         "symbol": "SPY",
         "name": "SPDR S&P 500 ETF Trust",
         "action": "BUY",
-        "amountUsd": 151,
-        "weightPct": 7.6,
+        "amountUsd": 122,
+        "weightPct": 6.1,
         "rationale": "ACCUMULATE: 抗稀释得分 82/100, 200日线倍数 1.07x"
       },
       {
         "symbol": "QQQ",
         "name": "Invesco QQQ Trust (Nasdaq 100)",
         "action": "BUY",
-        "amountUsd": 156,
-        "weightPct": 7.8,
+        "amountUsd": 126,
+        "weightPct": 6.3,
         "rationale": "ACCUMULATE: 抗稀释得分 82/100, 200日线倍数 1.13x"
       },
       {
         "symbol": "NVDA",
         "name": "NVIDIA Corporation",
         "action": "BUY",
-        "amountUsd": 173,
-        "weightPct": 8.7,
+        "amountUsd": 140,
+        "weightPct": 7,
         "rationale": "ACCUMULATE: 抗稀释得分 76/100, 200日线倍数 1.18x"
       },
       {
         "symbol": "AAPL",
         "name": "Apple Inc.",
         "action": "BUY",
-        "amountUsd": 160,
-        "weightPct": 8,
+        "amountUsd": 130,
+        "weightPct": 6.5,
         "rationale": "ACCUMULATE: 抗稀释得分 92/100, 200日线倍数 1.15x"
       },
       {
         "symbol": "MSFT",
         "name": "Microsoft Corporation",
         "action": "BUY",
-        "amountUsd": 138,
-        "weightPct": 6.9,
-        "rationale": "ACCUMULATE: 抗稀释得分 71/100, 200日线倍数 1.21x"
+        "amountUsd": 112,
+        "weightPct": 5.6,
+        "rationale": "ACCUMULATE: 抗稀释得分 71/100, 200日线倍数 1.22x"
       },
       {
         "symbol": "GOOGL",
         "name": "Alphabet Inc.",
         "action": "BUY",
-        "amountUsd": 182,
-        "weightPct": 9.1,
+        "amountUsd": 148,
+        "weightPct": 7.4,
         "rationale": "STRONG_ACCUMULATE: 抗稀释得分 86/100, 200日线倍数 1.02x"
       },
       {
         "symbol": "COIN",
         "name": "Coinbase Global Inc.",
         "action": "BUY",
-        "amountUsd": 140,
-        "weightPct": 7,
+        "amountUsd": 113,
+        "weightPct": 5.7,
         "rationale": "ACCUMULATE: 抗稀释得分 33/100, 200日线倍数 1.02x"
+      },
+      {
+        "symbol": "IBIT",
+        "name": "iShares Bitcoin Trust ETF",
+        "action": "BUY",
+        "amountUsd": 117,
+        "weightPct": 5.9,
+        "rationale": "ACCUMULATE: 抗稀释得分 65/100, 200日线倍数 1.16x"
+      },
+      {
+        "symbol": "PLTR",
+        "name": "Palantir Technologies Inc.",
+        "action": "BUY",
+        "amountUsd": 92,
+        "weightPct": 4.6,
+        "rationale": "ACCUMULATE: 抗稀释得分 35/100, 200日线倍数 1.24x"
       }
     ],
     "cryptoAllocations": [
@@ -354,7 +506,7 @@
         "action": "BUY",
         "amountUsd": 175,
         "weightPct": 17.5,
-        "rationale": "宏观周期温度计 47/100, 乘数 1x"
+        "rationale": "宏观周期温度计 39/100, 乘数 1x"
       },
       {
         "symbol": "ETH",
