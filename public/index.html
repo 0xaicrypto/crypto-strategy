@@ -1080,6 +1080,18 @@
             </div>
           </div>
 
+          <!-- Network Notice if not on Mantle -->
+          <div id="portNetworkAlert" style="display: none; padding: 10px 14px; background: rgba(255, 184, 0, 0.08); border: 1px solid rgba(255, 184, 0, 0.3); border-radius: 6px; margin-bottom: 16px; font-size: 12px; color: #FFB800; align-items: center; justify-content: space-between; gap: 12px;">
+            <span>⚠️ 提示：MetaMask 当前不在 Mantle 网络，但系统已通过 Mantle 官方 RPC 节点精准读取您的 Mantle 资产。如需发起交易，请切网。</span>
+            <button class="btn btn-secondary" style="padding: 3px 10px; font-size: 11px; white-space: nowrap;" onclick="switchToMantleNetwork()">切至 Mantle</button>
+          </div>
+
+          <!-- Empty State Banner if Real Wallet has 0 USD -->
+          <div id="portEmptyStateBanner" style="display: none; padding: 12px 16px; background: rgba(0, 212, 255, 0.05); border: 1px dashed rgba(0, 212, 255, 0.25); border-radius: 6px; margin-bottom: 16px; font-size: 12px; line-height: 1.6; color: var(--text-muted);">
+            💡 <strong style="color: #FFFFFF;">当前地址在 Mantle 链上尚未持有任何资产 (总额: $0.00)</strong>。
+            您可以点击右上角的 <strong style="color: var(--ice-cyan); cursor: pointer;" onclick="setPortfolioSource('demo')">【🌟 策略示范】</strong> 查看推荐资产配置模型，或点击资产列表中的 <strong style="color: var(--mint);">【⚡ 买入】</strong> 通过 Mantle 链上免跳转终端进行首笔建仓充值。
+          </div>
+
           <!-- 4 Metrics Cards -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px;">
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-main); border-radius: 8px; padding: 14px 16px;">
@@ -2622,63 +2634,60 @@
     }
 
     async function fetchOnChainBalances(address) {
-      if (!isMetaMaskAvailable() || !address) return [];
+      if (!address) return [];
       const list = [];
       try {
-        const isMantle = currentChainId === MANTLE_CHAIN_ID_HEX;
-        const nativeSymbol = isMantle ? 'MNT' : 'ETH';
-        
-        // 1. Native balance
-        const balanceHex = await window.ethereum.request({
-          method: 'eth_getBalance',
-          params: [address, 'latest']
-        });
-        const nativeWei = BigInt(balanceHex || '0x0');
-        const nativeAmount = Number(nativeWei) / 1e18;
-        userWalletBalance = nativeAmount.toFixed(4);
+        // Query Mantle RPC directly so network in MetaMask does not prevent reading real Mantle assets!
+        let nativeAmount = 0;
+        try {
+          const balanceHex = await callMantleRpc('eth_getBalance', [address, 'latest']);
+          const nativeWei = BigInt(balanceHex || '0x0');
+          nativeAmount = Number(nativeWei) / 1e18;
+          userWalletBalance = nativeAmount < 0.0001 && nativeAmount > 0 ? nativeAmount.toFixed(6) : nativeAmount.toFixed(4);
+        } catch (e) {
+          console.warn('Failed to query native balance from Mantle RPC:', e);
+        }
 
+        // Always push native MNT
         list.push({
-          symbol: nativeSymbol,
-          name: isMantle ? 'Mantle Native' : 'Ether (Native)',
+          symbol: 'MNT',
+          name: 'Mantle (Native Gas)',
           amount: nativeAmount,
           type: 'CRYPTO',
-          targetWeight: isMantle ? 8.0 : 25.0,
+          targetWeight: 8.0,
           isNative: true
         });
 
-        // 2. Mantle ERC20 Tokens if on Mantle
-        if (isMantle) {
-          const MANTLE_TOKENS = [
-            { symbol: 'USDT', name: 'Tether USD', address: '0x201EBa5CC46D216Ce6DC03F6a759e80666199157', decimals: 6, type: 'CASH', targetWeight: 15.0 },
-            { symbol: 'USDC', name: 'USD Coin', address: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9', decimals: 6, type: 'CASH', targetWeight: 5.0 },
-            { symbol: 'WETH', name: 'Wrapped Ether', address: '0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111', decimals: 18, type: 'CRYPTO', targetWeight: 20.0 }
-          ];
+        // 2. Mantle ERC20 Tokens
+        const MANTLE_TOKENS = [
+          { symbol: 'USDT', name: 'Tether USD', address: '0x201EBa5CC46D216Ce6DC03F6a759e80666199157', decimals: 6, type: 'CASH', targetWeight: 15.0 },
+          { symbol: 'USDC', name: 'USD Coin', address: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9', decimals: 6, type: 'CASH', targetWeight: 5.0 },
+          { symbol: 'WETH', name: 'Wrapped Ether', address: '0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111', decimals: 18, type: 'CRYPTO', targetWeight: 20.0 },
+          { symbol: 'WBTC', name: 'Wrapped BTC', address: '0xCAbAE6f6Ea1ecaB08Ad02fE02ce9A44F09aebfA2', decimals: 8, type: 'CRYPTO', targetWeight: 35.0 },
+          { symbol: 'WMNT', name: 'Wrapped MNT', address: '0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8', decimals: 18, type: 'CRYPTO', targetWeight: 0.0 }
+        ];
 
-          const cleanAddr = address.toLowerCase().replace('0x', '').padStart(64, '0');
-          const data = '0x70a08231' + cleanAddr;
+        const cleanAddr = address.toLowerCase().replace('0x', '').padStart(64, '0');
+        const data = '0x70a08231' + cleanAddr;
 
-          for (const tok of MANTLE_TOKENS) {
-            try {
-              const resHex = await window.ethereum.request({
-                method: 'eth_call',
-                params: [{ to: tok.address, data }, 'latest']
-              });
-              if (resHex && resHex !== '0x' && resHex !== '0x0') {
-                const balWei = BigInt(resHex);
-                const bal = Number(balWei) / (10 ** tok.decimals);
-                if (bal > 0) {
-                  list.push({
-                    symbol: tok.symbol,
-                    name: tok.name,
-                    amount: bal,
-                    type: tok.type,
-                    targetWeight: tok.targetWeight
-                  });
-                }
+        for (const tok of MANTLE_TOKENS) {
+          try {
+            const resHex = await callMantleRpc('eth_call', [{ to: tok.address, data }, 'latest']);
+            if (resHex && resHex !== '0x' && resHex !== '0x0') {
+              const balWei = BigInt(resHex);
+              const bal = Number(balWei) / (10 ** tok.decimals);
+              if (bal > 0) {
+                list.push({
+                  symbol: tok.symbol,
+                  name: tok.name,
+                  amount: bal,
+                  type: tok.type,
+                  targetWeight: tok.targetWeight
+                });
               }
-            } catch (e) {
-              // ignore single token fail
             }
+          } catch (e) {
+            // ignore single token fail
           }
         }
       } catch (err) {
@@ -2844,37 +2853,45 @@
       const chainEl = document.getElementById('portChainName');
       const badgeEl = document.getElementById('portSourceBadge');
 
-      if (hasWallet) {
+      const isDemo = portfolioSource === 'demo' || !hasWallet;
+
+      // Update Network Alert
+      const netAlert = document.getElementById('portNetworkAlert');
+      if (netAlert) {
+        if (hasWallet && currentChainId !== MANTLE_CHAIN_ID_HEX) {
+          netAlert.style.display = 'flex';
+        } else {
+          netAlert.style.display = 'none';
+        }
+      }
+
+      if (hasWallet && !isDemo) {
         if (addrEl) addrEl.innerText = formatAddress(userWalletAddress) + ` (${userWalletAddress.slice(0, 8)}...${userWalletAddress.slice(-6)})`;
-        const cName = CHAIN_NAMES[currentChainId] || 'EVM Chain';
-        if (chainEl) chainEl.innerText = `${cName} (${currentChainId === MANTLE_CHAIN_ID_HEX ? 'Chain ID: 5000' : currentChainId || '5000'})`;
+        if (chainEl) chainEl.innerText = `Mantle Network (Chain ID: 5000)`;
         if (badgeEl) {
-          badgeEl.innerText = currentChainId === MANTLE_CHAIN_ID_HEX ? '⚡ Mantle 实时读链' : '🔗 Web3 已连接';
+          badgeEl.innerText = '⚡ Mantle 真实链上持仓';
           badgeEl.style.background = 'rgba(0, 255, 147, 0.12)';
           badgeEl.style.color = 'var(--mint)';
+          badgeEl.style.borderColor = 'rgba(0, 255, 147, 0.4)';
         }
       } else {
-        if (addrEl) addrEl.innerText = '演示账户 (Demo Mode)';
+        if (addrEl) addrEl.innerText = hasWallet ? `${formatAddress(userWalletAddress)} (当前查看策略示范)` : '演示账户 (Demo Mode)';
         if (chainEl) chainEl.innerText = 'Mantle Network (Chain ID: 5000)';
         if (badgeEl) {
-          badgeEl.innerText = '🌟 策略示范组合';
+          badgeEl.innerText = '🌟 策略示范组合 (模拟基准)';
           badgeEl.style.background = 'rgba(0, 212, 255, 0.12)';
           badgeEl.style.color = 'var(--ice-cyan)';
+          badgeEl.style.borderColor = 'rgba(0, 212, 255, 0.4)';
         }
       }
 
       // Determine active holdings
       let rawHoldings = [];
-      if (portfolioSource === 'demo' || !hasWallet) {
+      if (isDemo) {
         rawHoldings = [...DEMO_PORTFOLIO_HOLDINGS];
       } else {
-        // Real on-chain mode
-        if (userOnChainHoldings.length === 0 || (userOnChainHoldings.length === 1 && userOnChainHoldings[0].amount === 0)) {
-          // Empty wallet fallback to demo
-          rawHoldings = [...DEMO_PORTFOLIO_HOLDINGS];
-        } else {
-          rawHoldings = [...userOnChainHoldings];
-        }
+        // Real on-chain mode: strictly show real on-chain holdings without demo fallback!
+        rawHoldings = [...userOnChainHoldings];
       }
 
       // Compute valuations
@@ -2906,6 +2923,16 @@
         };
       });
 
+      // Show/Hide Empty Banner
+      const emptyBanner = document.getElementById('portEmptyStateBanner');
+      if (emptyBanner) {
+        if (!isDemo && totalUsd === 0) {
+          emptyBanner.style.display = 'block';
+        } else {
+          emptyBanner.style.display = 'none';
+        }
+      }
+
       // Calculate weight percentage and delta
       items.forEach(it => {
         it.weightPct = totalUsd > 0 ? (it.usdValue / totalUsd) * 100 : 0;
@@ -2921,62 +2948,102 @@
       if (totalValEl) totalValEl.innerText = formatMoney(totalUsd);
 
       const countEl = document.getElementById('portAssetCountDisplay');
-      if (countEl) countEl.innerText = `${items.length} 种主要资产`;
+      if (countEl) {
+        const positiveAssets = items.filter(it => it.amount > 0).length;
+        countEl.innerText = isDemo
+          ? `${items.length} 种主要资产`
+          : (positiveAssets > 0 ? `${positiveAssets} 项持仓资产` : '0 项资产 (待建仓)');
+      }
 
       const mixEl = document.getElementById('portAssetMixSummary');
-      if (mixEl && totalUsd > 0) {
-        const sPct = ((stockUsd / totalUsd) * 100).toFixed(0);
-        const cPct = ((cryptoUsd / totalUsd) * 100).toFixed(0);
-        const caPct = ((cashUsd / totalUsd) * 100).toFixed(0);
-        mixEl.innerText = `美股代币 ${sPct}% | 加密 ${cPct}% | 现金 ${caPct}%`;
+      if (mixEl) {
+        if (totalUsd > 0) {
+          const sPct = ((stockUsd / totalUsd) * 100).toFixed(0);
+          const cPct = ((cryptoUsd / totalUsd) * 100).toFixed(0);
+          const caPct = ((cashUsd / totalUsd) * 100).toFixed(0);
+          mixEl.innerText = `美股代币 ${sPct}% | 加密 ${cPct}% | 现金 ${caPct}%`;
+        } else {
+          mixEl.innerText = isDemo ? '美股 21% | 加密 65% | 现金 14%' : '当前钱包在 Mantle 链上持仓为空';
+        }
       }
 
       const gasEl = document.getElementById('portGasReserveDisplay');
       if (gasEl) gasEl.innerText = formatAmount(mntAmount, 'MNT');
 
       const gasUsdEl = document.getElementById('portGasReserveUsd');
-      if (gasUsdEl) gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | ${mntAmount >= 50 ? 'Gas 充裕 ⚡' : '建议储备 Gas'}`;
+      if (gasUsdEl) {
+        if (mntAmount >= 50) {
+          gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | Gas 充裕 ⚡`;
+        } else if (mntAmount > 0) {
+          gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | 少量 Gas 可用`;
+        } else {
+          gasUsdEl.innerHTML = `<span style="color: #FF5252;">Gas 储备为 0，需先补充 MNT</span>`;
+        }
+      }
 
-      // Analyze health
+      // Analyze health & Directives
       const maxUnderweight = items.reduce((min, it) => it.deltaPct < min.deltaPct ? it : min, items[0] || { deltaPct: 0 });
       const directives = [];
 
-      items.forEach(it => {
-        if (it.deltaPct < -1.5) {
-          const targetAmountUsd = totalUsd * (it.targetWeight / 100);
-          const gapUsd = Math.max(50, Math.round(targetAmountUsd - it.usdValue));
-          directives.push({
-            type: 'BUY',
-            item: it,
-            suggestedAmount: gapUsd,
-            rationale: `当前持仓占比 ${it.weightPct.toFixed(1)}% 显著低于策略目标配比 ${it.targetWeight.toFixed(1)}%（欠配 ${Math.abs(it.deltaPct).toFixed(1)}%）。建议加仓 ${formatMoney(gapUsd)} 以拉平偏离度并积累优质底仓。`
-          });
-        } else if (it.deltaPct > 4.5) {
-          directives.push({
-            type: 'HOLD',
-            item: it,
-            suggestedAmount: 0,
-            rationale: `当前持仓占比 ${it.weightPct.toFixed(1)}% 已超出策略目标配比 ${it.targetWeight.toFixed(1)}%（超配 +${it.deltaPct.toFixed(1)}%）。建议本期暂停定投，将增量资金分配给欠配标的。`
-          });
-        }
-      });
-
-      // Gas Directive for MNT if needed
-      if (mntAmount < 50) {
+      if (!isDemo && totalUsd === 0) {
+        // Empty real wallet onboarding directives
         directives.push({
           type: 'GAS_BUY',
-          item: { symbol: 'MNT', name: 'Mantle Gas', type: 'CRYPTO' },
-          suggestedAmount: 50,
-          rationale: `Mantle 链上原生 Gas 储备偏低 (${mntAmount.toFixed(1)} MNT)，建议兑换 $50 等值 MNT 保障后续高频 DeFi 交互。`
+          item: { symbol: 'MNT', name: 'Mantle (Native Gas)', type: 'CRYPTO' },
+          targetWeight: 8.0,
+          currentWeight: 0,
+          suggestedAmount: 10,
+          rationale: '钱包当前缺少 Mantle 原生 Gas 费 (MNT)。建议先买入 5~10 MNT 保障后续所有链上交互。'
         });
+        directives.push({
+          type: 'BUY',
+          item: { symbol: 'USDC', name: 'USD Coin (Cash Reserve)', type: 'CASH' },
+          targetWeight: 20.0,
+          currentWeight: 0,
+          suggestedAmount: 50,
+          rationale: '作为防守底仓与现金储备，注入 USDC / USDT 可用于参与 AI 动态价值定投逢低建仓。'
+        });
+      } else {
+        items.forEach(it => {
+          if (it.deltaPct < -1.5) {
+            const targetAmountUsd = totalUsd * (it.targetWeight / 100);
+            const gapUsd = Math.max(50, Math.round(targetAmountUsd - it.usdValue));
+            directives.push({
+              type: 'BUY',
+              item: it,
+              suggestedAmount: gapUsd,
+              rationale: `当前持仓占比 ${it.weightPct.toFixed(1)}% 显著低于策略目标配比 ${it.targetWeight.toFixed(1)}%（欠配 ${Math.abs(it.deltaPct).toFixed(1)}%）。建议加仓 ${formatMoney(gapUsd)} 以拉平偏离度并积累优质底仓。`
+            });
+          } else if (it.deltaPct > 4.5) {
+            directives.push({
+              type: 'HOLD',
+              item: it,
+              suggestedAmount: 0,
+              rationale: `当前持仓占比 ${it.weightPct.toFixed(1)}% 已超出策略目标配比 ${it.targetWeight.toFixed(1)}%（超配 +${it.deltaPct.toFixed(1)}%）。建议本期暂停定投，将增量资金分配给欠配标的。`
+            });
+          }
+        });
+
+        // Gas Directive for MNT if needed
+        if (mntAmount < 50) {
+          directives.push({
+            type: 'GAS_BUY',
+            item: { symbol: 'MNT', name: 'Mantle Gas', type: 'CRYPTO' },
+            suggestedAmount: 50,
+            rationale: `Mantle 链上原生 Gas 储备偏低 (${mntAmount.toFixed(1)} MNT)，建议兑换 $50 等值 MNT 保障后续高频 DeFi 交互。`
+          });
+        }
       }
 
       const healthEl = document.getElementById('portHealthStatusDisplay');
       const healthSubEl = document.getElementById('portHealthSubtext');
       if (healthEl && healthSubEl) {
-        if (directives.length > 0) {
+        if (!isDemo && totalUsd === 0) {
+          healthEl.innerHTML = `<span style="color: var(--ice-cyan);">待建仓充值</span>`;
+          healthSubEl.innerText = `请先注入 MNT/稳定币启动配置`;
+        } else if (directives.length > 0) {
           healthEl.innerHTML = `<span style="color: #FFB800;">需执行 ${directives.length} 项指令</span>`;
-          healthSubEl.innerHTML = `最大偏离: <strong style="color: var(--danger);">${maxUnderweight.symbol} (${maxUnderweight.deltaPct.toFixed(1)}%)</strong>`;
+          healthSubEl.innerHTML = `最大偏离: <strong style="color: var(--danger);">${maxUnderweight ? maxUnderweight.symbol : 'MNT'} (${maxUnderweight ? maxUnderweight.deltaPct.toFixed(1) : '-8.0'}%)</strong>`;
         } else {
           healthEl.innerHTML = `<span style="color: var(--mint);">✓ 组合配比健康</span>`;
           healthSubEl.innerText = `各资产偏离度均在 ±1.5% 容差内`;
@@ -3002,29 +3069,44 @@
       };
 
       if (barEl && legendEl) {
-        let barHtml = '';
-        let legendHtml = '';
-        items.forEach(it => {
-          const color = ASSET_COLORS[it.symbol] || ASSET_COLORS.DEFAULT;
-          const displayVal = formatMoney(it.usdValue);
-          barHtml += `<div class="allocation-segment" style="width: ${it.weightPct}%; background: ${color};" title="${it.symbol}: ${it.weightPct.toFixed(1)}% (${displayVal})" onclick="openBuyModal('${it.symbol.replace(/x$/i, '')}', '${it.name.replace(/'/g, "\\'")}', '${it.type === 'STOCK' ? 'STOCK' : 'CRYPTO'}')"></div>`;
-          legendHtml += `
-            <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="openBuyModal('${it.symbol.replace(/x$/i, '')}', '${it.name.replace(/'/g, "\\'")}', '${it.type === 'STOCK' ? 'STOCK' : 'CRYPTO'}')">
-              <span style="width: 10px; height: 10px; border-radius: 2px; background: ${color}; display: inline-block;"></span>
-              <span style="font-weight: 500; color: #FFFFFF;">${it.symbol}</span>
-              <span style="color: var(--mint); font-family: 'JetBrains Mono', monospace; font-size: 11px;">${it.weightPct.toFixed(1)}%</span>
-            </div>
-          `;
-        });
-        barEl.innerHTML = barHtml;
-        legendEl.innerHTML = legendHtml;
+        if (totalUsd === 0) {
+          barEl.innerHTML = '<div style="width: 100%; height: 100%; background: rgba(255,255,255,0.06); text-align: center; line-height: 14px; font-size: 10px; color: var(--text-dim);">当前真实钱包暂无资产持仓 ($0.00)</div>';
+          legendEl.innerHTML = '<div style="color: var(--text-muted); font-size: 11px;">💡 提示：当前显示的是您真实的 Mantle 链上资产。可点击右上角【🌟 策略示范】查看推荐配置。</div>';
+        } else {
+          let barHtml = '';
+          let legendHtml = '';
+          items.forEach(it => {
+            const color = ASSET_COLORS[it.symbol] || ASSET_COLORS.DEFAULT;
+            const displayVal = formatMoney(it.usdValue);
+            barHtml += `<div class="allocation-segment" style="width: ${it.weightPct}%; background: ${color};" title="${it.symbol}: ${it.weightPct.toFixed(1)}% (${displayVal})" onclick="openBuyModal('${it.symbol.replace(/x$/i, '')}', '${it.name.replace(/'/g, "\\'")}', '${it.type === 'STOCK' ? 'STOCK' : 'CRYPTO'}')"></div>`;
+            legendHtml += `
+              <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="openBuyModal('${it.symbol.replace(/x$/i, '')}', '${it.name.replace(/'/g, "\\'")}', '${it.type === 'STOCK' ? 'STOCK' : 'CRYPTO'}')">
+                <span style="width: 10px; height: 10px; border-radius: 2px; background: ${color}; display: inline-block;"></span>
+                <span style="font-weight: 500; color: #FFFFFF;">${it.symbol}</span>
+                <span style="color: var(--mint); font-family: 'JetBrains Mono', monospace; font-size: 11px;">${it.weightPct.toFixed(1)}%</span>
+              </div>
+            `;
+          });
+          barEl.innerHTML = barHtml;
+          legendEl.innerHTML = legendHtml;
+        }
       }
 
       // 3. Render Holdings Table Body
       const tbody = document.getElementById('portHoldingsTableBody');
       if (tbody) {
         tbody.innerHTML = '';
-        items.forEach(it => {
+        let tableItems = items;
+        if (!isDemo && totalUsd === 0) {
+          tableItems = [
+            { symbol: 'MNT', name: 'Mantle (Native Gas)', amount: mntAmount, price: 0.82, usdValue: mntValue, weightPct: 0, targetWeight: 8.0, deltaPct: -8.0, type: 'CRYPTO' },
+            { symbol: 'USDC', name: 'USD Coin (Cash)', amount: 0, price: 1.0, usdValue: 0, weightPct: 0, targetWeight: 20.0, deltaPct: -20.0, type: 'CASH' },
+            { symbol: 'USDT', name: 'Tether USD', amount: 0, price: 1.0, usdValue: 0, weightPct: 0, targetWeight: 15.0, deltaPct: -15.0, type: 'CASH' },
+            { symbol: 'WETH', name: 'Wrapped Ether', amount: 0, price: 2450.0, usdValue: 0, weightPct: 0, targetWeight: 20.0, deltaPct: -20.0, type: 'CRYPTO' }
+          ];
+        }
+
+        tableItems.forEach(it => {
           const tr = document.createElement('tr');
           const cleanSym = it.symbol.replace(/x$/i, '');
           const isStock = it.type === 'STOCK';
@@ -3039,7 +3121,7 @@
             : `<span style="color: var(--danger); font-family: 'JetBrains Mono', monospace;">${it.deltaPct.toFixed(1)}% (欠配)</span>`;
 
           const actionBtn = `<button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap;" onclick="openBuyModal('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
-            ${isStock ? '⚡ Fluxion RFQ' : '⚡ 交易'}
+            ${isStock ? '⚡ Fluxion RFQ' : '⚡ 立即买入'}
           </button>`;
 
           tr.innerHTML = `
@@ -3087,10 +3169,10 @@
 
             const routeName = isStock
               ? 'Fluxion xChange (Atomic RFQ)'
-              : 'DefiLlama Swap / Mantle DEX 聚合器';
+              : 'OpenOcean / KyberSwap (Mantle 聚合器)';
             const routeFeature = isStock
               ? '0 滑点原子做市 | BackedFi 1:1 美股'
-              : '全网比价 | 0 额外费用';
+              : '全网比价 | 智能多路径路由';
 
             const btnText = isStock
               ? '⚡ 立即通过 Fluxion RFQ 执行'
@@ -3498,7 +3580,7 @@
             statusBox.style.background = 'rgba(255, 184, 0, 0.08)';
             statusBox.style.border = '1px solid rgba(255, 184, 0, 0.3)';
             statusBox.style.color = '#FFB800';
-            statusBox.innerHTML = `⚠️ 当前币对在 Fluxion AMM 上池流动性受限，建议点击上方 <b>【聚合路由】</b> 使用 DefiLlama / OpenOcean 全网聚合买入。`;
+            statusBox.innerHTML = `⚠️ 当前币对在 Fluxion AMM 上池流动性受限，建议点击上方 <b>【聚合路由】</b> 使用 OpenOcean / KyberSwap 全网聚合买入。`;
           }
         }
       } catch (err) {
@@ -3794,29 +3876,11 @@
             </div>
           </div>
 
-          <!-- Route 2: DefiLlama Swap Meta-Aggregator -->
+          <!-- Route 2: OpenOcean Aggregator -->
           <div class="route-option-card">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
                 <span class="badge-tag" style="background: rgba(0, 212, 255, 0.12); color: var(--ice-cyan); border-color: rgba(0, 212, 255, 0.3); margin-bottom: 6px; display: inline-block;">
-                  ⚡ 0 额外费用聚合器
-                </span>
-                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">DefiLlama Swap (Mantle)</div>
-              </div>
-              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://swap.defillama.com/?chain=mantle')">
-                前往 DefiLlama 聚合
-              </button>
-            </div>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              DefiLlama 官方多链聚合器，自动比对 Mantle 链上所有 DEX 与聚合路由（包括 OpenOcean、KyberSwap 及本地池），确保获得最优二次市场流动性。
-            </p>
-          </div>
-
-          <!-- Route 3: OpenOcean Aggregator -->
-          <div class="route-option-card" style="margin-bottom: 0;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border-color: var(--border-main); margin-bottom: 6px; display: inline-block;">
                   智能分拆路由
                 </span>
                 <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">OpenOcean (Mantle)</div>
@@ -3829,6 +3893,24 @@
               Web3 领先的跨 DEX 深度分流聚合器，提供全自动动态路由分拆与滑点保护。
             </p>
           </div>
+
+          <!-- Route 3: KyberSwap Meta-Aggregator -->
+          <div class="route-option-card" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+              <div>
+                <span class="badge-tag" style="background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border-color: var(--border-main); margin-bottom: 6px; display: inline-block;">
+                  多链聚合龙头
+                </span>
+                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">KyberSwap (Mantle)</div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://kyberswap.com/swap/mantle')">
+                前往 KyberSwap
+              </button>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+              KyberSwap 官方多链聚合器，原生支持 Mantle L2，实时比对全网流动性提供最优报价。
+            </p>
+          </div>
         `;
       } else {
         // Crypto Asset Routes
@@ -3837,46 +3919,46 @@
         subtitle.innerHTML = `通过 Mantle 生态顶级 DEX 聚合器与原生流动性池极速交易`;
 
         container.innerHTML = `
-          <!-- Route 1: DefiLlama Swap Meta-Aggregator -->
+          <!-- Route 1: OpenOcean DEX Aggregator (Highlighted) -->
           <div class="route-option-card highlight">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
                 <span class="badge-tag" style="background: rgba(0, 255, 147, 0.15); color: var(--mint); border-color: rgba(0, 255, 147, 0.4); margin-bottom: 6px; display: inline-block;">
-                  🔥 推荐首选 | 0 抽成 Meta-Aggregator
+                  🔥 推荐首选 | Mantle 核心 DEX 聚合器
                 </span>
                 <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
-                  <span>DefiLlama Swap</span>
+                  <span>OpenOcean DEX Aggregator</span>
                   <span style="font-size: 11px; background: rgba(0, 255, 147, 0.15); color: var(--mint); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;">全网比价</span>
                 </div>
               </div>
-              <button class="btn btn-primary" style="padding: 7px 18px; font-size: 12px; font-weight: 600;" onclick="executeRoute('https://swap.defillama.com/?chain=mantle')">
+              <button class="btn btn-primary" style="padding: 7px 18px; font-size: 12px; font-weight: 600;" onclick="executeRoute('https://app.openocean.finance/classic#/MANTLE')">
                 ⚡ 最佳价格成交
               </button>
             </div>
             <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
-              DefiLlama 官方交易聚合终端，自动实时比价 Agni Finance、Merchant Moe、OpenOcean 和 KyberSwap，提供最深流动性与最低滑点，不收取任何协议抽成。
+              Mantle 生态头号 DEX 聚合终端，自动比对 Agni Finance、Merchant Moe、FusionX、Swapsicle 等全网流动性，提供最优滑点与最低 Gas。
             </p>
             <div style="display: flex; gap: 14px; font-size: 11px; color: var(--text-dim); border-top: 1px dashed rgba(255, 255, 255, 0.08); padding-top: 8px;">
               <span>• 支持: MNT / USDT / USDC / WETH / WBTC 等</span>
-              <span>• Gas 费用: 极低 (&lt; $0.01)</span>
+              <span>• Gas 费用: 极低 (&lt; $0.001)</span>
             </div>
           </div>
 
-          <!-- Route 2: OpenOcean DEX Aggregator -->
+          <!-- Route 2: KyberSwap Meta-Aggregator -->
           <div class="route-option-card">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
                 <span class="badge-tag" style="background: rgba(0, 212, 255, 0.12); color: var(--ice-cyan); border-color: rgba(0, 212, 255, 0.3); margin-bottom: 6px; display: inline-block;">
-                  智能多路径拆单
+                  多链聚合龙头
                 </span>
-                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">OpenOcean DEX Aggregator</div>
+                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">KyberSwap (Mantle)</div>
               </div>
-              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://app.openocean.finance/classic#/MANTLE')">
-                前往 OpenOcean
+              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://kyberswap.com/swap/mantle')">
+                前往 KyberSwap
               </button>
             </div>
             <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              Mantle 生态核心 DEX 聚合器，具备先进的智能路由算法，将订单智能拆分给多个底层池以实现最少滑点与 Gas 开销。
+              业内久经考验的去中心化交易聚合协议，原生支持 Mantle 网络，精准路由优化并保障无额外抽成。
             </p>
           </div>
 
