@@ -18,12 +18,16 @@ export interface DiscoveredCandidate {
   safetyRating: 'HIGH' | 'MEDIUM' | 'RISKY';
 }
 
-interface DefiLlamaChainItem {
+interface DefiLlamaProtocolItem {
+  id: string;
   name: string;
-  tokenSymbol?: string;
+  symbol?: string;
+  category: string;
   tvl: number;
+  change_1d?: number;
   change_7d?: number;
-  change_1m?: number;
+  gecko_id?: string;
+  mcap?: number;
 }
 
 interface CoinGeckoTrendingItem {
@@ -49,51 +53,56 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
   const candidates: DiscoveredCandidate[] = [];
   const existingSymbols = new Set(WATCHED_ASSETS.map((a) => a.symbol.toUpperCase()));
 
-  // 1. Scan DeFiLlama for Chains with explosive TVL growth (> $30M TVL, 30d growth > 15%)
+  // 1. Scan DeFiLlama for Protocols with explosive TVL growth (> $25M TVL, 7d growth > 10%)
   try {
-    const res = await fetch(`${STRATEGY_CONFIG.apis.defillamaBase}/v2/chains`, {
+    const res = await fetch(`${STRATEGY_CONFIG.apis.defillamaBase}/protocols`, {
       headers: { Accept: 'application/json' },
-      signal: AbortSignal.timeout(7000),
+      signal: AbortSignal.timeout(8000),
     });
 
     if (res.ok) {
-      const chains = (await res.json()) as DefiLlamaChainItem[];
-      const highGrowthChains = chains.filter(
-        (c) =>
-          c.tvl > 30_000_000 &&
-          (c.change_1m ?? 0) > 15 &&
-          c.tokenSymbol &&
-          !existingSymbols.has(c.tokenSymbol.toUpperCase())
+      const protocols = (await res.json()) as DefiLlamaProtocolItem[];
+      const highGrowth = protocols.filter(
+        (p) =>
+          p.tvl > 25_000_000 &&
+          (p.change_7d ?? 0) > 10 &&
+          p.category !== 'CEX' &&
+          p.symbol &&
+          p.symbol !== '-' &&
+          p.symbol.length <= 8 &&
+          !existingSymbols.has(p.symbol.toUpperCase())
       );
 
-      // Sort by 30d growth
-      highGrowthChains.sort((a, b) => (b.change_1m ?? 0) - (a.change_1m ?? 0));
+      // Sort by 7d TVL growth
+      highGrowth.sort((a, b) => (b.change_7d ?? 0) - (a.change_7d ?? 0));
 
-      for (const c of highGrowthChains.slice(0, 3)) {
-        const symbol = c.tokenSymbol!.toUpperCase();
+      for (const p of highGrowth.slice(0, 3)) {
+        const symbol = p.symbol!.toUpperCase();
+        if (candidates.some((c) => c.symbol === symbol)) continue;
+        const isL2 = p.category.includes('L2') || p.category.includes('Rollup') || p.category.includes('Bridge');
         candidates.push({
           symbol,
-          name: c.name,
-          coingeckoId: c.name.toLowerCase().replace(/\s+/g, '-'),
-          category: 'L1/L2',
+          name: p.name,
+          coingeckoId: p.gecko_id || p.name.toLowerCase().replace(/\s+/g, '-'),
+          category: isL2 ? 'L1/L2' : 'DEFI',
           currentPrice: 0,
-          marketCap: 0,
+          marketCap: p.mcap ?? 0,
           fdv: 0,
           volume24h: 0,
-          tvl: Math.round(c.tvl),
-          tvlGrowth30dPct: Math.round((c.change_1m ?? 0) * 10) / 10,
+          tvl: Math.round(p.tvl),
+          tvlGrowth30dPct: Math.round((p.change_7d ?? 0) * 10) / 10,
           priceChange30d: 0,
           relativeStrengthVsBtc: 0,
           discoveryReasons: [
-            `链上 TVL 出现显著爆发：近 30 天净增长 +${(c.change_1m ?? 0).toFixed(1)}%`,
-            `链上锁定总价值达 $${(c.tvl / 1e6).toFixed(1)}M，属于资金净流入活跃链`,
+            `链上 TVL 7天资金爆发：净增长 +${(p.change_7d ?? 0).toFixed(1)}%（锁定资金达 $${(p.tvl / 1e6).toFixed(1)}M）`,
+            `属于 ${p.category} 赛道资金净流入活跃龙头`,
           ],
-          safetyRating: c.tvl > 100_000_000 ? 'HIGH' : 'MEDIUM',
+          safetyRating: p.tvl > 100_000_000 ? 'HIGH' : 'MEDIUM',
         });
       }
     }
   } catch (err) {
-    console.warn(`[Scanner] DeFiLlama chain radar failed: ${(err as Error).message}`);
+    console.warn(`[Scanner] DeFiLlama protocol radar failed: ${(err as Error).message}`);
   }
 
   // 2. Scan CoinGecko Trending & Momentum Leaders
@@ -111,7 +120,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
         const item = coin.item;
         const sym = item.symbol.toUpperCase();
 
-        // Filter out existing watched assets and low rank/micro-caps (rank > 300)
+        // Filter out existing watched assets and low rank/micro-caps (rank > 250)
         if (existingSymbols.has(sym) || (item.market_cap_rank && item.market_cap_rank > 250)) {
           continue;
         }
@@ -119,6 +128,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
         // Avoid duplicates
         if (candidates.some((c) => c.symbol === sym)) continue;
 
+        const change24h = item.data?.price_change_percentage_24h?.usd ?? 0;
         candidates.push({
           symbol: sym,
           name: item.name,
@@ -128,11 +138,11 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
           marketCap: 0,
           fdv: 0,
           volume24h: 0,
-          priceChange30d: 0,
+          priceChange30d: change24h,
           relativeStrengthVsBtc: 0,
           discoveryReasons: [
-            `全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #${item.market_cap_rank ?? 'N/A'}）`,
-            `具备当下市场主线叙事关注度`,
+            `CoinGecko 全网实时 Trending 热搜榜（市值 Rank #${item.market_cap_rank ?? 'N/A'}）`,
+            `24H 涨跌幅 ${change24h >= 0 ? '+' : ''}${change24h.toFixed(1)}%，具备主线叙事热度`,
           ],
           safetyRating: (item.market_cap_rank && item.market_cap_rank <= 100) ? 'MEDIUM' : 'RISKY',
         });
@@ -142,6 +152,27 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
     }
   } catch (err) {
     console.warn(`[Scanner] CoinGecko trending radar failed: ${(err as Error).message}`);
+  }
+
+  // 3. Resolve missing prices for discovered assets
+  const missingPrices = candidates.filter((c) => c.currentPrice === 0 && c.coingeckoId);
+  if (missingPrices.length > 0) {
+    try {
+      const ids = missingPrices.map((c) => encodeURIComponent(c.coingeckoId)).join(',');
+      const pRes = await fetch(`${STRATEGY_CONFIG.apis.coingeckoBase}/simple/price?ids=${ids}&vs_currencies=usd`, {
+        signal: AbortSignal.timeout(4000),
+      });
+      if (pRes.ok) {
+        const pData = (await pRes.json()) as Record<string, { usd?: number }>;
+        for (const c of missingPrices) {
+          if (pData[c.coingeckoId]?.usd) {
+            c.currentPrice = pData[c.coingeckoId]!.usd!;
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
   }
 
   // Fallback high-value candidates if network APIs return few results

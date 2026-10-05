@@ -1,20 +1,77 @@
 {
-  "timestamp": 1791211957159,
+  "timestamp": 1791212963306,
   "candidates": [
+    {
+      "symbol": "CHIP",
+      "name": "USD AI",
+      "coingeckoId": "chip-2",
+      "category": "DEFI",
+      "currentPrice": 0.04859235,
+      "marketCap": 97362832.44580613,
+      "fdv": 0,
+      "volume24h": 0,
+      "tvl": 336203674,
+      "tvlGrowth30dPct": 53.8,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "链上 TVL 7天资金爆发：净增长 +53.8%（锁定资金达 $336.2M）",
+        "属于 RWA 赛道资金净流入活跃龙头"
+      ],
+      "safetyRating": "HIGH"
+    },
+    {
+      "symbol": "ZRO",
+      "name": "LayerZero V2",
+      "coingeckoId": "layerzero-v2",
+      "category": "L1/L2",
+      "currentPrice": 0,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "tvl": 11661910657,
+      "tvlGrowth30dPct": 45.6,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "链上 TVL 7天资金爆发：净增长 +45.6%（锁定资金达 $11661.9M）",
+        "属于 Bridge 赛道资金净流入活跃龙头"
+      ],
+      "safetyRating": "HIGH"
+    },
+    {
+      "symbol": "DIME",
+      "name": "Paradex Bridge",
+      "coingeckoId": "paradex-bridge",
+      "category": "L1/L2",
+      "currentPrice": 0,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "tvl": 31563748,
+      "tvlGrowth30dPct": 41.4,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "链上 TVL 7天资金爆发：净增长 +41.4%（锁定资金达 $31.6M）",
+        "属于 Bridge 赛道资金净流入活跃龙头"
+      ],
+      "safetyRating": "MEDIUM"
+    },
     {
       "symbol": "PENGU",
       "name": "Pudgy Penguins",
       "coingeckoId": "pudgy-penguins",
       "category": "TRENDING",
-      "currentPrice": 0.00962502446291116,
+      "currentPrice": 0.00967073016170751,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0,
+      "priceChange30d": 4.123661602599003,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #105）",
-        "具备当下市场主线叙事关注度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #105）",
+        "24H 涨跌幅 +4.1%，具备主线叙事热度"
       ],
       "safetyRating": "RISKY"
     },
@@ -23,32 +80,15 @@
       "name": "NEAR Protocol",
       "coingeckoId": "near",
       "category": "TRENDING",
-      "currentPrice": 5.016238002185712,
+      "currentPrice": 4.973819679236313,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0,
+      "priceChange30d": 2.3692918666765017,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #21）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
-    },
-    {
-      "symbol": "QNT",
-      "name": "Quant",
-      "coingeckoId": "quant-network",
-      "category": "TRENDING",
-      "currentPrice": 258.2261013866587,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #33）",
-        "具备当下市场主线叙事关注度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #21）",
+        "24H 涨跌幅 +2.4%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },
@@ -57,51 +97,17 @@
       "name": "Artificial Superintelligence Alliance",
       "coingeckoId": "fetch-ai",
       "category": "TRENDING",
-      "currentPrice": 0.25161446809356913,
+      "currentPrice": 0.24938571745037555,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0,
+      "priceChange30d": 3.480519103409275,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #109）",
-        "具备当下市场主线叙事关注度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #109）",
+        "24H 涨跌幅 +3.5%，具备主线叙事热度"
       ],
       "safetyRating": "RISKY"
-    },
-    {
-      "symbol": "HYPE",
-      "name": "Hyperliquid",
-      "coingeckoId": "hyperliquid",
-      "category": "TRENDING",
-      "currentPrice": 92.66721411032098,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #11）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
-    },
-    {
-      "symbol": "TAO",
-      "name": "Bittensor",
-      "coingeckoId": "bittensor",
-      "category": "TRENDING",
-      "currentPrice": 299.4116055719801,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #35）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
     }
   ]
 }

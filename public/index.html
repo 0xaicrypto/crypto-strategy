@@ -1010,7 +1010,7 @@
             <div class="card-eyebrow">Autonomous Market Scanner</div>
             <h3 style="font-size: 20px; font-weight: 500;">全网潜力资产异动发现雷达</h3>
             <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
-              实时捕获 DeFiLlama 链上 TVL 净爆发与 CoinGecko 实时 Trending 主线热点
+              实时捕获 DeFiLlama 链上 TVL 资金爆发与 CoinGecko 实时 Trending 主线热点
             </p>
           </div>
           <button class="btn btn-primary" id="rescanBtn" onclick="triggerScan()">
@@ -1018,12 +1018,35 @@
           </button>
         </div>
 
+        <!-- Live Scanner Status Strip -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px 18px; background: rgba(6, 20, 15, 0.7); border: 1px solid var(--border-main); border-radius: 6px; font-size: 13px; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="pulse-dot" style="background: var(--mint);"></span>
+              <span style="color: var(--text-white); font-weight: 500;">雷达探针：<strong style="color: var(--mint);">LIVE 实时直连</strong></span>
+            </div>
+            <div style="color: var(--text-muted); font-size: 12px;">
+              覆盖源：<span style="color: #FFFFFF;">DeFiLlama (8,400+ 协议链上 TVL)</span> ＋ <span style="color: #FFFFFF;">CoinGecko (全网 Trending 热榜)</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="color: var(--text-muted); font-size: 12px; font-family: 'JetBrains Mono', monospace;" id="radarLastScanTime">上次扫描: 刚刚同步</span>
+            <span class="badge-tag tag-blue" id="radarScanCountTag">6 个异动候选</span>
+          </div>
+        </div>
+
+        <div id="radarScanProgress" style="display: none; padding: 12px 18px; margin-bottom: 16px; background: rgba(0, 255, 147, 0.06); border: 1px solid rgba(0, 255, 147, 0.3); border-radius: 6px; font-size: 13px; color: var(--ice-cyan); align-items: center; gap: 12px;">
+          <span class="loading-rotator">⚡</span>
+          <span id="radarScanProgressText">正在连接全网多源节点扫描中...</span>
+        </div>
+
         <div class="table-wrap">
           <table class="data-table">
             <thead>
               <tr>
                 <th>标的资产与代码</th>
-                <th>分类</th>
+                <th>实时单价 / 动量</th>
+                <th>赛道分类</th>
                 <th>安全评级</th>
                 <th>核心链上/市场异动信号</th>
                 <th>建议硬上限</th>
@@ -1031,7 +1054,7 @@
               </tr>
             </thead>
             <tbody id="radarTableBody">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">正在扫描全网链上资金与交易量异动...</td></tr>
+              <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">正在全网雷达扫描中...</td></tr>
             </tbody>
           </table>
         </div>
@@ -1532,47 +1555,226 @@
       }
     }
 
+    // Live Client-Side Scanner (Direct CORS queries to DeFiLlama & CoinGecko)
+    async function scanLiveFromBrowser(updateStatusText) {
+      const existing = window.activeAssetSymbols || new Set(['BTC', 'ETH', 'STRK', 'ARB', 'ZEC', 'NEAR']);
+      const candidates = [];
+
+      // Step 1: Scan DeFiLlama for on-chain TVL explosion
+      if (updateStatusText) updateStatusText('🔄 [1/2] 正在检索 DeFiLlama 8,400+ 链上协议资金净流入爆发...');
+      try {
+        const res = await fetch('https://api.llama.fi/protocols', { signal: AbortSignal.timeout(6000) });
+        if (res.ok) {
+          const protocols = await res.json();
+          const highGrowth = protocols.filter(p =>
+            p.tvl > 25000000 &&
+            (p.change_7d || 0) > 10 &&
+            p.category !== 'CEX' &&
+            p.symbol && p.symbol !== '-' && p.symbol.length <= 8 &&
+            !existing.has(p.symbol.toUpperCase())
+          );
+          highGrowth.sort((a, b) => (b.change_7d || 0) - (a.change_7d || 0));
+          for (const p of highGrowth.slice(0, 3)) {
+            const sym = p.symbol.toUpperCase();
+            if (candidates.some(c => c.symbol === sym)) continue;
+            const isL2 = p.category.includes('L2') || p.category.includes('Rollup') || p.category.includes('Bridge');
+            candidates.push({
+              symbol: sym,
+              name: p.name,
+              coingeckoId: p.gecko_id || p.name.toLowerCase().replace(/\s+/g, '-'),
+              category: isL2 ? 'L1/L2' : 'DEFI',
+              currentPrice: 0,
+              tvl: Math.round(p.tvl),
+              tvlGrowth30dPct: Number((p.change_7d || 0).toFixed(1)),
+              priceChange30d: Number((p.change_1d || 0).toFixed(1)),
+              discoveryReasons: [
+                `链上 TVL 7天资金爆发：净增长 +${(p.change_7d || 0).toFixed(1)}%（锁定资金达 $${(p.tvl / 1e6).toFixed(1)}M）`,
+                `属于 ${p.category} 赛道资金净流入代表标的`
+              ],
+              safetyRating: p.tvl > 100000000 ? 'HIGH' : 'MEDIUM'
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Browser DeFiLlama scan skipped:', err.message);
+      }
+
+      // Step 2: Scan CoinGecko Trending
+      if (updateStatusText) updateStatusText('🔄 [2/2] 正在分析 CoinGecko 实时 Trending Top 热榜与动量主线...');
+      try {
+        const res2 = await fetch('https://api.coingecko.com/api/v3/search/trending', { signal: AbortSignal.timeout(5000) });
+        if (res2.ok) {
+          const json = await res2.json();
+          for (const c of json.coins || []) {
+            const item = c.item;
+            const sym = item.symbol.toUpperCase();
+            if (existing.has(sym) || candidates.some(x => x.symbol === sym) || (item.market_cap_rank && item.market_cap_rank > 250)) continue;
+            const change24h = item.data?.price_change_percentage_24h?.usd ?? 0;
+            candidates.push({
+              symbol: sym,
+              name: item.name,
+              coingeckoId: item.id,
+              category: 'TRENDING',
+              currentPrice: item.data?.price ?? 0,
+              priceChange30d: change24h,
+              discoveryReasons: [
+                `CoinGecko 全网实时 Trending 热搜榜（市值 Rank #${item.market_cap_rank ?? 'N/A'}）`,
+                `24H 涨幅 ${change24h >= 0 ? '+' : ''}${change24h.toFixed(1)}%，具备当下主线叙事热度`
+              ],
+              safetyRating: (item.market_cap_rank && item.market_cap_rank <= 100) ? 'MEDIUM' : 'RISKY'
+            });
+            if (candidates.length >= 6) break;
+          }
+        }
+      } catch (err) {
+        console.warn('Browser CoinGecko trending skipped:', err.message);
+      }
+
+      // Step 3: Fetch missing prices
+      const missing = candidates.filter(c => c.currentPrice === 0 && c.coingeckoId);
+      if (missing.length > 0) {
+        try {
+          const ids = missing.map(m => encodeURIComponent(m.coingeckoId)).join(',');
+          const pRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`, { signal: AbortSignal.timeout(3000) });
+          if (pRes.ok) {
+            const pData = await pRes.json();
+            for (const m of missing) {
+              if (pData[m.coingeckoId]?.usd) {
+                m.currentPrice = pData[m.coingeckoId].usd;
+              }
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      return candidates;
+    }
+
     // Load Discovery Radar Data
     async function loadRadarData() {
       window.hasLoadedRadar = true;
       try {
         const data = await apiFetch('/api/scan');
         renderRadarTable(data.candidates);
+        if (data.timestamp) {
+          const tStr = new Date(data.timestamp).toLocaleTimeString('zh-CN', { hour12: false });
+          const timeEl = document.getElementById('radarLastScanTime');
+          if (timeEl) timeEl.innerText = `上次扫描: ${tStr}`;
+        }
+        if (data.candidates) {
+          const countEl = document.getElementById('radarScanCountTag');
+          if (countEl) countEl.innerText = `${data.candidates.length} 个异动候选`;
+        }
       } catch (err) {
         console.error('Failed to load scan radar:', err);
       }
     }
 
     async function triggerScan() {
+      const btn = document.getElementById('rescanBtn');
       const icon = document.getElementById('scanIcon');
-      icon.classList.add('loading-rotator');
+      const progressBox = document.getElementById('radarScanProgress');
+      const progressText = document.getElementById('radarScanProgressText');
+
+      if (btn) btn.disabled = true;
+      if (icon) icon.classList.add('loading-rotator');
+      if (progressBox) progressBox.style.display = 'flex';
+
       try {
-        const data = await apiFetch('/api/scan');
-        renderRadarTable(data.candidates);
-        showToast('⚡ 全网异动雷达扫描完成！');
+        let candidates = [];
+        const isStaticPages = window.location.hostname.includes('github.io') || 
+                              window.location.hostname === 'alphanalyzor.trade' || 
+                              window.location.protocol === 'file:';
+
+        // 1. If running with Node server, try server API first
+        if (!isStaticPages) {
+          if (progressText) progressText.innerText = '⚡ 正在请求后台量化雷达扫描引擎 (/api/scan)...';
+          try {
+            const res = await fetch('/api/scan', { signal: AbortSignal.timeout(6000) });
+            if (res.ok) {
+              const data = await res.json();
+              candidates = data.candidates || [];
+            }
+          } catch (e) {
+            console.warn('Server scan failed, falling back to direct browser scan:', e);
+          }
+        }
+
+        // 2. If candidates is empty (or on static deployment), run direct browser live scan
+        if (candidates.length === 0) {
+          candidates = await scanLiveFromBrowser((msg) => {
+            if (progressText) progressText.innerText = msg;
+          });
+        }
+
+        // 3. Fallback to cached scan.json if network failed
+        if (candidates.length === 0) {
+          if (progressText) progressText.innerText = '🔄 加载本地缓存雷达快照...';
+          const fallback = await fetch('./data/scan.json').then(r => r.json());
+          candidates = fallback.candidates || [];
+        }
+
+        renderRadarTable(candidates);
+
+        // Update last scan time
+        const nowStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+        const timeEl = document.getElementById('radarLastScanTime');
+        if (timeEl) timeEl.innerText = `上次扫描: ${nowStr}`;
+
+        const countEl = document.getElementById('radarScanCountTag');
+        if (countEl) countEl.innerText = `${candidates.length} 个最新异动候选`;
+
+        showToast(`⚡ 全网异动雷达扫描完成！发现 ${candidates.length} 个资金与热点标的`);
+      } catch (err) {
+        console.error('Scan error:', err);
+        showToast('⚠️ 扫描请求异常，已保留现有雷达列表');
       } finally {
-        icon.classList.remove('loading-rotator');
+        if (btn) btn.disabled = false;
+        if (icon) icon.classList.remove('loading-rotator');
+        if (progressBox) progressBox.style.display = 'none';
       }
     }
 
     function renderRadarTable(candidates) {
       const tbody = document.getElementById('radarTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
       const watchedSet = window.activeAssetSymbols || new Set();
 
       for (const c of candidates) {
         const tr = document.createElement('tr');
         const badgeColor = c.safetyRating === 'HIGH' ? 'tag-green' : c.safetyRating === 'MEDIUM' ? 'tag-yellow' : 'tag-danger';
+        const safetyText = c.safetyRating === 'HIGH' ? '🟢 稳健' : c.safetyRating === 'MEDIUM' ? '🟡 中等' : '🔴 投机';
         const isWatched = watchedSet.has(c.symbol.toUpperCase());
+
+        let priceDisplay = '--';
+        if (c.currentPrice > 0) {
+          priceDisplay = `$${c.currentPrice < 0.01 ? c.currentPrice.toFixed(4) : c.currentPrice < 10 ? c.currentPrice.toFixed(3) : c.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        } else if (c.tvl) {
+          priceDisplay = `TVL $${(c.tvl / 1e6).toFixed(1)}M`;
+        }
+
+        const changeVal = c.priceChange30d !== undefined && c.priceChange30d !== 0 ? c.priceChange30d : c.tvlGrowth30dPct;
+        const changeDisplay = changeVal !== undefined && changeVal !== 0
+          ? `<span class="badge-tag ${changeVal >= 0 ? 'tag-green' : 'tag-danger'}" style="font-size: 10px; margin-left: 6px;">${changeVal >= 0 ? '+' : ''}${changeVal.toFixed(1)}%</span>`
+          : '';
 
         const actionBtn = isWatched
           ? `<button class="btn btn-secondary" disabled style="padding: 5px 12px; font-size: 12px; opacity: 0.7; cursor: default;">✓ 已监控</button>`
           : `<button class="btn btn-primary" id="btn-watch-${c.symbol}" style="padding: 5px 16px; font-size: 12px;" onclick="watchAsset('${c.symbol}', '${c.name.replace(/'/g, "\\'")}', '${c.coingeckoId}', '${c.category}')">＋ 关注</button>`;
 
         tr.innerHTML = `
-          <td><strong>${c.name}</strong> <span class="symbol-pill">$${c.symbol}</span></td>
+          <td>
+            <div style="font-weight: 600; font-size: 15px;">${c.name} <span class="symbol-pill">$${c.symbol}</span></div>
+            <div style="font-size: 11px; color: var(--text-dim); margin-top: 2px; font-family: 'JetBrains Mono', monospace;">ID: ${c.coingeckoId}</div>
+          </td>
+          <td>
+            <div style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #FFFFFF;">${priceDisplay} ${changeDisplay}</div>
+          </td>
           <td><span class="badge-tag tag-blue">${c.category}</span></td>
-          <td><span class="badge-tag ${badgeColor}">${c.safetyRating}</span></td>
+          <td><span class="badge-tag ${badgeColor}">${safetyText}</span></td>
           <td style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">${c.discoveryReasons.join('；')}</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">${c.safetyRating === 'HIGH' ? '3%~5%' : '1%~2%'}</td>
           <td>${actionBtn}</td>
@@ -1588,7 +1790,9 @@
         btn.innerText = '关注中...';
       }
 
-      const isPages = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+      const isPages = window.location.hostname.includes('github.io') || 
+                      window.location.hostname === 'alphanalyzor.trade' || 
+                      window.location.protocol === 'file:';
       if (isPages) {
         try {
           const stored = JSON.parse(localStorage.getItem('watched_assets') || '[]');
