@@ -1,0 +1,237 @@
+{
+  "timestamp": 1791201137634,
+  "cycle": {
+    "currentPrice": 86048,
+    "ma200w": 55508.85,
+    "ma200d": 75043,
+    "ratioTo200w": 1.55,
+    "ratioTo200d": 1.15,
+    "mvrvProxy": 1.39,
+    "rsiWeekly": 85.1,
+    "fearAndGreed": 70,
+    "temperatureScore": 47,
+    "regime": "ACCUMULATION",
+    "dcaMultiplier": 1,
+    "signal": "REGULAR_BUY",
+    "summary": "健康积累筑底期。价格在合理估值偏低区间，按计划进行标准/加量价值定投。"
+  },
+  "sentiment": {
+    "value": 70,
+    "classification": "Greed",
+    "historicalAvg30d": 67.5,
+    "historicalAvg90d": 49
+  },
+  "altEvaluations": [
+    {
+      "symbol": "STRK",
+      "name": "Starknet",
+      "currentPrice": 0.056982,
+      "dilutionRiskScore": 45,
+      "ecosystemTractionScore": 35,
+      "relativeValuationScore": 80,
+      "compositeHealthScore": 55,
+      "verdict": "ACCUMULATE_CONSERVATIVE",
+      "maxPortfolioCapPct": 0.015,
+      "dcaAllowed": true,
+      "triggersForEntry": [
+        "仅建议极小仓位探索性参与，严守止损纪律。"
+      ],
+      "riskWarnings": [
+        "结构性月度抛压高危：每月新增解锁约占当前流通盘的 3.0%，需要极高买盘承接。"
+      ]
+    },
+    {
+      "symbol": "ARB",
+      "name": "Arbitrum",
+      "currentPrice": 0.206455,
+      "dilutionRiskScore": 45,
+      "ecosystemTractionScore": 85,
+      "relativeValuationScore": 80,
+      "compositeHealthScore": 70,
+      "verdict": "ACCUMULATE_NORMAL",
+      "maxPortfolioCapPct": 0.05,
+      "dcaAllowed": true,
+      "triggersForEntry": [
+        "当前估值与基本面匹配良好，可分配轻仓额度执行右侧定投。"
+      ],
+      "riskWarnings": [
+        "结构性月度抛压高危：每月新增解锁约占当前流通盘的 2.5%，需要极高买盘承接。"
+      ]
+    },
+    {
+      "symbol": "ZEC",
+      "name": "Zcash",
+      "currentPrice": 1324.62,
+      "dilutionRiskScore": 25,
+      "ecosystemTractionScore": 50,
+      "relativeValuationScore": 50,
+      "compositeHealthScore": 61,
+      "verdict": "ACCUMULATE_CONSERVATIVE",
+      "maxPortfolioCapPct": 0.025,
+      "dcaAllowed": true,
+      "triggersForEntry": [
+        "仅建议极小仓位探索性参与，严守止损纪律。"
+      ],
+      "riskWarnings": [
+        "月度抛压适中：每月解锁约占流通盘的 2.0%。"
+      ]
+    },
+    {
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "currentPrice": 5.02,
+      "dilutionRiskScore": 25,
+      "ecosystemTractionScore": 50,
+      "relativeValuationScore": 50,
+      "compositeHealthScore": 61,
+      "verdict": "ACCUMULATE_CONSERVATIVE",
+      "maxPortfolioCapPct": 0.025,
+      "dcaAllowed": true,
+      "triggersForEntry": [
+        "仅建议极小仓位探索性参与，严守止损纪律。"
+      ],
+      "riskWarnings": [
+        "月度抛压适中：每月解锁约占流通盘的 2.0%。"
+      ]
+    }
+  ],
+  "plan": {
+    "periodDcaBudgetUsd": 500,
+    "allocations": [
+      {
+        "symbol": "BTC",
+        "action": "BUY",
+        "amountUsd": 225,
+        "weightPct": 75,
+        "rationale": "核心底仓资产，动态乘数 1x，本期分配 $225。"
+      },
+      {
+        "symbol": "ETH",
+        "action": "BUY",
+        "amountUsd": 75,
+        "weightPct": 25,
+        "rationale": "次级核心资产，本期分配 $75。"
+      },
+      {
+        "symbol": "STRK",
+        "action": "BUY",
+        "amountUsd": 50,
+        "weightPct": 1.3,
+        "rationale": "满足右侧探索条件，分配 10% 探索预算。"
+      },
+      {
+        "symbol": "ARB",
+        "action": "BUY",
+        "amountUsd": 50,
+        "weightPct": 1.3,
+        "rationale": "满足右侧探索条件，分配 10% 探索预算。"
+      },
+      {
+        "symbol": "ZEC",
+        "action": "BUY",
+        "amountUsd": 50,
+        "weightPct": 1.3,
+        "rationale": "满足右侧探索条件，分配 10% 探索预算。"
+      },
+      {
+        "symbol": "NEAR",
+        "action": "BUY",
+        "amountUsd": 50,
+        "weightPct": 1.3,
+        "rationale": "满足右侧探索条件，分配 10% 探索预算。"
+      }
+    ],
+    "targetPortfolioWeights": {
+      "btc": 0.65,
+      "eth": 0.25,
+      "alts": {
+        "STRK": 0.015,
+        "ARB": 0.05,
+        "ZEC": 0.025,
+        "NEAR": 0.025
+      },
+      "cashOrStablecoins": 0.1,
+      "rebalanceNotes": [
+        "稳步积累：保持 BTC/ETH 高底仓，对通过安全审计的高性价比山寨币小额定投。"
+      ]
+    }
+  },
+  "activeAssets": [
+    {
+      "symbol": "BTC",
+      "name": "Bitcoin",
+      "coingeckoId": "bitcoin",
+      "category": "CORE",
+      "maxPortfolioCapPct": 0.85,
+      "enabled": true
+    },
+    {
+      "symbol": "ETH",
+      "name": "Ethereum",
+      "coingeckoId": "ethereum",
+      "category": "CORE",
+      "maxPortfolioCapPct": 0.35,
+      "enabled": true
+    },
+    {
+      "symbol": "STRK",
+      "name": "Starknet",
+      "coingeckoId": "starknet",
+      "category": "ALT_L2",
+      "chainName": "starknet",
+      "maxPortfolioCapPct": 0.03,
+      "customTokenomics": {
+        "totalSupply": 10000000000,
+        "estimatedMonthlyUnlockPct": 0.03,
+        "stakingRatio": 0.085
+      },
+      "enabled": true
+    },
+    {
+      "symbol": "ARB",
+      "name": "Arbitrum",
+      "coingeckoId": "arbitrum",
+      "category": "ALT_L2",
+      "chainName": "arbitrum",
+      "maxPortfolioCapPct": 0.04,
+      "customTokenomics": {
+        "totalSupply": 10000000000,
+        "estimatedMonthlyUnlockPct": 0.025
+      },
+      "enabled": true
+    },
+    {
+      "symbol": "ZEC",
+      "name": "Zcash",
+      "coingeckoId": "zcash",
+      "category": "TRENDING",
+      "maxPortfolioCapPct": 0.02,
+      "enabled": true,
+      "customTokenomics": {
+        "estimatedMonthlyUnlockPct": 0.02
+      }
+    },
+    {
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "coingeckoId": "near",
+      "category": "TRENDING",
+      "maxPortfolioCapPct": 0.02,
+      "enabled": true,
+      "customTokenomics": {
+        "estimatedMonthlyUnlockPct": 0.02
+      }
+    }
+  ],
+  "holdings": {
+    "btc": 25000,
+    "eth": 8000,
+    "alts": {
+      "STRK": 500,
+      "ARB": 500,
+      "ZEC": 500,
+      "NEAR": 500
+    },
+    "cash": 5000
+  }
+}

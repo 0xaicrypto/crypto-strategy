@@ -1,0 +1,11 @@
+{
+  "periodDays": 1401,
+  "totalInvestedNaive": 86000,
+  "finalValueNaive": 131162,
+  "roiNaivePct": 52.5,
+  "totalInvestedDynamic": 143750,
+  "finalValueDynamic": 224540,
+  "roiDynamicPct": 56.2,
+  "outperformancePct": 3.7,
+  "cashRemainingInReserve": 0
+}

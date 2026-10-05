@@ -11,6 +11,7 @@
     "backtest": "node --experimental-strip-types src/index.ts backtest",
     "web": "node --experimental-strip-types src/server.ts",
     "dev": "node --experimental-strip-types src/server.ts",
+    "build:pages": "node --experimental-strip-types src/build-static.ts",
     "strk": "node --experimental-strip-types src/index.ts evaluate --asset STRK",
     "typecheck": "tsc --noEmit"
   },

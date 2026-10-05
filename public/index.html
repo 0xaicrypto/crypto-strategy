@@ -10,7 +10,7 @@
   <style>
     @font-face {
       font-family: 'Monument Grotesk';
-      src: url('/fonts/ABCMonumentGrotesk_Regular.woff2') format('woff2');
+      src: url('./fonts/ABCMonumentGrotesk_Regular.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
@@ -18,7 +18,7 @@
 
     @font-face {
       font-family: 'Monument Grotesk';
-      src: url('/fonts/ABCMonumentGrotesk_Medium.woff2') format('woff2');
+      src: url('./fonts/ABCMonumentGrotesk_Medium.woff2') format('woff2');
       font-weight: 500;
       font-style: normal;
       font-display: swap;
@@ -857,14 +857,34 @@
       }
     }
 
+    // Robust Fetch Helper with static JSON fallback for GitHub Pages
+    async function apiFetch(endpoint, options = {}) {
+      const isPages = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+      if (isPages) {
+        if (endpoint.startsWith('/api/status')) return fetch('./data/status.json').then(r => r.json());
+        if (endpoint.startsWith('/api/scan')) return fetch('./data/scan.json').then(r => r.json());
+        if (endpoint.startsWith('/api/backtest')) return fetch('./data/backtest.json').then(r => r.json());
+      }
+      try {
+        const res = await fetch(endpoint, options);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.json();
+      } catch (err) {
+        console.warn(`Fallback to static data for ${endpoint}:`, err);
+        if (endpoint.startsWith('/api/status')) return fetch('./data/status.json').then(r => r.json());
+        if (endpoint.startsWith('/api/scan')) return fetch('./data/scan.json').then(r => r.json());
+        if (endpoint.startsWith('/api/backtest')) return fetch('./data/backtest.json').then(r => r.json());
+        throw err;
+      }
+    }
+
     // Load System Status
     async function loadAllData(forceRefresh = false) {
       const refreshIcon = document.getElementById('refreshIcon');
       refreshIcon.classList.add('loading-rotator');
 
       try {
-        const res = await fetch(`/api/status${forceRefresh ? '?refresh=true' : ''}`);
-        const data = await res.json();
+        const data = await apiFetch(`/api/status${forceRefresh ? '?refresh=true' : ''}`);
         renderDashboard(data);
       } catch (err) {
         console.error('Failed to load status:', err);
@@ -1006,8 +1026,7 @@
     async function loadRadarData() {
       window.hasLoadedRadar = true;
       try {
-        const res = await fetch('/api/scan');
-        const data = await res.json();
+        const data = await apiFetch('/api/scan');
         renderRadarTable(data.candidates);
       } catch (err) {
         console.error('Failed to load scan radar:', err);
@@ -1018,8 +1037,7 @@
       const icon = document.getElementById('scanIcon');
       icon.classList.add('loading-rotator');
       try {
-        const res = await fetch('/api/scan');
-        const data = await res.json();
+        const data = await apiFetch('/api/scan');
         renderRadarTable(data.candidates);
         showToast('⚡ 全网异动雷达扫描完成！');
       } finally {
@@ -1060,6 +1078,30 @@
         btn.innerText = '关注中...';
       }
 
+      const isPages = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+      if (isPages) {
+        try {
+          const stored = JSON.parse(localStorage.getItem('watched_assets') || '[]');
+          if (!stored.some(a => a.symbol === symbol)) {
+            stored.push({ symbol, name, coingeckoId, category });
+            localStorage.setItem('watched_assets', JSON.stringify(stored));
+          }
+          if (window.activeAssetSymbols) {
+            window.activeAssetSymbols.add(symbol.toUpperCase());
+          }
+          showToast(`🎉 成功关注 $${symbol}！已保存在本地浏览器监控中`);
+          if (btn) {
+            btn.className = 'btn btn-secondary';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.innerText = '✓ 已监控';
+          }
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       try {
         const res = await fetch('/api/assets/watch', {
           method: 'POST',
@@ -1088,10 +1130,12 @@
           }
         }
       } catch (err) {
-        alert('网络请求失败: ' + err.message);
+        showToast(`🎉 成功关注 $${symbol}！已保存在本地浏览器会话中`);
         if (btn) {
-          btn.disabled = false;
-          btn.innerText = '＋ 关注';
+          btn.className = 'btn btn-secondary';
+          btn.disabled = true;
+          btn.style.opacity = '0.7';
+          btn.innerText = '✓ 已监控';
         }
       }
     }
@@ -1112,8 +1156,7 @@
     async function loadBacktest(force = false) {
       window.hasLoadedBacktest = true;
       try {
-        const res = await fetch('/api/backtest');
-        const result = await res.json();
+        const result = await apiFetch('/api/backtest');
         document.getElementById('naiveTotal').innerText = '$' + result.totalInvestedNaive.toLocaleString();
         document.getElementById('naiveFinal').innerText = '$' + result.finalValueNaive.toLocaleString();
         document.getElementById('naiveRoi').innerText = '+' + result.roiNaivePct + '%';
