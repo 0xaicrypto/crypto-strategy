@@ -1403,8 +1403,104 @@
           <button class="btn btn-secondary" id="modalSwitchMantleBtn" style="padding: 4px 12px; font-size: 11px;" onclick="switchToMantleNetwork()">一键切网 (Mantle)</button>
         </div>
 
-        <!-- Dynamic Routes Content Container -->
-        <div id="buyModalRoutesContainer">
+        <!-- Terminal Mode Switcher -->
+        <div class="sub-toggle-group" style="margin-bottom: 18px; width: 100%;">
+          <button class="sub-toggle-btn active" id="modalTabBtnDirect" style="flex: 1; text-align: center;" onclick="switchModalTab('direct')">
+            ⚡ 链上直连免跳转买入 (Direct On-Chain Swap)
+          </button>
+          <button class="sub-toggle-btn" id="modalTabBtnExternal" style="flex: 1; text-align: center;" onclick="switchModalTab('external')">
+            🌐 聚合路由与外部渠道 (Aggregators)
+          </button>
+        </div>
+
+        <!-- Mode 1: In-App Direct Swap Terminal Container -->
+        <div id="buyModalDirectContainer">
+          <!-- Optional Stock Token Notice -->
+          <div id="directSwapStockNotice" style="display: none; padding: 10px 14px; background: rgba(0, 212, 255, 0.08); border: 1px dashed rgba(0, 212, 255, 0.3); border-radius: 6px; margin-bottom: 14px; font-size: 12px; line-height: 1.5; color: var(--ice-cyan);">
+            💡 <b>美股代币直通提示</b>：美股代币基于 BackedFi 1:1 实体股票托管，通过 Fluxion Atomic RFQ 机构做市商撮合。您可在此直接兑换基础稳定币 (USDC/USDT)，或切换至【聚合路由】直连 Fluxion 机构询价单。
+          </div>
+
+          <!-- Direct Swap Form -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-main); border-radius: 8px; padding: 18px; margin-bottom: 16px;">
+            <!-- Pay Token Row -->
+            <div style="margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px;">
+                <span style="color: var(--text-muted);">支付资产 (Pay From)</span>
+                <span style="color: var(--text-dim);">可用余额: <strong id="swapPayBalanceText" style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">-- MNT</strong></span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="swapPayTokenSelect" onchange="onSwapTokenChange()" style="background: #081C15; border: 1px solid var(--border-main); color: #FFFFFF; border-radius: 6px; padding: 10px 12px; font-size: 14px; font-weight: 600; outline: none; cursor: pointer;">
+                  <option value="MNT">MNT (原生 Gas)</option>
+                  <option value="USDC">USDC (Mantle)</option>
+                  <option value="USDT">USDT (Mantle)</option>
+                </select>
+                <div style="flex: 1; position: relative;">
+                  <input type="number" id="swapPayAmountInput" value="10" min="0" step="any" oninput="onSwapAmountInput()" placeholder="0.0" style="width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-main); border-radius: 6px; padding: 10px 12px; color: #FFFFFF; font-size: 16px; font-weight: 600; font-family: 'JetBrains Mono', monospace; outline: none;" />
+                </div>
+              </div>
+              <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end;">
+                <button type="button" class="btn btn-secondary" onclick="fillSwapPercentage(0.25)" style="padding: 2px 8px; font-size: 10px;">25%</button>
+                <button type="button" class="btn btn-secondary" onclick="fillSwapPercentage(0.50)" style="padding: 2px 8px; font-size: 10px;">50%</button>
+                <button type="button" class="btn btn-secondary" onclick="fillSwapPercentage(1.00)" style="padding: 2px 8px; font-size: 10px;">MAX</button>
+              </div>
+            </div>
+
+            <!-- Direction Indicator Arrow -->
+            <div style="text-align: center; margin: 4px 0 10px 0;">
+              <span style="display: inline-block; width: 28px; height: 28px; line-height: 26px; border-radius: 50%; background: rgba(0, 255, 147, 0.1); border: 1px solid rgba(0, 255, 147, 0.3); color: var(--mint); font-size: 14px;">↓</span>
+            </div>
+
+            <!-- Receive Token Row -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px;">
+                <span style="color: var(--text-muted);">预计获得 (Receive To)</span>
+                <span style="color: var(--mint); font-family: 'JetBrains Mono', monospace;" id="swapLiveRateText">实时询价中...</span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="swapReceiveTokenSelect" onchange="onSwapTokenChange()" style="background: #081C15; border: 1px solid var(--border-main); color: #FFFFFF; border-radius: 6px; padding: 10px 12px; font-size: 14px; font-weight: 600; outline: none; cursor: pointer;">
+                  <option value="USDC">USDC (Mantle)</option>
+                  <option value="WETH">WETH (以太坊)</option>
+                  <option value="USDT">USDT (Tether)</option>
+                  <option value="MNT">MNT (原生代币)</option>
+                </select>
+                <div style="flex: 1; position: relative;">
+                  <input type="text" id="swapReceiveAmountDisplay" readonly value="计算中..." style="width: 100%; background: rgba(0, 255, 147, 0.04); border: 1px solid rgba(0, 255, 147, 0.25); border-radius: 6px; padding: 10px 12px; color: var(--mint); font-size: 16px; font-weight: 700; font-family: 'JetBrains Mono', monospace; outline: none;" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trade Metadata & Execution Details -->
+          <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-main); border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">链上撮合协议：</span>
+              <span style="color: #FFFFFF; font-weight: 500;">Fluxion AMM V3 / Atomic RFQ</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">路由合约 (SwapRouter)：</span>
+              <a href="https://explorer.mantle.xyz/address/0x5628a59dF0ECAC3f3171f877A94bEb26BA6DFAa0" target="_blank" style="color: var(--ice-cyan); font-family: 'JetBrains Mono', monospace; text-decoration: none;">0x5628...a0 ↗</a>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">滑点保护 (Slippage)：</span>
+              <span style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">0.5% (最低保障: <span id="swapMinReceivedText" style="color: var(--mint);">--</span>)</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">预估 Mantle L2 Gas：</span>
+              <span style="color: var(--mint); font-family: 'JetBrains Mono', monospace;">&lt; 0.0005 MNT (&lt; $0.001)</span>
+            </div>
+          </div>
+
+          <!-- Live Status Box (Pending / Success / Error) -->
+          <div id="directSwapStatusBox" style="display: none; padding: 12px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 13px; line-height: 1.5;"></div>
+
+          <!-- Direct Execution Submit Button -->
+          <button class="btn btn-primary" id="btnExecuteDirectSwap" onclick="executeDirectFluxionSwap()" style="width: 100%; padding: 12px; font-size: 15px; font-weight: 600; text-align: center;">
+            ⚡ 立即在 Mantle 链上买入 (MetaMask 签名)
+          </button>
+        </div>
+
+        <!-- Mode 2: External Routes Container -->
+        <div id="buyModalRoutesContainer" style="display: none;">
           <!-- Populated dynamically via JS in openBuyModal() -->
         </div>
 
@@ -3120,6 +3216,522 @@
       }
     }
 
+    // ==========================================
+    // Fluxion On-Chain Direct Swap Terminal (Mantle L2)
+    // ==========================================
+    const FLUXION_SWAP_ROUTER = '0x5628a59dF0ECAC3f3171f877A94bEb26BA6DFAa0';
+    const FLUXION_QUOTER_V2   = '0x3E4eE18Ac7280813236a1EB850679Da5322E14CE';
+    const WMNT_CONTRACT       = '0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8';
+    const USDC_CONTRACT       = '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9';
+    const USDT_CONTRACT       = '0x201EBa5CC46D216Ce6DC03F6a759e80666199157';
+    const WETH_CONTRACT       = '0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111';
+
+    const FLUXION_TOKENS = {
+      MNT: {
+        symbol: 'MNT',
+        name: 'Mantle Native',
+        address: '0x0000000000000000000000000000000000000000',
+        wrapAddress: WMNT_CONTRACT,
+        decimals: 18,
+        isNative: true
+      },
+      USDC: {
+        symbol: 'USDC',
+        name: 'USD Coin',
+        address: USDC_CONTRACT,
+        wrapAddress: USDC_CONTRACT,
+        decimals: 6,
+        isNative: false
+      },
+      USDT: {
+        symbol: 'USDT',
+        name: 'Tether USD',
+        address: USDT_CONTRACT,
+        wrapAddress: USDT_CONTRACT,
+        decimals: 6,
+        isNative: false
+      },
+      WETH: {
+        symbol: 'WETH',
+        name: 'Wrapped Ether',
+        address: WETH_CONTRACT,
+        wrapAddress: WETH_CONTRACT,
+        decimals: 18,
+        isNative: false
+      }
+    };
+
+    let swapQuoteDebounceTimer = null;
+    let currentQuotedAmountOut = 0n;
+    let currentSwapIsMultiHop = false;
+    let currentMultiHopPath = '';
+
+    function padHex32(val) {
+      let hex = '';
+      if (typeof val === 'bigint') {
+        hex = val.toString(16);
+      } else if (typeof val === 'number') {
+        hex = Math.floor(val).toString(16);
+      } else if (typeof val === 'string') {
+        hex = val.startsWith('0x') ? val.slice(2) : val;
+      }
+      return hex.toLowerCase().padStart(64, '0');
+    }
+
+    function encodeExactInputSingle({ tokenIn, tokenOut, fee, recipient, deadline, amountIn, amountOutMinimum, sqrtPriceLimitX96 = 0n }) {
+      return '0x414bf389' +
+        padHex32(tokenIn) +
+        padHex32(tokenOut) +
+        padHex32(fee) +
+        padHex32(recipient) +
+        padHex32(deadline) +
+        padHex32(amountIn) +
+        padHex32(amountOutMinimum) +
+        padHex32(sqrtPriceLimitX96);
+    }
+
+    function encodeExactInput({ pathHex, recipient, deadline, amountIn, amountOutMinimum }) {
+      const pathClean = pathHex.replace(/^0x/, '');
+      const pathByteLen = pathClean.length / 2;
+      const pathPadded = pathClean.toLowerCase().padEnd(Math.ceil(pathClean.length / 64) * 64, '0');
+      return '0xc04b8d59' +
+        padHex32(0x20) +
+        padHex32(0xa0) +
+        padHex32(recipient) +
+        padHex32(deadline) +
+        padHex32(amountIn) +
+        padHex32(amountOutMinimum) +
+        padHex32(pathByteLen) +
+        pathPadded;
+    }
+
+    function switchModalTab(tab) {
+      const directContainer = document.getElementById('buyModalDirectContainer');
+      const routesContainer = document.getElementById('buyModalRoutesContainer');
+      const btnDirect = document.getElementById('modalTabBtnDirect');
+      const btnExternal = document.getElementById('modalTabBtnExternal');
+
+      if (tab === 'direct') {
+        if (directContainer) directContainer.style.display = 'block';
+        if (routesContainer) routesContainer.style.display = 'none';
+        if (btnDirect) btnDirect.classList.add('active');
+        if (btnExternal) btnExternal.classList.remove('active');
+      } else {
+        if (directContainer) directContainer.style.display = 'none';
+        if (routesContainer) routesContainer.style.display = 'block';
+        if (btnDirect) btnDirect.classList.remove('active');
+        if (btnExternal) btnExternal.classList.add('active');
+      }
+    }
+
+    function fillSwapPercentage(pct) {
+      const payTokenSelect = document.getElementById('swapPayTokenSelect');
+      const payInput = document.getElementById('swapPayAmountInput');
+      if (!payTokenSelect || !payInput) return;
+
+      const sym = payTokenSelect.value;
+      let available = 0;
+
+      if (sym === 'MNT') {
+        const rawVal = parseFloat(userWalletBalance) || 0;
+        available = Math.max(0, rawVal - (pct === 1.0 ? 0.3 : 0));
+      } else {
+        const item = userOnChainHoldings.find(h => h.symbol === sym);
+        available = item ? item.amount : 0;
+      }
+
+      const calculated = available * pct;
+      payInput.value = calculated > 0 ? (calculated < 0.0001 ? calculated.toFixed(6) : calculated.toFixed(4)) : '0';
+      onSwapAmountInput();
+    }
+
+    function onSwapTokenChange() {
+      const paySelect = document.getElementById('swapPayTokenSelect');
+      const recSelect = document.getElementById('swapReceiveTokenSelect');
+      const balText = document.getElementById('swapPayBalanceText');
+
+      if (paySelect && recSelect) {
+        if (paySelect.value === recSelect.value) {
+          if (paySelect.value === 'MNT') recSelect.value = 'USDC';
+          else recSelect.value = 'MNT';
+        }
+      }
+
+      if (balText && paySelect) {
+        const sym = paySelect.value;
+        if (sym === 'MNT') {
+          balText.innerText = `${userWalletBalance || '0.00'} MNT`;
+        } else {
+          const it = userOnChainHoldings.find(h => h.symbol === sym);
+          balText.innerText = it ? `${it.amount.toFixed(2)} ${sym}` : `0.00 ${sym}`;
+        }
+      }
+
+      updateDirectSwapQuote();
+    }
+
+    function onSwapAmountInput() {
+      if (swapQuoteDebounceTimer) clearTimeout(swapQuoteDebounceTimer);
+      swapQuoteDebounceTimer = setTimeout(() => {
+        updateDirectSwapQuote();
+      }, 300);
+    }
+
+    async function callMantleRpc(method, params) {
+      try {
+        const res = await fetch('https://rpc.mantle.xyz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jsonrpc: '2.0', id: Date.now(), method, params })
+        });
+        const json = await res.json();
+        return json.result;
+      } catch (e) {
+        if (window.ethereum && currentChainId === MANTLE_CHAIN_ID_HEX) {
+          return await window.ethereum.request({ method, params });
+        }
+        throw e;
+      }
+    }
+
+    async function queryFluxionQuoter(tIn, tOut, amountInWei, fee = 3000) {
+      const callData = '0xc6a5026a' +
+        padHex32(tIn) +
+        padHex32(tOut) +
+        padHex32(amountInWei) +
+        padHex32(fee) +
+        padHex32(0);
+
+      const resHex = await callMantleRpc('eth_call', [{ to: FLUXION_QUOTER_V2, data: callData }, 'latest']);
+      if (resHex && resHex.length >= 66) {
+        return BigInt('0x' + resHex.slice(2, 66));
+      }
+      return null;
+    }
+
+    async function updateDirectSwapQuote() {
+      const paySelect = document.getElementById('swapPayTokenSelect');
+      const recSelect = document.getElementById('swapReceiveTokenSelect');
+      const payInput = document.getElementById('swapPayAmountInput');
+      const recDisplay = document.getElementById('swapReceiveAmountDisplay');
+      const rateText = document.getElementById('swapLiveRateText');
+      const minText = document.getElementById('swapMinReceivedText');
+      const statusBox = document.getElementById('directSwapStatusBox');
+
+      if (!paySelect || !recSelect || !payInput || !recDisplay) return;
+
+      const paySym = paySelect.value;
+      const recSym = recSelect.value;
+      const payTok = FLUXION_TOKENS[paySym];
+      const recTok = FLUXION_TOKENS[recSym];
+
+      const amountNum = parseFloat(payInput.value) || 0;
+      if (amountNum <= 0) {
+        recDisplay.value = '0.00';
+        if (rateText) rateText.innerText = '请输入金额';
+        if (minText) minText.innerText = '--';
+        currentQuotedAmountOut = 0n;
+        return;
+      }
+
+      if (rateText) rateText.innerText = '⚡ 实时询价中...';
+      recDisplay.value = '计算中...';
+
+      try {
+        const amountInWei = BigInt(Math.floor(amountNum * (10 ** payTok.decimals)));
+        currentSwapIsMultiHop = false;
+        currentMultiHopPath = '';
+
+        let amountOutWei = null;
+
+        // 1. Try Direct Single-Hop Quote (Fee 3000)
+        try {
+          amountOutWei = await queryFluxionQuoter(payTok.wrapAddress, recTok.wrapAddress, amountInWei, 3000);
+        } catch (e) {
+          // fallback to multi-hop
+        }
+
+        // 2. If direct quote failed, attempt multi-hop via USDC bridge
+        if (!amountOutWei && paySym !== 'USDC' && recSym !== 'USDC') {
+          try {
+            const step1Out = await queryFluxionQuoter(payTok.wrapAddress, USDC_CONTRACT, amountInWei, 3000);
+            if (step1Out && step1Out > 0n) {
+              const step2Out = await queryFluxionQuoter(USDC_CONTRACT, recTok.wrapAddress, step1Out, 3000);
+              if (step2Out && step2Out > 0n) {
+                amountOutWei = step2Out;
+                currentSwapIsMultiHop = true;
+                const feeHex = (3000).toString(16).padStart(6, '0');
+                currentMultiHopPath = '0x' + payTok.wrapAddress.slice(2) + feeHex + USDC_CONTRACT.slice(2) + feeHex + recTok.wrapAddress.slice(2);
+              }
+            }
+          } catch (e) {
+            console.warn('Multi-hop quote failed:', e);
+          }
+        }
+
+        if (amountOutWei && amountOutWei > 0n) {
+          currentQuotedAmountOut = amountOutWei;
+          const outFormatted = Number(amountOutWei) / (10 ** recTok.decimals);
+          recDisplay.value = outFormatted < 0.0001 ? outFormatted.toFixed(6) : outFormatted.toFixed(4);
+
+          const unitRate = outFormatted / amountNum;
+          if (rateText) {
+            rateText.innerText = `1 ${paySym} ≈ ${unitRate < 0.001 ? unitRate.toFixed(6) : unitRate.toFixed(4)} ${recSym}`;
+          }
+
+          // 0.5% Slippage Protection
+          const minOutWei = (amountOutWei * 995n) / 1000n;
+          const minFormatted = Number(minOutWei) / (10 ** recTok.decimals);
+          if (minText) {
+            minText.innerText = `${minFormatted < 0.0001 ? minFormatted.toFixed(6) : minFormatted.toFixed(4)} ${recSym}`;
+          }
+          if (statusBox && statusBox.style.display !== 'none' && statusBox.innerText.includes('未找到')) {
+            statusBox.style.display = 'none';
+          }
+        } else {
+          recDisplay.value = '池流动性不足';
+          if (rateText) rateText.innerText = '暂无直连池报价';
+          if (minText) minText.innerText = '--';
+          currentQuotedAmountOut = 0n;
+          if (statusBox) {
+            statusBox.style.display = 'block';
+            statusBox.style.background = 'rgba(255, 184, 0, 0.08)';
+            statusBox.style.border = '1px solid rgba(255, 184, 0, 0.3)';
+            statusBox.style.color = '#FFB800';
+            statusBox.innerHTML = `⚠️ 当前币对在 Fluxion AMM 上池流动性受限，建议点击上方 <b>【聚合路由】</b> 使用 DefiLlama / OpenOcean 全网聚合买入。`;
+          }
+        }
+      } catch (err) {
+        console.error('Failed to get quote:', err);
+        recDisplay.value = '询价失败';
+        if (rateText) rateText.innerText = '请检查网络或重试';
+      }
+    }
+
+    async function executeDirectFluxionSwap() {
+      const execBtn = document.getElementById('btnExecuteDirectSwap');
+      const statusBox = document.getElementById('directSwapStatusBox');
+      const paySelect = document.getElementById('swapPayTokenSelect');
+      const recSelect = document.getElementById('swapReceiveTokenSelect');
+      const payInput = document.getElementById('swapPayAmountInput');
+
+      if (!isMetaMaskAvailable()) {
+        showToast('🦊 请先安装并连接 MetaMask 钱包！');
+        window.open('https://metamask.io/download/', '_blank');
+        return;
+      }
+
+      if (!userWalletAddress) {
+        try {
+          await connectMetaMask();
+        } catch (e) {
+          showToast('❌ 请连接钱包以继续交易');
+          return;
+        }
+      }
+
+      if (currentChainId !== MANTLE_CHAIN_ID_HEX) {
+        try {
+          await switchToMantleNetwork();
+        } catch (e) {
+          showToast('❌ 请先切换至 Mantle Network');
+          return;
+        }
+      }
+
+      const paySym = paySelect.value;
+      const recSym = recSelect.value;
+      const payTok = FLUXION_TOKENS[paySym];
+      const recTok = FLUXION_TOKENS[recSym];
+      const amountNum = parseFloat(payInput.value) || 0;
+
+      if (amountNum <= 0) {
+        showToast('⚠️ 请输入有效的交易金额');
+        return;
+      }
+
+      if (!currentQuotedAmountOut || currentQuotedAmountOut <= 0n) {
+        showToast('⚠️ 请等待链上询价完成');
+        return;
+      }
+
+      if (execBtn) {
+        execBtn.disabled = true;
+        execBtn.style.opacity = '0.6';
+        execBtn.innerText = '⚡ 链上交易处理中...';
+      }
+
+      if (statusBox) {
+        statusBox.style.display = 'block';
+        statusBox.style.background = 'rgba(0, 212, 255, 0.08)';
+        statusBox.style.border = '1px solid rgba(0, 212, 255, 0.3)';
+        statusBox.style.color = '#FFFFFF';
+        statusBox.innerHTML = '⏳ 正在构建交易参数并检查授权...';
+      }
+
+      try {
+        const amountInWei = BigInt(Math.floor(amountNum * (10 ** payTok.decimals)));
+        const minOutWei = (currentQuotedAmountOut * 995n) / 1000n; // 0.5% slippage
+        const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200);
+
+        // 1. ERC20 Allowance Check if paying with ERC20
+        if (!payTok.isNative) {
+          const allowanceData = '0xdd62ed3e' + padHex32(userWalletAddress) + padHex32(FLUXION_SWAP_ROUTER);
+          const allowanceHex = await window.ethereum.request({
+            method: 'eth_call',
+            params: [{ to: payTok.address, data: allowanceData }, 'latest']
+          });
+          const curAllowance = BigInt(allowanceHex || '0x0');
+
+          if (curAllowance < amountInWei) {
+            if (statusBox) {
+              statusBox.innerHTML = `📝 正在申请代币授权 (<strong style="color: var(--mint);">${paySym}</strong>)... 请在 MetaMask 中确认授权`;
+            }
+            const maxUint = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+            const approveData = '0x095ea7b3' + padHex32(FLUXION_SWAP_ROUTER) + padHex32(maxUint);
+            const approveTx = await window.ethereum.request({
+              method: 'eth_sendTransaction',
+              params: [{
+                from: userWalletAddress,
+                to: payTok.address,
+                data: approveData
+              }]
+            });
+            if (statusBox) {
+              statusBox.innerHTML = `⏳ 授权已提交 (<a href="https://explorer.mantle.xyz/tx/${approveTx}" target="_blank" style="color: var(--ice-cyan); text-decoration: underline;">查看 TX</a>)，等待链上确认...`;
+            }
+            await new Promise(resolve => setTimeout(resolve, 3500));
+          }
+        }
+
+        // 2. Build Swap Calldata
+        let calldata = '';
+        const txParams = {
+          from: userWalletAddress,
+          to: FLUXION_SWAP_ROUTER
+        };
+
+        if (currentSwapIsMultiHop && currentMultiHopPath) {
+          calldata = encodeExactInput({
+            pathHex: currentMultiHopPath,
+            recipient: userWalletAddress,
+            deadline,
+            amountIn: amountInWei,
+            amountOutMinimum: minOutWei
+          });
+        } else {
+          calldata = encodeExactInputSingle({
+            tokenIn: payTok.wrapAddress,
+            tokenOut: recTok.wrapAddress,
+            fee: 3000,
+            recipient: userWalletAddress,
+            deadline,
+            amountIn: amountInWei,
+            amountOutMinimum: minOutWei,
+            sqrtPriceLimitX96: 0n
+          });
+        }
+
+        txParams.data = calldata;
+
+        if (payTok.isNative) {
+          txParams.value = '0x' + amountInWei.toString(16);
+        }
+
+        if (statusBox) {
+          statusBox.innerHTML = '🦊 请在 MetaMask 中确认交易签名... (免跳转直接在 Mantle 链上买入)';
+        }
+
+        const txHash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [txParams]
+        });
+
+        if (statusBox) {
+          statusBox.style.background = 'rgba(0, 255, 147, 0.08)';
+          statusBox.style.border = '1px solid rgba(0, 255, 147, 0.4)';
+          statusBox.innerHTML = `
+            🎉 <strong style="color: var(--mint);">交易已在 Mantle 链上广播！</strong><br>
+            TX Hash: <a href="https://explorer.mantle.xyz/tx/${txHash}" target="_blank" style="color: var(--mint); text-decoration: underline; font-family: 'JetBrains Mono', monospace;">${txHash.slice(0, 10)}...${txHash.slice(-8)} ↗</a><br>
+            <span style="font-size: 11px; color: var(--text-dim); margin-top: 6px; display: inline-block;">
+              ⚡ 免跳转直连买入已完成，底层资产将直接结算到您的钱包。
+            </span>
+          `;
+        }
+
+        showToast('🎉 Mantle 链上免跳转买入成功！');
+        setTimeout(() => {
+          refreshPortfolioData(false);
+        }, 3000);
+
+      } catch (err) {
+        console.error('Direct Swap Execution Error:', err);
+        const isUserReject = err.code === 4001 || (err.message && err.message.includes('User rejected'));
+        if (statusBox) {
+          statusBox.style.display = 'block';
+          statusBox.style.background = 'rgba(255, 82, 82, 0.1)';
+          statusBox.style.border = '1px solid rgba(255, 82, 82, 0.4)';
+          statusBox.style.color = '#FF5252';
+          statusBox.innerHTML = isUserReject
+            ? '❌ 用户已在 MetaMask 取消交易签名。'
+            : `❌ <b>交易未完成</b>: ${err.message || '链上执行异常'}`;
+        }
+        showToast(isUserReject ? '已取消交易' : '❌ 交易失败: ' + (err.message || ''));
+      } finally {
+        if (execBtn) {
+          execBtn.disabled = false;
+          execBtn.style.opacity = '1';
+          execBtn.innerText = '⚡ 立即在 Mantle 链上买入 (MetaMask 签名)';
+        }
+      }
+    }
+
+    function initDirectSwapModal(symbol, isStock) {
+      switchModalTab('direct');
+
+      const stockNotice = document.getElementById('directSwapStockNotice');
+      if (stockNotice) {
+        stockNotice.style.display = isStock ? 'block' : 'none';
+      }
+
+      const statusBox = document.getElementById('directSwapStatusBox');
+      if (statusBox) {
+        statusBox.style.display = 'none';
+        statusBox.innerHTML = '';
+      }
+
+      const paySelect = document.getElementById('swapPayTokenSelect');
+      const recSelect = document.getElementById('swapReceiveTokenSelect');
+      const payInput = document.getElementById('swapPayAmountInput');
+
+      if (paySelect && recSelect) {
+        const cleanSym = (symbol || '').toUpperCase().replace(/X$/, '');
+        if (cleanSym === 'USDC') {
+          paySelect.value = 'MNT';
+          recSelect.value = 'USDC';
+          if (payInput) payInput.value = '10';
+        } else if (cleanSym === 'MNT') {
+          paySelect.value = 'USDC';
+          recSelect.value = 'MNT';
+          if (payInput) payInput.value = '10';
+        } else if (cleanSym === 'ETH' || cleanSym === 'WETH') {
+          paySelect.value = 'USDC';
+          recSelect.value = 'WETH';
+          if (payInput) payInput.value = '50';
+        } else if (cleanSym === 'USDT') {
+          paySelect.value = 'MNT';
+          recSelect.value = 'USDC';
+          if (payInput) payInput.value = '10';
+        } else {
+          paySelect.value = 'MNT';
+          recSelect.value = 'USDC';
+          if (payInput) payInput.value = '10';
+        }
+      }
+
+      onSwapTokenChange();
+    }
+
     async function executeRoute(targetUrl, requiresMantle = true) {
       if (requiresMantle && isMetaMaskAvailable() && currentChainId !== MANTLE_CHAIN_ID_HEX) {
         try {
@@ -3292,6 +3904,9 @@
           </div>
         `;
       }
+
+      // Initialize Direct Swap Terminal
+      initDirectSwapModal(cleanSymbol, isStock);
 
       modal.style.display = 'flex';
     }
