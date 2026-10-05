@@ -648,6 +648,40 @@
       box-shadow: 0 0 16px rgba(0, 255, 147, 0.1);
     }
 
+    /* Portfolio Terminal & Action Directives */
+    .directive-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .directive-card:hover {
+      border-color: rgba(0, 255, 147, 0.4);
+      background: rgba(0, 255, 147, 0.03);
+      transform: translateY(-1px);
+    }
+    .directive-card.buy {
+      border-left: 3px solid var(--mint);
+    }
+    .directive-card.hold {
+      border-left: 3px solid #FFB800;
+    }
+    .directive-card.rebalance {
+      border-left: 3px solid var(--ice-cyan);
+    }
+    .allocation-segment {
+      height: 100%;
+      transition: width 0.3s ease;
+      cursor: pointer;
+    }
+    .allocation-segment:hover {
+      filter: brightness(1.25);
+    }
+
     /* Data Tables */
     .table-wrap {
       border: 1px solid var(--border-main);
@@ -991,13 +1025,139 @@
           </div>
         </div>
 
-        <div id="walletSyncBanner" style="display: none; align-items: center; justify-content: space-between; padding: 12px 18px; margin-bottom: 20px; background: rgba(0, 255, 147, 0.04); border: 1px solid rgba(0, 255, 147, 0.25); border-radius: 6px; font-size: 13px;">
-          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <span style="color: var(--mint); font-weight: 500;">🦊 Web3 钱包已联动</span>
-            <span style="color: var(--text-muted);">| 账户: <strong id="walletSyncAddr" style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">--</strong></span>
-            <span style="color: var(--text-muted);">| 链上可用原生资金: <strong id="walletSyncBal" style="color: var(--mint); font-family: 'JetBrains Mono', monospace;">--</strong></span>
+        <!-- Web3 Wallet Prompt Card (Shown when wallet is not connected and demo is not active) -->
+        <div id="walletPromptCard" style="padding: 16px 20px; margin-bottom: 24px; background: rgba(0, 255, 147, 0.03); border: 1px dashed rgba(0, 255, 147, 0.25); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(226, 118, 27, 0.15); border: 1px solid rgba(226, 118, 27, 0.4); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              🦊
+            </div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: #FFFFFF;">连接 Web3 钱包查看当前持仓组合 (Portfolio) 与调仓指令</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                自动统计链上持仓占比、总资产估值，支持隐私金额遮蔽 (Mask)，并在 Mantle 链上一键执行个性化调仓指令。
+              </div>
+            </div>
           </div>
-          <span class="badge-tag tag-green">⚡ 实时读链中</span>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" onclick="enableDemoPortfolio()" style="font-size: 12px; padding: 5px 12px;">🌟 查看策略演示组合</button>
+            <button class="btn btn-primary" onclick="connectMetaMask()" style="font-size: 12px; padding: 5px 14px;">🦊 连接 MetaMask</button>
+          </div>
+        </div>
+
+        <!-- Connected Web3 Portfolio Terminal & Action Directives -->
+        <div id="portfolioCard" class="panel-card" style="display: none; margin-bottom: 24px; border-color: rgba(0, 255, 147, 0.35); background: linear-gradient(180deg, rgba(0, 255, 147, 0.04) 0%, rgba(6, 20, 15, 0.7) 100%);">
+          <!-- Header Toolbar -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="pulse-dot" style="background: var(--mint);"></span>
+                <div class="card-eyebrow" style="color: var(--mint); margin-bottom: 0;">Web3 Live Portfolio Terminal</div>
+                <span class="badge-tag" id="portSourceBadge" style="background: rgba(0, 255, 147, 0.12); color: var(--mint); border-color: rgba(0, 255, 147, 0.3); font-size: 11px;">链上已联动</span>
+              </div>
+              <h3 style="font-size: 20px; font-weight: 600; color: #FFFFFF; margin-top: 4px;">当前持仓组合分布与调仓指令</h3>
+              <p id="portWalletSubtitle" style="font-size: 12px; color: var(--text-muted); margin-top: 2px; font-family: 'JetBrains Mono', monospace;">
+                账户: <span id="portAccountAddr" style="color: #FFFFFF;">0x...</span> | 网络: <span id="portChainName" style="color: var(--mint);">Mantle Network</span>
+              </p>
+            </div>
+
+            <!-- Actions / Toggles -->
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <div class="sub-toggle-group" style="margin-bottom: 0;">
+                <button class="sub-toggle-btn active" id="btnPortModeReal" onclick="setPortfolioSource('real')">🔗 链上资产</button>
+                <button class="sub-toggle-btn" id="btnPortModeDemo" onclick="setPortfolioSource('demo')">🌟 策略示范</button>
+              </div>
+
+              <!-- Mask Button -->
+              <button class="btn btn-secondary" id="btnPortfolioMask" onclick="togglePortfolioMask()" style="display: flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 12px;" title="隐藏或显示持仓金额">
+                <span id="maskIcon">👁️</span>
+                <span id="maskBtnText">遮蔽金额 (Mask)</span>
+              </button>
+
+              <!-- Refresh Button -->
+              <button class="btn btn-secondary" onclick="refreshPortfolioData(true)" style="padding: 5px 10px; font-size: 12px;" title="重新读取链上资产">
+                🔄 刷新
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Metrics Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px;">
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-main); border-radius: 8px; padding: 14px 16px;">
+              <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">组合总资产估值</div>
+              <div class="font-mono" id="portTotalUsdDisplay" style="font-size: 26px; font-weight: 700; color: #FFFFFF; margin: 4px 0;">$0.00</div>
+              <div style="font-size: 11px; color: var(--text-dim);">实时汇率换算折合 (USD)</div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-main); border-radius: 8px; padding: 14px 16px;">
+              <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">主要资产分布</div>
+              <div class="font-mono" id="portAssetCountDisplay" style="font-size: 24px; font-weight: 600; color: var(--mint); margin: 4px 0;">0 项资产</div>
+              <div style="font-size: 11px; color: var(--text-muted);" id="portAssetMixSummary">美股 --% | 加密 --% | 现金 --%</div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-main); border-radius: 8px; padding: 14px 16px;">
+              <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">Mantle 原生 Gas 储备</div>
+              <div class="font-mono" id="portGasReserveDisplay" style="font-size: 24px; font-weight: 600; color: var(--ice-cyan); margin: 4px 0;">0.00 MNT</div>
+              <div style="font-size: 11px; color: var(--text-dim);" id="portGasReserveUsd">估值: $0.00 | 手续费充裕</div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-main); border-radius: 8px; padding: 14px 16px;">
+              <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px;">组合调仓健康度</div>
+              <div class="font-mono" id="portHealthStatusDisplay" style="font-size: 19px; font-weight: 600; color: #FFB800; margin: 6px 0;">分析中...</div>
+              <div style="font-size: 11px; color: var(--text-muted);" id="portHealthSubtext">偏离度监测与指令就绪</div>
+            </div>
+          </div>
+
+          <!-- Visual Allocation Multi-Bar -->
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px;">
+              <span style="color: var(--text-muted); font-weight: 500;">各资产持仓权重分布 (Allocation Breakdown)</span>
+              <span style="color: var(--text-dim); font-size: 11px;">鼠标悬停查看对应资产估值</span>
+            </div>
+            <div id="portAllocationBar" style="height: 14px; width: 100%; border-radius: 7px; overflow: hidden; display: flex; background: rgba(255,255,255,0.04); box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);">
+              <!-- Rendered via JS -->
+            </div>
+            <div id="portAllocationLegend" style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 12px;">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Portfolio Assets Table -->
+          <div class="table-wrap" style="margin-bottom: 22px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>标的资产</th>
+                  <th>资产类别</th>
+                  <th>当前持仓数额</th>
+                  <th>实时单价</th>
+                  <th>持仓估值 (USD)</th>
+                  <th>当前占比</th>
+                  <th>目标策略配比</th>
+                  <th>配比偏离度</th>
+                  <th>快捷操作</th>
+                </tr>
+              </thead>
+              <tbody id="portHoldingsTableBody">
+                <tr><td colspan="9" style="text-align: center; color: var(--text-muted);">正在同步持仓数据...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Dedicated Action Directives Console on Portfolio -->
+          <div style="padding-top: 18px; border-top: 1px solid var(--border-main);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div class="card-eyebrow" style="color: var(--mint);">Portfolio Action Directives</div>
+                <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px;">⚡ 当前持仓调仓与定投操作指令</h4>
+              </div>
+              <span class="badge-tag tag-green" id="portDirectiveCountBadge">0 项操作指令</span>
+            </div>
+
+            <!-- Directives Grid -->
+            <div id="portDirectivesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
         </div>
 
         <div class="table-wrap">
@@ -1416,6 +1576,9 @@
     function renderDashboard(data) {
       const { cycle, sentiment, altEvaluations, plan, activeAssets, stockEvaluations, macroRates, crossAssetPlan } = data;
 
+      window.statusData = data;
+      window.cycleData = cycle;
+
       if (activeAssets) {
         window.activeAssetSymbols = new Set(activeAssets.map(a => a.symbol.toUpperCase()));
       }
@@ -1426,6 +1589,8 @@
       if (crossAssetPlan) {
         window.lastCrossAssetPlan = crossAssetPlan;
       }
+
+      renderPortfolio();
 
       // 1. Hero & Thermometer
       document.getElementById('tempScore').innerText = cycle.temperatureScore;
@@ -1548,6 +1713,7 @@
     async function loadStocksData() {
       try {
         const data = await apiFetch('/api/stocks');
+        window.stocksData = data;
         if (data.stockEvaluations && data.macroRates) {
           renderStocks(data.stockEvaluations, data.macroRates);
         }
@@ -1557,6 +1723,7 @@
             renderAllocTable();
           }
         }
+        renderPortfolio();
       } catch (err) {
         console.error('Failed to load stocks data:', err);
       }
@@ -2245,6 +2412,185 @@
       }
     }
 
+    // ==========================================
+    // Portfolio & Multi-Asset Web3 Terminal State
+    // ==========================================
+    let isPortfolioMasked = localStorage.getItem('portfolio_masked') === 'true';
+    let portfolioSource = 'real'; // 'real' | 'demo'
+    let isDemoEnabledManually = false;
+    let userOnChainHoldings = [];
+
+    const DEMO_PORTFOLIO_HOLDINGS = [
+      { symbol: 'NVDAx', name: 'NVIDIA (BackedFi Token)', amount: 25.0, type: 'STOCK', targetWeight: 12.0, baseStock: 'NVDA' },
+      { symbol: 'AAPLx', name: 'Apple Inc (BackedFi Token)', amount: 15.0, type: 'STOCK', targetWeight: 10.0, baseStock: 'AAPL' },
+      { symbol: 'BTC', name: 'Bitcoin (Core)', amount: 0.15, type: 'CRYPTO', targetWeight: 35.0 },
+      { symbol: 'ETH', name: 'Ethereum (Core)', amount: 2.50, type: 'CRYPTO', targetWeight: 20.0 },
+      { symbol: 'MNT', name: 'Mantle (Native Gas)', amount: 2500.0, type: 'CRYPTO', targetWeight: 8.0 },
+      { symbol: 'USDT', name: 'Tether USD (Cash Reserve)', amount: 4500.0, type: 'CASH', targetWeight: 15.0 },
+    ];
+
+    function formatMoney(amount) {
+      if (isPortfolioMasked) return '$••••••';
+      if (amount === undefined || amount === null || isNaN(amount)) return '$0.00';
+      return '$' + Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatAmount(amount, symbol, decimals = 2) {
+      if (isPortfolioMasked) return `•••• ${symbol}`;
+      if (amount === undefined || amount === null || isNaN(amount)) return `0.00 ${symbol}`;
+      const num = Number(amount);
+      const formatted = num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: decimals });
+      return `${formatted} ${symbol}`;
+    }
+
+    function togglePortfolioMask() {
+      isPortfolioMasked = !isPortfolioMasked;
+      localStorage.setItem('portfolio_masked', isPortfolioMasked ? 'true' : 'false');
+      updateMaskButtonState();
+      renderPortfolio();
+      showToast(isPortfolioMasked ? '🙈 已开启持仓金额隐私遮蔽 (Mask 模式)' : '👁️ 已解除遮蔽，显示持仓金额');
+    }
+
+    function updateMaskButtonState() {
+      const icon = document.getElementById('maskIcon');
+      const text = document.getElementById('maskBtnText');
+      if (icon && text) {
+        if (isPortfolioMasked) {
+          icon.innerText = '🙈';
+          text.innerText = '已隐藏金额 (点击显示)';
+        } else {
+          icon.innerText = '👁️';
+          text.innerText = '遮蔽金额 (Mask)';
+        }
+      }
+    }
+
+    function setPortfolioSource(source) {
+      portfolioSource = source;
+      const btnReal = document.getElementById('btnPortModeReal');
+      const btnDemo = document.getElementById('btnPortModeDemo');
+      if (btnReal && btnDemo) {
+        if (source === 'real') {
+          btnReal.classList.add('active');
+          btnDemo.classList.remove('active');
+        } else {
+          btnReal.classList.remove('active');
+          btnDemo.classList.add('active');
+        }
+      }
+      renderPortfolio();
+    }
+
+    function enableDemoPortfolio() {
+      isDemoEnabledManually = true;
+      portfolioSource = 'demo';
+      const promptCard = document.getElementById('walletPromptCard');
+      const portCard = document.getElementById('portfolioCard');
+      if (promptCard) promptCard.style.display = 'none';
+      if (portCard) portCard.style.display = 'block';
+
+      const btnReal = document.getElementById('btnPortModeReal');
+      const btnDemo = document.getElementById('btnPortModeDemo');
+      if (btnReal && btnDemo) {
+        btnReal.classList.remove('active');
+        btnDemo.classList.add('active');
+      }
+      renderPortfolio();
+      showToast('🌟 已切换至策略示范持仓组合 (Demo Portfolio)');
+    }
+
+    function getAssetPrice(symbol, baseStock) {
+      const cleanSym = (symbol || '').toUpperCase().replace(/X$/, '');
+      if (cleanSym === 'USDT' || cleanSym === 'USDC' || cleanSym === 'DAI') return 1.0;
+      if (cleanSym === 'MNT') return 0.82;
+      if (cleanSym === 'BTC' || cleanSym === 'WBTC') {
+        return window.cycleData?.currentPrice || 85343;
+      }
+      if (cleanSym === 'ETH' || cleanSym === 'WETH') {
+        const ethEval = window.statusData?.altEvaluations?.find(a => a.symbol === 'ETH');
+        return ethEval?.currentPrice || 2450;
+      }
+      if (window.stocksData && window.stocksData.stocks) {
+        const s = window.stocksData.stocks.find(st => st.symbol === cleanSym || st.symbol === baseStock);
+        if (s && s.currentPrice) return s.currentPrice;
+      }
+      if (window.statusData && window.statusData.altEvaluations) {
+        const a = window.statusData.altEvaluations.find(alt => alt.symbol === cleanSym);
+        if (a && a.currentPrice) return a.currentPrice;
+      }
+      if (cleanSym === 'NVDA') return 128.5;
+      if (cleanSym === 'AAPL') return 228.0;
+      if (cleanSym === 'TSLA') return 245.0;
+      if (cleanSym === 'SOL') return 145.0;
+      return 1.0;
+    }
+
+    async function fetchOnChainBalances(address) {
+      if (!isMetaMaskAvailable() || !address) return [];
+      const list = [];
+      try {
+        const isMantle = currentChainId === MANTLE_CHAIN_ID_HEX;
+        const nativeSymbol = isMantle ? 'MNT' : 'ETH';
+        
+        // 1. Native balance
+        const balanceHex = await window.ethereum.request({
+          method: 'eth_getBalance',
+          params: [address, 'latest']
+        });
+        const nativeWei = BigInt(balanceHex || '0x0');
+        const nativeAmount = Number(nativeWei) / 1e18;
+        userWalletBalance = nativeAmount.toFixed(4);
+
+        list.push({
+          symbol: nativeSymbol,
+          name: isMantle ? 'Mantle Native' : 'Ether (Native)',
+          amount: nativeAmount,
+          type: 'CRYPTO',
+          targetWeight: isMantle ? 8.0 : 25.0,
+          isNative: true
+        });
+
+        // 2. Mantle ERC20 Tokens if on Mantle
+        if (isMantle) {
+          const MANTLE_TOKENS = [
+            { symbol: 'USDT', name: 'Tether USD', address: '0x201EBa5CC46D216Ce6DC03F6a759e80666199157', decimals: 6, type: 'CASH', targetWeight: 15.0 },
+            { symbol: 'USDC', name: 'USD Coin', address: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9', decimals: 6, type: 'CASH', targetWeight: 5.0 },
+            { symbol: 'WETH', name: 'Wrapped Ether', address: '0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111', decimals: 18, type: 'CRYPTO', targetWeight: 20.0 }
+          ];
+
+          const cleanAddr = address.toLowerCase().replace('0x', '').padStart(64, '0');
+          const data = '0x70a08231' + cleanAddr;
+
+          for (const tok of MANTLE_TOKENS) {
+            try {
+              const resHex = await window.ethereum.request({
+                method: 'eth_call',
+                params: [{ to: tok.address, data }, 'latest']
+              });
+              if (resHex && resHex !== '0x' && resHex !== '0x0') {
+                const balWei = BigInt(resHex);
+                const bal = Number(balWei) / (10 ** tok.decimals);
+                if (bal > 0) {
+                  list.push({
+                    symbol: tok.symbol,
+                    name: tok.name,
+                    amount: bal,
+                    type: tok.type,
+                    targetWeight: tok.targetWeight
+                  });
+                }
+              }
+            } catch (e) {
+              // ignore single token fail
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to fetch on-chain balances:', err);
+      }
+      return list;
+    }
+
     async function handleWalletConnected(address, showSuccessToast = true) {
       userWalletAddress = address;
 
@@ -2266,35 +2612,36 @@
         });
       }
 
-      // Fetch balance & chainId
+      // Fetch balance, chainId & on-chain portfolio
       try {
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         currentChainId = chainId;
 
-        const balanceHex = await window.ethereum.request({
-          method: 'eth_getBalance',
-          params: [address, 'latest']
-        });
-        const balanceWei = BigInt(balanceHex);
-        const balanceEth = Number(balanceWei) / 1e18;
-        userWalletBalance = balanceEth.toFixed(4);
+        userOnChainHoldings = await fetchOnChainBalances(address);
       } catch (e) {
         console.warn('Failed to fetch balance or chainId:', e);
       }
 
       renderWalletButton();
       updateWalletPortfolioSync();
+      renderPortfolio();
+
       if (showSuccessToast) {
-        showToast(`🎉 MetaMask 连接成功: ${formatAddress(address)} (${userWalletBalance} ETH)`);
+        const isMantle = currentChainId === MANTLE_CHAIN_ID_HEX;
+        showToast(`🎉 MetaMask 连接成功: ${formatAddress(address)} (${userWalletBalance} ${isMantle ? 'MNT' : 'ETH'})`);
       }
     }
 
     function disconnectWallet() {
       userWalletAddress = null;
       userWalletBalance = '0.00';
+      userOnChainHoldings = [];
+      isDemoEnabledManually = false;
+      portfolioSource = 'real';
       currentChainId = null;
       renderWalletButton();
       updateWalletPortfolioSync();
+      renderPortfolio();
       showToast('🔌 MetaMask 钱包已断开连接');
     }
 
@@ -2338,13 +2685,13 @@
           <div class="wallet-connected-pill" onclick="toggleWalletMenu(event)" title="点击管理钱包">
             <span class="wallet-chain-badge">${chainName}</span>
             <span class="wallet-addr">${formatAddress(userWalletAddress)}</span>
-            <span class="wallet-balance">${userWalletBalance} ETH</span>
+            <span class="wallet-balance">${userWalletBalance} ${currentChainId === MANTLE_CHAIN_ID_HEX ? 'MNT' : 'ETH'}</span>
             <span style="font-size: 10px; color: var(--text-dim); margin-left: 2px;">▼</span>
           </div>
           <div id="walletDropdown" class="wallet-dropdown" style="display: none;">
             <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;">已连接 Web3 账户</div>
             <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; word-break: break-all; color: var(--mint); margin-bottom: 12px; padding: 8px; background: rgba(0, 255, 147, 0.05); border-radius: 4px; border: 1px solid rgba(0, 255, 147, 0.2);">${userWalletAddress}</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">当前网络: <strong style="color: #FFFFFF;">${chainName}</strong> | 余额: <strong style="color: var(--ice-cyan);">${userWalletBalance} ETH</strong></div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">当前网络: <strong style="color: #FFFFFF;">${chainName}</strong> | 余额: <strong style="color: var(--ice-cyan);">${userWalletBalance} ${currentChainId === MANTLE_CHAIN_ID_HEX ? 'MNT' : 'ETH'}</strong></div>
             <div style="display: flex; gap: 8px;">
               <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;" onclick="copyWalletAddress()">复制地址</button>
               <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px; color: var(--danger); border-color: rgba(255, 77, 109, 0.3);" onclick="disconnectWallet()">断开连接</button>
@@ -2375,14 +2722,329 @@
     }
 
     function updateWalletPortfolioSync() {
-      const banner = document.getElementById('walletSyncBanner');
-      if (!banner) return;
-      if (userWalletAddress) {
-        banner.style.display = 'flex';
-        document.getElementById('walletSyncAddr').innerText = formatAddress(userWalletAddress);
-        document.getElementById('walletSyncBal').innerText = userWalletBalance + ' ETH';
+      renderPortfolio();
+    }
+
+    async function renderPortfolio() {
+      updateMaskButtonState();
+
+      const promptCard = document.getElementById('walletPromptCard');
+      const portCard = document.getElementById('portfolioCard');
+      if (!portCard) return;
+
+      const hasWallet = !!userWalletAddress;
+
+      if (!hasWallet && !isDemoEnabledManually) {
+        if (promptCard) promptCard.style.display = 'flex';
+        portCard.style.display = 'none';
+        return;
+      }
+
+      if (promptCard) promptCard.style.display = 'none';
+      portCard.style.display = 'block';
+
+      // Update Header Info
+      const addrEl = document.getElementById('portAccountAddr');
+      const chainEl = document.getElementById('portChainName');
+      const badgeEl = document.getElementById('portSourceBadge');
+
+      if (hasWallet) {
+        if (addrEl) addrEl.innerText = formatAddress(userWalletAddress) + ` (${userWalletAddress.slice(0, 8)}...${userWalletAddress.slice(-6)})`;
+        const cName = CHAIN_NAMES[currentChainId] || 'EVM Chain';
+        if (chainEl) chainEl.innerText = `${cName} (${currentChainId === MANTLE_CHAIN_ID_HEX ? 'Chain ID: 5000' : currentChainId || '5000'})`;
+        if (badgeEl) {
+          badgeEl.innerText = currentChainId === MANTLE_CHAIN_ID_HEX ? '⚡ Mantle 实时读链' : '🔗 Web3 已连接';
+          badgeEl.style.background = 'rgba(0, 255, 147, 0.12)';
+          badgeEl.style.color = 'var(--mint)';
+        }
       } else {
-        banner.style.display = 'none';
+        if (addrEl) addrEl.innerText = '演示账户 (Demo Mode)';
+        if (chainEl) chainEl.innerText = 'Mantle Network (Chain ID: 5000)';
+        if (badgeEl) {
+          badgeEl.innerText = '🌟 策略示范组合';
+          badgeEl.style.background = 'rgba(0, 212, 255, 0.12)';
+          badgeEl.style.color = 'var(--ice-cyan)';
+        }
+      }
+
+      // Determine active holdings
+      let rawHoldings = [];
+      if (portfolioSource === 'demo' || !hasWallet) {
+        rawHoldings = [...DEMO_PORTFOLIO_HOLDINGS];
+      } else {
+        // Real on-chain mode
+        if (userOnChainHoldings.length === 0 || (userOnChainHoldings.length === 1 && userOnChainHoldings[0].amount === 0)) {
+          // Empty wallet fallback to demo
+          rawHoldings = [...DEMO_PORTFOLIO_HOLDINGS];
+        } else {
+          rawHoldings = [...userOnChainHoldings];
+        }
+      }
+
+      // Compute valuations
+      let totalUsd = 0;
+      let mntAmount = 0;
+      let mntValue = 0;
+      let stockUsd = 0;
+      let cryptoUsd = 0;
+      let cashUsd = 0;
+
+      const items = rawHoldings.map(h => {
+        const price = getAssetPrice(h.symbol, h.baseStock);
+        const usdValue = h.amount * price;
+        totalUsd += usdValue;
+
+        if (h.symbol === 'MNT') {
+          mntAmount = h.amount;
+          mntValue = usdValue;
+        }
+
+        if (h.type === 'STOCK') stockUsd += usdValue;
+        else if (h.type === 'CASH') cashUsd += usdValue;
+        else cryptoUsd += usdValue;
+
+        return {
+          ...h,
+          price,
+          usdValue
+        };
+      });
+
+      // Calculate weight percentage and delta
+      items.forEach(it => {
+        it.weightPct = totalUsd > 0 ? (it.usdValue / totalUsd) * 100 : 0;
+        it.targetWeight = it.targetWeight || 10.0;
+        it.deltaPct = it.weightPct - it.targetWeight;
+      });
+
+      // Sort items by valuation descending
+      items.sort((a, b) => b.usdValue - a.usdValue);
+
+      // 1. Update 4 Metrics Cards
+      const totalValEl = document.getElementById('portTotalUsdDisplay');
+      if (totalValEl) totalValEl.innerText = formatMoney(totalUsd);
+
+      const countEl = document.getElementById('portAssetCountDisplay');
+      if (countEl) countEl.innerText = `${items.length} 种主要资产`;
+
+      const mixEl = document.getElementById('portAssetMixSummary');
+      if (mixEl && totalUsd > 0) {
+        const sPct = ((stockUsd / totalUsd) * 100).toFixed(0);
+        const cPct = ((cryptoUsd / totalUsd) * 100).toFixed(0);
+        const caPct = ((cashUsd / totalUsd) * 100).toFixed(0);
+        mixEl.innerText = `美股代币 ${sPct}% | 加密 ${cPct}% | 现金 ${caPct}%`;
+      }
+
+      const gasEl = document.getElementById('portGasReserveDisplay');
+      if (gasEl) gasEl.innerText = formatAmount(mntAmount, 'MNT');
+
+      const gasUsdEl = document.getElementById('portGasReserveUsd');
+      if (gasUsdEl) gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | ${mntAmount >= 50 ? 'Gas 充裕 ⚡' : '建议储备 Gas'}`;
+
+      // Analyze health
+      const maxUnderweight = items.reduce((min, it) => it.deltaPct < min.deltaPct ? it : min, items[0] || { deltaPct: 0 });
+      const directives = [];
+
+      items.forEach(it => {
+        if (it.deltaPct < -1.5) {
+          const targetAmountUsd = totalUsd * (it.targetWeight / 100);
+          const gapUsd = Math.max(50, Math.round(targetAmountUsd - it.usdValue));
+          directives.push({
+            type: 'BUY',
+            item: it,
+            suggestedAmount: gapUsd,
+            rationale: `当前持仓占比 ${it.weightPct.toFixed(1)}% 显著低于策略目标配比 ${it.targetWeight.toFixed(1)}%（欠配 ${Math.abs(it.deltaPct).toFixed(1)}%）。建议加仓 ${formatMoney(gapUsd)} 以拉平偏离度并积累优质底仓。`
+          });
+        } else if (it.deltaPct > 4.5) {
+          directives.push({
+            type: 'HOLD',
+            item: it,
+            suggestedAmount: 0,
+            rationale: `当前持仓占比 ${it.weightPct.toFixed(1)}% 已超出策略目标配比 ${it.targetWeight.toFixed(1)}%（超配 +${it.deltaPct.toFixed(1)}%）。建议本期暂停定投，将增量资金分配给欠配标的。`
+          });
+        }
+      });
+
+      // Gas Directive for MNT if needed
+      if (mntAmount < 50) {
+        directives.push({
+          type: 'GAS_BUY',
+          item: { symbol: 'MNT', name: 'Mantle Gas', type: 'CRYPTO' },
+          suggestedAmount: 50,
+          rationale: `Mantle 链上原生 Gas 储备偏低 (${mntAmount.toFixed(1)} MNT)，建议兑换 $50 等值 MNT 保障后续高频 DeFi 交互。`
+        });
+      }
+
+      const healthEl = document.getElementById('portHealthStatusDisplay');
+      const healthSubEl = document.getElementById('portHealthSubtext');
+      if (healthEl && healthSubEl) {
+        if (directives.length > 0) {
+          healthEl.innerHTML = `<span style="color: #FFB800;">需执行 ${directives.length} 项指令</span>`;
+          healthSubEl.innerHTML = `最大偏离: <strong style="color: var(--danger);">${maxUnderweight.symbol} (${maxUnderweight.deltaPct.toFixed(1)}%)</strong>`;
+        } else {
+          healthEl.innerHTML = `<span style="color: var(--mint);">✓ 组合配比健康</span>`;
+          healthSubEl.innerText = `各资产偏离度均在 ±1.5% 容差内`;
+        }
+      }
+
+      // 2. Render Visual Multi-Bar & Legend
+      const barEl = document.getElementById('portAllocationBar');
+      const legendEl = document.getElementById('portAllocationLegend');
+      const ASSET_COLORS = {
+        'NVDAx': '#00FF93',
+        'AAPLx': '#00D4FF',
+        'TSLAx': '#FF5C93',
+        'BTC': '#F7931A',
+        'ETH': '#627EEA',
+        'MNT': '#00E599',
+        'USDT': '#26A17B',
+        'USDC': '#2775CA',
+        'SOL': '#9945FF',
+        'STRK': '#EC796B',
+        'ARB': '#28A0F0',
+        'DEFAULT': '#5A7365'
+      };
+
+      if (barEl && legendEl) {
+        let barHtml = '';
+        let legendHtml = '';
+        items.forEach(it => {
+          const color = ASSET_COLORS[it.symbol] || ASSET_COLORS.DEFAULT;
+          const displayVal = formatMoney(it.usdValue);
+          barHtml += `<div class="allocation-segment" style="width: ${it.weightPct}%; background: ${color};" title="${it.symbol}: ${it.weightPct.toFixed(1)}% (${displayVal})" onclick="openBuyModal('${it.symbol.replace(/x$/i, '')}', '${it.name.replace(/'/g, "\\'")}', '${it.type === 'STOCK' ? 'STOCK' : 'CRYPTO'}')"></div>`;
+          legendHtml += `
+            <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="openBuyModal('${it.symbol.replace(/x$/i, '')}', '${it.name.replace(/'/g, "\\'")}', '${it.type === 'STOCK' ? 'STOCK' : 'CRYPTO'}')">
+              <span style="width: 10px; height: 10px; border-radius: 2px; background: ${color}; display: inline-block;"></span>
+              <span style="font-weight: 500; color: #FFFFFF;">${it.symbol}</span>
+              <span style="color: var(--mint); font-family: 'JetBrains Mono', monospace; font-size: 11px;">${it.weightPct.toFixed(1)}%</span>
+            </div>
+          `;
+        });
+        barEl.innerHTML = barHtml;
+        legendEl.innerHTML = legendHtml;
+      }
+
+      // 3. Render Holdings Table Body
+      const tbody = document.getElementById('portHoldingsTableBody');
+      if (tbody) {
+        tbody.innerHTML = '';
+        items.forEach(it => {
+          const tr = document.createElement('tr');
+          const cleanSym = it.symbol.replace(/x$/i, '');
+          const isStock = it.type === 'STOCK';
+          const typeBadge = isStock
+            ? '<span class="badge-tag tag-cyan">美股代币 (BackedFi)</span>'
+            : it.type === 'CASH'
+              ? '<span class="badge-tag tag-green">稳定币/现金</span>'
+              : '<span class="badge-tag tag-orange">核心加密资产</span>';
+
+          const deltaText = it.deltaPct >= 0
+            ? `<span style="color: var(--mint); font-family: 'JetBrains Mono', monospace;">+${it.deltaPct.toFixed(1)}% (超配)</span>`
+            : `<span style="color: var(--danger); font-family: 'JetBrains Mono', monospace;">${it.deltaPct.toFixed(1)}% (欠配)</span>`;
+
+          const actionBtn = `<button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap;" onclick="openBuyModal('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
+            ${isStock ? '⚡ Fluxion RFQ' : '⚡ 交易'}
+          </button>`;
+
+          tr.innerHTML = `
+            <td>
+              <div style="font-weight: 600; font-size: 15px; color: #FFFFFF;">${it.symbol} <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">(${it.name})</span></div>
+            </td>
+            <td>${typeBadge}</td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-weight: 500; color: #FFFFFF;">${formatAmount(it.amount, it.symbol)}</td>
+            <td style="font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">${formatMoney(it.price)}</td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #FFFFFF; font-size: 15px;">${formatMoney(it.usdValue)}</td>
+            <td><strong style="color: var(--mint); font-family: 'JetBrains Mono', monospace;">${it.weightPct.toFixed(1)}%</strong></td>
+            <td style="font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">${it.targetWeight.toFixed(1)}%</td>
+            <td>${deltaText}</td>
+            <td>${actionBtn}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // 4. Render Action Directives Console
+      const dirCountBadge = document.getElementById('portDirectiveCountBadge');
+      if (dirCountBadge) dirCountBadge.innerText = `${directives.length} 项操作指令`;
+
+      const dirContainer = document.getElementById('portDirectivesContainer');
+      if (dirContainer) {
+        dirContainer.innerHTML = '';
+        if (directives.length === 0) {
+          dirContainer.innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--text-muted); background: rgba(0, 255, 147, 0.02); border: 1px dashed var(--border-main); border-radius: 8px;">
+              🎉 <strong>当前持仓配比高度健康</strong>：各资产均处于战略目标配比区间，无需强制再平衡，按计划执行周期定投即可。
+            </div>
+          `;
+        } else {
+          directives.forEach(dir => {
+            const card = document.createElement('div');
+            const it = dir.item;
+            const isBuy = dir.type === 'BUY' || dir.type === 'GAS_BUY';
+            const cleanSym = it.symbol.replace(/x$/i, '');
+            const isStock = it.type === 'STOCK';
+
+            card.className = `directive-card ${isBuy ? 'buy' : 'hold'}`;
+
+            const badgeClass = isBuy ? 'action-buy' : 'action-hold';
+            const badgeLabel = dir.type === 'GAS_BUY' ? 'GAS 补充' : isBuy ? 'BUY 建议加仓' : 'HOLD 暂停买入';
+
+            const routeName = isStock
+              ? 'Fluxion xChange (Atomic RFQ)'
+              : 'DefiLlama Swap / Mantle DEX 聚合器';
+            const routeFeature = isStock
+              ? '0 滑点原子做市 | BackedFi 1:1 美股'
+              : '全网比价 | 0 额外费用';
+
+            const btnText = isStock
+              ? '⚡ 立即通过 Fluxion RFQ 执行'
+              : '⚡ 立即在 Mantle 聚合买入';
+
+            card.innerHTML = `
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="action-badge ${badgeClass}">${badgeLabel}</span>
+                    <strong style="color: #FFFFFF; font-size: 16px;">${it.symbol}</strong>
+                    <span style="font-size: 12px; color: var(--text-muted);">(${it.name})</span>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">建议金额</div>
+                    <strong style="color: var(--mint); font-size: 16px; font-family: 'JetBrains Mono', monospace;">
+                      ${dir.suggestedAmount > 0 ? '+' + formatMoney(dir.suggestedAmount) : '保持观望'}
+                    </strong>
+                  </div>
+                </div>
+
+                <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+                  💡 <strong style="color: #FFFFFF;">决策依据</strong>：${dir.rationale}
+                </p>
+
+                <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 12px;">
+                  推荐路径：<strong style="color: var(--ice-cyan);">${routeName}</strong> (${routeFeature})
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-main);">
+                <span style="font-size: 11px; color: var(--text-dim);">结算网络: Mantle Network L2</span>
+                <button class="btn btn-primary" style="padding: 5px 14px; font-size: 12px; font-weight: 600;" onclick="openBuyModal('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
+                  ${btnText}
+                </button>
+              </div>
+            `;
+            dirContainer.appendChild(card);
+          });
+        }
+      }
+    }
+
+    async function refreshPortfolioData(showToastMsg = false) {
+      if (userWalletAddress) {
+        userOnChainHoldings = await fetchOnChainBalances(userWalletAddress);
+      }
+      renderPortfolio();
+      if (showToastMsg) {
+        showToast('🔄 链上持仓数据已刷新同步！');
       }
     }
 
@@ -2640,6 +3302,7 @@
 
     // Initial Load & Silent Wallet Check
     loadAllData();
+    renderPortfolio();
     checkExistingWalletConnection();
   </script>
 </body>
