@@ -211,6 +211,80 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
+    .btn-wallet {
+      background: rgba(226, 118, 27, 0.08);
+      border: 1px solid rgba(226, 118, 27, 0.35);
+      color: #FF9B42;
+      font-weight: 500;
+    }
+    .btn-wallet:hover {
+      background: rgba(226, 118, 27, 0.16);
+      border-color: rgba(226, 118, 27, 0.6);
+      box-shadow: 0 0 15px rgba(226, 118, 27, 0.2);
+    }
+
+    #walletContainer {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .wallet-connected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(8, 26, 20, 0.9);
+      border: 1px solid var(--border-highlight);
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-family: var(--font-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .wallet-connected-pill:hover {
+      border-color: var(--mint);
+      background: rgba(13, 38, 30, 0.95);
+    }
+    .wallet-chain-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(0, 255, 147, 0.1);
+      color: var(--mint);
+      border: 1px solid rgba(0, 255, 147, 0.25);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .wallet-addr {
+      font-family: 'JetBrains Mono', monospace;
+      color: #FFFFFF;
+      font-weight: 500;
+    }
+    .wallet-balance {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--ice-cyan);
+      font-size: 12px;
+      padding-left: 6px;
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .wallet-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      width: 290px;
+      background: #061711;
+      border: 1px solid var(--border-main);
+      border-radius: 6px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 147, 0.15);
+      z-index: 1000;
+      backdrop-filter: blur(20px);
+    }
+
     /* Cards & Containers */
     .panel-card {
       background: var(--bg-card);
@@ -628,6 +702,30 @@
         <button class="btn btn-secondary" id="refreshBtn" onclick="loadAllData(true)">
           <span id="refreshIcon">⟳</span> 刷新数据
         </button>
+        <div id="walletContainer">
+          <button class="btn btn-wallet" id="connectWalletBtn" onclick="connectMetaMask()">
+            <svg width="18" height="18" viewBox="0 0 318.6 318.6" style="vertical-align: middle;">
+              <path fill="#E2761B" stroke="#E2761B" stroke-linecap="round" stroke-linejoin="round" d="m274.1 35.5-99.5 73.9L194 65.8z"/>
+              <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m44.4 35.5 128.7 30.7-19.4 43.6z"/>
+              <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m238.3 206.8-28.5 43.4 56.4 15.6 16.3-58.4z"/>
+              <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m35.6 207.4 16.2 58.4 56.4-15.6-28.5-43.4z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m87.8 110.1 27.6 40.5-38.3 11.2z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m230.8 110.1-27.6 40.5 38.3 11.2z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m108.6 249.7 29.8 14.5-2.2-22.3z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m210 249.7-27.6-7.8-2.2 22.3z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m180.2 264.2 29.8-14.5-27.6-7.8z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m138.4 264.2-2.2-22.3-27.6 7.8z"/>
+              <path fill="#C0AD9E" stroke="#C0AD9E" stroke-linecap="round" stroke-linejoin="round" d="m182.4 241.9-23.1-6.7-23.1 6.7 2.2 22.3 20.9 14.3 20.9-14.3z"/>
+              <path fill="#161616" stroke="#161616" stroke-linecap="round" stroke-linejoin="round" d="m159.3 200.7-20.9 6.2 14.7 6.3 6.2-12.5z"/>
+              <path fill="#161616" stroke="#161616" stroke-linecap="round" stroke-linejoin="round" d="m159.3 200.7 6.2 12.5 14.7-6.3z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m77.1 161.8 15.6 24.3-15.6-2.5z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m241.5 161.8-15.6 21.8 15.6 2.5z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m92.7 186.1 17.5 35.8 49.1-3.6-20.9-6.2z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m225.9 186.1-45.7 26 49.1 3.6z"/>
+            </svg>
+            <span>连接 MetaMask</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -719,6 +817,15 @@
             <div style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">WEEKLY BUDGET (BASE $500 × <span id="planMultiplier">1.0</span>x)</div>
             <div id="totalBudget" style="font-size: 26px; font-weight: 700; color: var(--mint); font-family: 'JetBrains Mono', monospace;">$500 USD</div>
           </div>
+        </div>
+
+        <div id="walletSyncBanner" style="display: none; align-items: center; justify-content: space-between; padding: 12px 18px; margin-bottom: 20px; background: rgba(0, 255, 147, 0.04); border: 1px solid rgba(0, 255, 147, 0.25); border-radius: 6px; font-size: 13px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <span style="color: var(--mint); font-weight: 500;">🦊 Web3 钱包已联动</span>
+            <span style="color: var(--text-muted);">| 账户: <strong id="walletSyncAddr" style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">--</strong></span>
+            <span style="color: var(--text-muted);">| 链上可用原生资金: <strong id="walletSyncBal" style="color: var(--mint); font-family: 'JetBrains Mono', monospace;">--</strong></span>
+          </div>
+          <span class="badge-tag tag-green">⚡ 实时读链中</span>
         </div>
 
         <div class="table-wrap">
@@ -1180,8 +1287,215 @@
       }
     }
 
-    // Initial Load
+    // ==========================================
+    // MetaMask Web3 Integration
+    // ==========================================
+    let userWalletAddress = null;
+    let userWalletBalance = '0.00';
+    let currentChainId = null;
+
+    const CHAIN_NAMES = {
+      '0x1': 'Ethereum',
+      '0xa4b1': 'Arbitrum',
+      '0xa': 'Optimism',
+      '0x89': 'Polygon',
+      '0x2105': 'Base',
+      '0xaa36a7': 'Sepolia',
+    };
+
+    function isMetaMaskAvailable() {
+      return typeof window !== 'undefined' && typeof window.ethereum !== 'undefined';
+    }
+
+    async function checkExistingWalletConnection() {
+      if (!isMetaMaskAvailable()) return;
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts && accounts.length > 0) {
+          await handleWalletConnected(accounts[0], false);
+        }
+      } catch (err) {
+        console.warn('Silent wallet check failed:', err);
+      }
+    }
+
+    async function connectMetaMask() {
+      if (!isMetaMaskAvailable()) {
+        showToast('🦊 未检测到 MetaMask 插件，请先安装 MetaMask 钱包扩展！');
+        window.open('https://metamask.io/download/', '_blank');
+        return;
+      }
+
+      const btn = document.getElementById('connectWalletBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>🦊 连接中...</span>';
+      }
+
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+
+        if (accounts && accounts.length > 0) {
+          await handleWalletConnected(accounts[0], true);
+        }
+      } catch (err) {
+        console.error('MetaMask connection error:', err);
+        if (err.code === 4001) {
+          showToast('⚠️ 用户取消了 MetaMask 授权');
+        } else {
+          showToast('❌ 连接 MetaMask 失败: ' + (err.message || '未知错误'));
+        }
+      } finally {
+        if (!userWalletAddress) {
+          renderWalletButton();
+        }
+      }
+    }
+
+    async function handleWalletConnected(address, showSuccessToast = true) {
+      userWalletAddress = address;
+
+      // Event listeners for account and network changes
+      if (window.ethereum && window.ethereum.on && !window.hasBoundWalletEvents) {
+        window.hasBoundWalletEvents = true;
+        window.ethereum.on('accountsChanged', (accounts) => {
+          if (!accounts || accounts.length === 0) {
+            disconnectWallet();
+          } else {
+            handleWalletConnected(accounts[0], false);
+          }
+        });
+
+        window.ethereum.on('chainChanged', () => {
+          handleWalletConnected(userWalletAddress, false);
+        });
+      }
+
+      // Fetch balance & chainId
+      try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        currentChainId = chainId;
+
+        const balanceHex = await window.ethereum.request({
+          method: 'eth_getBalance',
+          params: [address, 'latest']
+        });
+        const balanceWei = BigInt(balanceHex);
+        const balanceEth = Number(balanceWei) / 1e18;
+        userWalletBalance = balanceEth.toFixed(4);
+      } catch (e) {
+        console.warn('Failed to fetch balance or chainId:', e);
+      }
+
+      renderWalletButton();
+      updateWalletPortfolioSync();
+      if (showSuccessToast) {
+        showToast(`🎉 MetaMask 连接成功: ${formatAddress(address)} (${userWalletBalance} ETH)`);
+      }
+    }
+
+    function disconnectWallet() {
+      userWalletAddress = null;
+      userWalletBalance = '0.00';
+      currentChainId = null;
+      renderWalletButton();
+      updateWalletPortfolioSync();
+      showToast('🔌 MetaMask 钱包已断开连接');
+    }
+
+    function formatAddress(addr) {
+      if (!addr) return '';
+      return addr.slice(0, 6) + '...' + addr.slice(-4);
+    }
+
+    function renderWalletButton() {
+      const container = document.getElementById('walletContainer');
+      if (!container) return;
+
+      if (!userWalletAddress) {
+        container.innerHTML = `
+          <button class="btn btn-wallet" id="connectWalletBtn" onclick="connectMetaMask()">
+            <svg width="18" height="18" viewBox="0 0 318.6 318.6" style="vertical-align: middle;">
+              <path fill="#E2761B" stroke="#E2761B" stroke-linecap="round" stroke-linejoin="round" d="m274.1 35.5-99.5 73.9L194 65.8z"/>
+              <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m44.4 35.5 128.7 30.7-19.4 43.6z"/>
+              <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m238.3 206.8-28.5 43.4 56.4 15.6 16.3-58.4z"/>
+              <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m35.6 207.4 16.2 58.4 56.4-15.6-28.5-43.4z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m87.8 110.1 27.6 40.5-38.3 11.2z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m230.8 110.1-27.6 40.5 38.3 11.2z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m108.6 249.7 29.8 14.5-2.2-22.3z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m210 249.7-27.6-7.8-2.2 22.3z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m180.2 264.2 29.8-14.5-27.6-7.8z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m138.4 264.2-2.2-22.3-27.6 7.8z"/>
+              <path fill="#C0AD9E" stroke="#C0AD9E" stroke-linecap="round" stroke-linejoin="round" d="m182.4 241.9-23.1-6.7-23.1 6.7 2.2 22.3 20.9 14.3 20.9-14.3z"/>
+              <path fill="#161616" stroke="#161616" stroke-linecap="round" stroke-linejoin="round" d="m159.3 200.7-20.9 6.2 14.7 6.3 6.2-12.5z"/>
+              <path fill="#161616" stroke="#161616" stroke-linecap="round" stroke-linejoin="round" d="m159.3 200.7 6.2 12.5 14.7-6.3z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m77.1 161.8 15.6 24.3-15.6-2.5z"/>
+              <path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m241.5 161.8-15.6 21.8 15.6 2.5z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m92.7 186.1 17.5 35.8 49.1-3.6-20.9-6.2z"/>
+              <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m225.9 186.1-45.7 26 49.1 3.6z"/>
+            </svg>
+            <span>连接 MetaMask</span>
+          </button>
+        `;
+      } else {
+        const chainName = CHAIN_NAMES[currentChainId] || 'EVM';
+        container.innerHTML = `
+          <div class="wallet-connected-pill" onclick="toggleWalletMenu(event)" title="点击管理钱包">
+            <span class="wallet-chain-badge">${chainName}</span>
+            <span class="wallet-addr">${formatAddress(userWalletAddress)}</span>
+            <span class="wallet-balance">${userWalletBalance} ETH</span>
+            <span style="font-size: 10px; color: var(--text-dim); margin-left: 2px;">▼</span>
+          </div>
+          <div id="walletDropdown" class="wallet-dropdown" style="display: none;">
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;">已连接 Web3 账户</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; word-break: break-all; color: var(--mint); margin-bottom: 12px; padding: 8px; background: rgba(0, 255, 147, 0.05); border-radius: 4px; border: 1px solid rgba(0, 255, 147, 0.2);">${userWalletAddress}</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">当前网络: <strong style="color: #FFFFFF;">${chainName}</strong> | 余额: <strong style="color: var(--ice-cyan);">${userWalletBalance} ETH</strong></div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;" onclick="copyWalletAddress()">复制地址</button>
+              <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px; color: var(--danger); border-color: rgba(255, 77, 109, 0.3);" onclick="disconnectWallet()">断开连接</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function toggleWalletMenu(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('walletDropdown');
+      if (menu) {
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+
+    document.addEventListener('click', () => {
+      const menu = document.getElementById('walletDropdown');
+      if (menu) menu.style.display = 'none';
+    });
+
+    function copyWalletAddress() {
+      if (userWalletAddress) {
+        navigator.clipboard.writeText(userWalletAddress);
+        showToast('📋 钱包地址已复制到剪贴板！');
+      }
+    }
+
+    function updateWalletPortfolioSync() {
+      const banner = document.getElementById('walletSyncBanner');
+      if (!banner) return;
+      if (userWalletAddress) {
+        banner.style.display = 'flex';
+        document.getElementById('walletSyncAddr').innerText = formatAddress(userWalletAddress);
+        document.getElementById('walletSyncBal').innerText = userWalletBalance + ' ETH';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    // Initial Load & Silent Wallet Check
     loadAllData();
+    checkExistingWalletConnection();
   </script>
 </body>
 </html>
