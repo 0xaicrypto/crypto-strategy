@@ -1,5 +1,7 @@
 # AI Crypto Cycle & DCA Engine (TypeScript)
 
+> 🌐 **在线实时演示（GitHub Pages）**：[https://0xaicrypto.github.io/crypto-strategy/](https://0xaicrypto.github.io/crypto-strategy/)
+
 AI 驱动的加密资产宏观大周期温度计、动态价值定投与结构性稀释风控系统。基于现代 TypeScript（Node.js 24/26 原生 ESM 与 Strip-Types）实现，不依赖重量级外部打包工具。
 
 ---
