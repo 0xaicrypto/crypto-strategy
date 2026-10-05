@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "ZEC",
+    "name": "Zcash",
+    "coingeckoId": "zcash",
+    "category": "TRENDING",
+    "maxPortfolioCapPct": 0.02,
+    "enabled": true,
+    "customTokenomics": {
+      "estimatedMonthlyUnlockPct": 0.02
+    }
+  },
+  {
+    "symbol": "NEAR",
+    "name": "NEAR Protocol",
+    "coingeckoId": "near",
+    "category": "TRENDING",
+    "maxPortfolioCapPct": 0.02,
+    "enabled": true,
+    "customTokenomics": {
+      "estimatedMonthlyUnlockPct": 0.02
+    }
+  }
+]

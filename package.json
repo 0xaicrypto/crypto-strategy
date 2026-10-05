@@ -1,0 +1,21 @@
+{
+  "name": "crypto-strategy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-driven Crypto Dynamic Value DCA and Macro Cycle Position Management System",
+  "scripts": {
+    "start": "node --experimental-strip-types src/index.ts",
+    "analyze": "node --experimental-strip-types src/index.ts analyze",
+    "scan": "node --experimental-strip-types src/index.ts scan",
+    "backtest": "node --experimental-strip-types src/index.ts backtest",
+    "web": "node --experimental-strip-types src/server.ts",
+    "dev": "node --experimental-strip-types src/server.ts",
+    "strk": "node --experimental-strip-types src/index.ts evaluate --asset STRK",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "@types/node": "^22.0.0"
+  }
+}
