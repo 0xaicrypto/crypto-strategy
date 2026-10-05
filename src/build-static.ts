@@ -9,6 +9,10 @@ import { getActiveAssets } from './config/assets.ts';
 import { scanMarketOpportunities } from './engine/scanner.ts';
 import { runDcaBacktest } from './engine/backtester.ts';
 import { fetchHistoricalDailyPrices } from './data/coingecko.ts';
+import { fetchAllWatchedStocks } from './data/stocks/yahoo-finance.ts';
+import { fetchMacroLiquidityAndRates } from './data/stocks/macro-rates.ts';
+import { evaluateStock } from './models/stock-evaluator.ts';
+import { computeCrossAssetPlan } from './models/cross-asset-allocator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +57,19 @@ async function buildStaticData() {
 
   const plan = computeAllocationPlan(cycle, altEvaluations, currentHoldings);
 
+  console.log('⚡ [1.5/4] Collecting US equities & macro rates...');
+  let macroRates = null;
+  let stockEvaluations: any[] = [];
+  let crossAssetPlan = null;
+  try {
+    const liveStocks = await fetchAllWatchedStocks();
+    stockEvaluations = liveStocks.map(evaluateStock);
+    macroRates = await fetchMacroLiquidityAndRates();
+    crossAssetPlan = computeCrossAssetPlan(cycle, macroRates, stockEvaluations, altEvaluations);
+  } catch (err) {
+    console.error('Failed to compute stock evaluations or macro rates:', err);
+  }
+
   const statusData = {
     timestamp: Date.now(),
     cycle,
@@ -61,6 +78,16 @@ async function buildStaticData() {
     plan,
     activeAssets,
     holdings: currentHoldings,
+    macroRates,
+    stockEvaluations,
+    crossAssetPlan,
+  };
+
+  const stocksData = {
+    timestamp: Date.now(),
+    macroRates,
+    stockEvaluations,
+    crossAssetPlan,
   };
 
   console.log('⚡ [2/4] Scanning market opportunities...');
@@ -83,10 +110,12 @@ async function buildStaticData() {
   // Write static data files to public/data and dist/data
   console.log('⚡ [4/4] Writing static JSON and copying web assets...');
   fs.writeFileSync(path.join(DATA_DIR, 'status.json'), JSON.stringify(statusData, null, 2), 'utf-8');
+  fs.writeFileSync(path.join(DATA_DIR, 'stocks.json'), JSON.stringify(stocksData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DATA_DIR, 'scan.json'), JSON.stringify(scanData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DATA_DIR, 'backtest.json'), JSON.stringify(backtestData, null, 2), 'utf-8');
 
   fs.writeFileSync(path.join(DIST_DIR, 'data', 'status.json'), JSON.stringify(statusData, null, 2), 'utf-8');
+  fs.writeFileSync(path.join(DIST_DIR, 'data', 'stocks.json'), JSON.stringify(stocksData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DIST_DIR, 'data', 'scan.json'), JSON.stringify(scanData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DIST_DIR, 'data', 'backtest.json'), JSON.stringify(backtestData, null, 2), 'utf-8');
 

@@ -102,3 +102,5 @@ export interface BacktestResult {
   outperformancePct: number;
   cashRemainingInReserve: number;
 }
+
+export * from './stocks.ts';

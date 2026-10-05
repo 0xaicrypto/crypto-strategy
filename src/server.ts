@@ -10,6 +10,10 @@ import { getActiveAssets, addOrWatchAsset, unwatchAsset } from './config/assets.
 import { scanMarketOpportunities } from './engine/scanner.ts';
 import { runDcaBacktest } from './engine/backtester.ts';
 import { fetchHistoricalDailyPrices } from './data/coingecko.ts';
+import { fetchAllWatchedStocks } from './data/stocks/yahoo-finance.ts';
+import { fetchMacroLiquidityAndRates } from './data/stocks/macro-rates.ts';
+import { evaluateStock } from './models/stock-evaluator.ts';
+import { computeCrossAssetPlan } from './models/cross-asset-allocator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,6 +66,19 @@ async function getSystemStatus(forceRefresh = false) {
 
   const plan = computeAllocationPlan(cycle, altEvaluations, currentHoldings);
 
+  // Collect US Stocks & Macro Rates
+  let macroRates = null;
+  let stockEvaluations: any[] = [];
+  let crossAssetPlan = null;
+  try {
+    const liveStocks = await fetchAllWatchedStocks();
+    stockEvaluations = liveStocks.map(evaluateStock);
+    macroRates = await fetchMacroLiquidityAndRates();
+    crossAssetPlan = computeCrossAssetPlan(cycle, macroRates, stockEvaluations, altEvaluations);
+  } catch (err) {
+    console.error('Failed to compute stock evaluations or macro rates:', err);
+  }
+
   cachedStatus = {
     timestamp: now,
     cycle,
@@ -70,6 +87,9 @@ async function getSystemStatus(forceRefresh = false) {
     plan,
     activeAssets,
     holdings: currentHoldings,
+    macroRates,
+    stockEvaluations,
+    crossAssetPlan,
   };
   lastStatusFetch = now;
   return cachedStatus;
@@ -97,6 +117,20 @@ const server = http.createServer(async (req, res) => {
       const status = await getSystemStatus(forceRefresh);
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify(status));
+      return;
+    }
+
+    // API: US Stocks & Macro Valuation
+    if (pathname === '/api/stocks') {
+      const forceRefresh = url.searchParams.get('refresh') === 'true';
+      const status = await getSystemStatus(forceRefresh);
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({
+        timestamp: status.timestamp,
+        macroRates: status.macroRates,
+        stockEvaluations: status.stockEvaluations,
+        crossAssetPlan: status.crossAssetPlan,
+      }));
       return;
     }
 

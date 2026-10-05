@@ -1,12 +1,12 @@
 {
-  "timestamp": 1791202617327,
+  "timestamp": 1791211957159,
   "candidates": [
     {
       "symbol": "PENGU",
       "name": "Pudgy Penguins",
       "coingeckoId": "pudgy-penguins",
       "category": "TRENDING",
-      "currentPrice": 0.009900140644045898,
+      "currentPrice": 0.00962502446291116,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
@@ -19,79 +19,62 @@
       "safetyRating": "RISKY"
     },
     {
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "coingeckoId": "near",
+      "category": "TRENDING",
+      "currentPrice": 5.016238002185712,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #21）",
+        "具备当下市场主线叙事关注度"
+      ],
+      "safetyRating": "MEDIUM"
+    },
+    {
+      "symbol": "QNT",
+      "name": "Quant",
+      "coingeckoId": "quant-network",
+      "category": "TRENDING",
+      "currentPrice": 258.2261013866587,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #33）",
+        "具备当下市场主线叙事关注度"
+      ],
+      "safetyRating": "MEDIUM"
+    },
+    {
       "symbol": "FET",
       "name": "Artificial Superintelligence Alliance",
       "coingeckoId": "fetch-ai",
       "category": "TRENDING",
-      "currentPrice": 0.26211853166953714,
+      "currentPrice": 0.25161446809356913,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #106）",
+        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #109）",
         "具备当下市场主线叙事关注度"
       ],
       "safetyRating": "RISKY"
-    },
-    {
-      "symbol": "PUMP",
-      "name": "Pump.fun",
-      "coingeckoId": "pump-fun",
-      "category": "TRENDING",
-      "currentPrice": 0.006449736273650431,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #40）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
-    },
-    {
-      "symbol": "ADA",
-      "name": "Cardano",
-      "coingeckoId": "cardano",
-      "category": "TRENDING",
-      "currentPrice": 0.2723111303185733,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #15）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
-    },
-    {
-      "symbol": "ENA",
-      "name": "Ethena",
-      "coingeckoId": "ethena",
-      "category": "TRENDING",
-      "currentPrice": 0.26168134691719985,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #43）",
-        "具备当下市场主线叙事关注度"
-      ],
-      "safetyRating": "MEDIUM"
     },
     {
       "symbol": "HYPE",
       "name": "Hyperliquid",
       "coingeckoId": "hyperliquid",
       "category": "TRENDING",
-      "currentPrice": 93.32108263847815,
+      "currentPrice": 92.66721411032098,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
@@ -99,6 +82,23 @@
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #11）",
+        "具备当下市场主线叙事关注度"
+      ],
+      "safetyRating": "MEDIUM"
+    },
+    {
+      "symbol": "TAO",
+      "name": "Bittensor",
+      "coingeckoId": "bittensor",
+      "category": "TRENDING",
+      "currentPrice": 299.4116055719801,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "全网搜索与关注度飙升（CoinGecko 实时 Trending Top 热榜，Rank #35）",
         "具备当下市场主线叙事关注度"
       ],
       "safetyRating": "MEDIUM"
