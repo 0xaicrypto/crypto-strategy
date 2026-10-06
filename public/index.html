@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
+  <script src="./js/privy-bundle.js"></script>
   <style>
     @font-face {
       font-family: 'Monument Grotesk';
@@ -1829,7 +1830,7 @@
           <div>
             <div class="card-eyebrow" style="color: var(--mint);">Web3 Multi-Wallet Connect</div>
             <h3 style="font-size: 18px; font-weight: 600; color: #FFFFFF; margin-top: 2px;">选择连接的 Web3 钱包</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">原生支持 EIP-6963 独立协议，解决多钱包扩展抢占与冲突</p>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">原生支持 Privy 嵌入式免插件钱包及 EIP-6963 浏览器扩展钱包</p>
           </div>
           <button class="modal-close-btn" onclick="closeWalletSelectModal()">&times;</button>
         </div>
@@ -2911,6 +2912,10 @@
     function getSpecificProvider(type) {
       if (typeof window === 'undefined') return null;
 
+      if (type === 'privy') {
+        return activeWalletProvider;
+      }
+
       // 1. Check EIP-6963 Discovery Registry
       for (const [rdns, item] of eip6963Wallets.entries()) {
         const name = (item.info.name || '').toLowerCase();
@@ -2975,11 +2980,13 @@
 
     function isWalletInstalled(type) {
       if (typeof window === 'undefined') return false;
+      if (type === 'privy') return true;
       return !!getSpecificProvider(type);
     }
 
     function getWalletDisplayName(type) {
       const names = {
+        privy: 'Privy 嵌入式钱包',
         metamask: 'MetaMask',
         okx: 'OKX Web3',
         rainbow: 'Rainbow',
@@ -3020,7 +3027,7 @@
       const hasRabby = isWalletInstalled('rabby');
       const isRainbowDefault = typeof window !== 'undefined' && window.ethereum && window.ethereum.isRainbow;
 
-      const wallets = [
+      const extensionWallets = [
         {
           id: 'metamask',
           name: 'MetaMask',
@@ -3063,25 +3070,68 @@
         }
       ];
 
-      listEl.innerHTML = wallets.map(w => `
-        <div class="wallet-option-card" onclick="connectSpecificWallet('${w.id}')">
+      const currentPrivyAppId = localStorage.getItem('privy_app_id') || 'clpispdty00ycl80fpueukbhl';
+      const truncatedAppId = currentPrivyAppId.length > 14 ? (currentPrivyAppId.slice(0, 6) + '...' + currentPrivyAppId.slice(-4)) : currentPrivyAppId;
+
+      listEl.innerHTML = `
+        <!-- 🌟 Privy Embedded Wallet Card -->
+        <div class="wallet-option-card" onclick="connectPrivy()" style="background: linear-gradient(135deg, rgba(0, 255, 147, 0.08) 0%, rgba(0, 212, 255, 0.08) 100%); border: 1px solid rgba(0, 255, 147, 0.35); box-shadow: 0 0 16px rgba(0, 255, 147, 0.08); cursor: pointer;">
           <div style="display: flex; align-items: center; gap: 14px;">
-            <div class="wallet-icon-box">
-              ${w.iconSvg}
+            <div class="wallet-icon-box" style="background: rgba(0, 255, 147, 0.15); border: 1px solid rgba(0, 255, 147, 0.35); display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 8px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#00FF93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="#00FF93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
-            <div>
+            <div style="flex: 1;">
               <div style="font-size: 15px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
-                <span>${w.name}</span>
-                <span class="badge-tag ${w.badgeClass}" style="font-size: 11px; padding: 2px 8px;">${w.badgeText}</span>
+                <span>🌟 Privy 极速免插件登录</span>
+                <span class="badge-tag tag-green" style="font-size: 11px; padding: 2px 8px;">无需插件 / 助记词</span>
               </div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
-                ${w.desc}
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">
+                支持 邮箱验证码、Google、Twitter/𝕏、Telegram 一键登录，自动生成 Mantle 嵌入式钱包
               </div>
             </div>
           </div>
-          <span style="font-size: 18px; color: var(--text-muted); padding-right: 4px;">→</span>
+          <span style="font-size: 13px; color: var(--mint); font-weight: 600; padding-right: 4px; white-space: nowrap;">⚡ 极速登录 →</span>
         </div>
-      `).join('');
+
+        <!-- Divider -->
+        <div style="display: flex; align-items: center; gap: 12px; margin: 6px 0 2px 0;">
+          <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.08);"></div>
+          <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px;">或者连接传统扩展钱包</span>
+          <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.08);"></div>
+        </div>
+
+        <!-- Extension Wallets -->
+        ${extensionWallets.map(w => `
+          <div class="wallet-option-card" onclick="connectSpecificWallet('${w.id}')">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div class="wallet-icon-box">
+                ${w.iconSvg}
+              </div>
+              <div>
+                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
+                  <span>${w.name}</span>
+                  <span class="badge-tag ${w.badgeClass}" style="font-size: 11px; padding: 2px 8px;">${w.badgeText}</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                  ${w.desc}
+                </div>
+              </div>
+            </div>
+            <span style="font-size: 18px; color: var(--text-muted); padding-right: 4px;">→</span>
+          </div>
+        `).join('')}
+
+        <!-- Footer Custom Config -->
+        <div style="margin-top: 6px; display: flex; justify-content: flex-end; align-items: center;">
+          <button onclick="configurePrivyAppId()" style="background: none; border: none; color: var(--text-dim); font-size: 11px; cursor: pointer; text-decoration: underline; font-family: inherit;">
+            ⚙️ 自定义 Privy App ID (当前: ${truncatedAppId})
+          </button>
+        </div>
+      `;
     }
 
     function openWalletSelectModal() {
@@ -3100,7 +3150,86 @@
       openWalletSelectModal();
     }
 
+    let isPrivyUserInitiated = false;
+
+    async function connectPrivy() {
+      closeWalletSelectModal();
+      if (typeof window.PrivyAuth === 'undefined') {
+        showToast('⏳ Privy 模块正在加载中，请稍候...');
+        return;
+      }
+      isPrivyUserInitiated = true;
+      activeWalletType = 'privy';
+      localStorage.setItem('active_wallet_type', 'privy');
+
+      try {
+        if (window.PrivyAuth.isAuthenticated) {
+          const provider = await window.PrivyAuth.getEthereumProvider();
+          const activeWallet = (window.PrivyAuth.wallets && window.PrivyAuth.wallets.find(w => w.walletClientType === 'privy')) || (window.PrivyAuth.wallets && window.PrivyAuth.wallets[0]);
+          if (activeWallet && provider) {
+            activeWalletProvider = provider;
+            await handleWalletConnected(activeWallet.address, true);
+            isPrivyUserInitiated = false;
+            return;
+          }
+        }
+        window.PrivyAuth.login();
+      } catch (err) {
+        isPrivyUserInitiated = false;
+        console.error('Privy login error:', err);
+        showToast('❌ Privy 登录出错: ' + (err.message || '未知错误'));
+      }
+    }
+
+    function configurePrivyAppId() {
+      const current = localStorage.getItem('privy_app_id') || 'clpispdty00ycl80fpueukbhl';
+      const newId = prompt('请输入您的 Privy App ID (可在 https://dashboard.privy.io 创建/查看)：', current);
+      if (newId && newId.trim() && newId.trim() !== current) {
+        localStorage.setItem('privy_app_id', newId.trim());
+        showToast('✅ Privy App ID 已保存，正在重新加载页面...');
+        setTimeout(() => window.location.reload(), 600);
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('privy_auth_change', async (event) => {
+        const detail = event && event.detail;
+        if (!detail) return;
+        console.log('[PrivyAuth] Auth state event:', detail);
+
+        if (detail.isAuthenticated && detail.address && detail.provider) {
+          if (activeWalletType === 'privy' || !userWalletAddress) {
+            activeWalletProvider = detail.provider;
+            activeWalletType = 'privy';
+            localStorage.setItem('active_wallet_type', 'privy');
+            const showToastNotice = isPrivyUserInitiated;
+            isPrivyUserInitiated = false;
+            await handleWalletConnected(detail.address, showToastNotice);
+          }
+        } else if (!detail.isAuthenticated && activeWalletType === 'privy' && userWalletAddress) {
+          disconnectWallet();
+        }
+      });
+    }
+
     async function checkExistingWalletConnection() {
+      if (activeWalletType === 'privy') {
+        if (window.PrivyAuth && window.PrivyAuth.isAuthenticated) {
+          try {
+            const provider = await window.PrivyAuth.getEthereumProvider();
+            const activeWallet = (window.PrivyAuth.wallets && window.PrivyAuth.wallets.find(w => w.walletClientType === 'privy')) || (window.PrivyAuth.wallets && window.PrivyAuth.wallets[0]);
+            if (activeWallet && provider) {
+              activeWalletProvider = provider;
+              await handleWalletConnected(activeWallet.address, false);
+              return;
+            }
+          } catch (err) {
+            console.warn('[PrivyAuth] Reconnection check error:', err);
+          }
+        }
+        return;
+      }
+
       const provider = getWalletProvider();
       if (!provider) return;
       try {
@@ -3497,6 +3626,9 @@
     }
 
     function disconnectWallet() {
+      if (activeWalletType === 'privy' && window.PrivyAuth && window.PrivyAuth.isAuthenticated) {
+        window.PrivyAuth.logout().catch(err => console.warn('Privy logout error:', err));
+      }
       userWalletAddress = null;
       activeWalletProvider = null;
       activeWalletType = null;

@@ -3,6 +3,7 @@ node_modules/
 Thumbs.db
 *.log
 dist/
+*.map
 .env
 .env.local
 .vscode/

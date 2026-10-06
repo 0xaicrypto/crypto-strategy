@@ -119,11 +119,18 @@ async function buildStaticData() {
   fs.writeFileSync(path.join(DIST_DIR, 'data', 'scan.json'), JSON.stringify(scanData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DIST_DIR, 'data', 'backtest.json'), JSON.stringify(backtestData, null, 2), 'utf-8');
 
-  // Copy HTML and Fonts
+  // Copy HTML, Fonts and JS bundles
   fs.copyFileSync(path.join(PUBLIC_DIR, 'index.html'), path.join(DIST_DIR, 'index.html'));
   const fonts = fs.readdirSync(path.join(PUBLIC_DIR, 'fonts'));
   for (const font of fonts) {
     fs.copyFileSync(path.join(PUBLIC_DIR, 'fonts', font), path.join(DIST_DIR, 'fonts', font));
+  }
+  if (fs.existsSync(path.join(PUBLIC_DIR, 'js'))) {
+    fs.mkdirSync(path.join(DIST_DIR, 'js'), { recursive: true });
+    const jsFiles = fs.readdirSync(path.join(PUBLIC_DIR, 'js'));
+    for (const js of jsFiles) {
+      fs.copyFileSync(path.join(PUBLIC_DIR, 'js', js), path.join(DIST_DIR, 'js', js));
+    }
   }
 
   // Create .nojekyll & CNAME in dist and public

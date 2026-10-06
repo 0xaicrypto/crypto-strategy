@@ -1,5 +1,5 @@
 {
-  "timestamp": 1791279431973,
+  "timestamp": 1791283672441,
   "candidates": [
     {
       "symbol": "ZRO",
@@ -27,16 +27,16 @@
       "coingeckoId": "chip-2",
       "category": "DEFI",
       "assetType": "CRYPTO",
-      "currentPrice": 0.052569,
-      "marketCap": 106423353.12327847,
+      "currentPrice": 0.052827,
+      "marketCap": 105063920.5495896,
       "fdv": 0,
       "volume24h": 0,
-      "tvl": 338951461,
-      "tvlGrowth30dPct": 44.3,
+      "tvl": 338983742,
+      "tvlGrowth30dPct": 43.5,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "链上 TVL 7天资金爆发：净增长 +44.3%（锁定资金达 $339.0M）",
+        "链上 TVL 7天资金爆发：净增长 +43.5%（锁定资金达 $339.0M）",
         "属于 RWA 赛道资金净流入活跃龙头"
       ],
       "safetyRating": "HIGH"
@@ -51,7 +51,7 @@
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "tvl": 31364709,
+      "tvl": 31364262,
       "tvlGrowth30dPct": 42.1,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
@@ -62,22 +62,22 @@
       "safetyRating": "MEDIUM"
     },
     {
-      "symbol": "MON",
-      "name": "Monad",
-      "coingeckoId": "monad",
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "coingeckoId": "near",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 0.028712680715762863,
+      "currentPrice": 5.286977582421165,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -11.789558757964516,
+      "priceChange30d": 5.495631711277957,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #137）",
-        "24H 涨跌幅 -11.8%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #21）",
+        "24H 涨跌幅 +5.5%，具备主线叙事热度"
       ],
-      "safetyRating": "RISKY"
+      "safetyRating": "MEDIUM"
     },
     {
       "symbol": "ONDO",
@@ -85,33 +85,33 @@
       "coingeckoId": "ondo-finance",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 0.49377926031351105,
+      "currentPrice": 0.5013360750519165,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -2.2310156288528358,
+      "priceChange30d": -0.45516685694409953,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #47）",
-        "24H 涨跌幅 -2.2%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #46）",
+        "24H 涨跌幅 -0.5%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },
     {
-      "symbol": "PONS",
-      "name": "Pons",
-      "coingeckoId": "pons",
+      "symbol": "MON",
+      "name": "Monad",
+      "coingeckoId": "monad",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 0.3897375319426109,
+      "currentPrice": 0.028466422694150322,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -2.1512658306114925,
+      "priceChange30d": -10.996215373794819,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #164）",
-        "24H 涨跌幅 -2.2%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #137）",
+        "24H 涨跌幅 -11.0%，具备主线叙事热度"
       ],
       "safetyRating": "RISKY"
     },
