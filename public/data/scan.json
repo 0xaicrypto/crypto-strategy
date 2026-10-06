@@ -1,5 +1,5 @@
 {
-  "timestamp": 1791284249077,
+  "timestamp": 1791284626122,
   "candidates": [
     {
       "symbol": "ZRO",
@@ -27,7 +27,7 @@
       "coingeckoId": "chip-2",
       "category": "DEFI",
       "assetType": "CRYPTO",
-      "currentPrice": 0.052765,
+      "currentPrice": 0.053058,
       "marketCap": 105623504.36097898,
       "fdv": 0,
       "volume24h": 0,
@@ -67,15 +67,15 @@
       "coingeckoId": "near",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 5.262726407145122,
+      "currentPrice": 5.24544877440435,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 4.889207246568283,
+      "priceChange30d": 4.399679523858807,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #21）",
-        "24H 涨跌幅 +4.9%，具备主线叙事热度"
+        "24H 涨跌幅 +4.4%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },
@@ -85,15 +85,15 @@
       "coingeckoId": "hyperliquid",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 93.59771804086124,
+      "currentPrice": 93.5976391990979,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0.9226811349940608,
+      "priceChange30d": 0.7526528172029445,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #11）",
-        "24H 涨跌幅 +0.9%，具备主线叙事热度"
+        "24H 涨跌幅 +0.8%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },
@@ -103,15 +103,15 @@
       "coingeckoId": "pons",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 0.39541451753568607,
+      "currentPrice": 0.3938353640217948,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -0.11508786070124782,
+      "priceChange30d": -0.6469024089406379,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #164）",
-        "24H 涨跌幅 -0.1%，具备主线叙事热度"
+        "24H 涨跌幅 -0.6%，具备主线叙事热度"
       ],
       "safetyRating": "RISKY"
     },

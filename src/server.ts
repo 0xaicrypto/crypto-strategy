@@ -104,6 +104,26 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  // Security & Content-Security-Policy (CSP) headers compliant with Privy SDK
+  const privyCsp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://challenges.cloudflare.com https://telegram.org",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: blob: https:",
+    "child-src https://auth.privy.io https://verify.walletconnect.com https://verify.walletconnect.org",
+    "frame-src https://auth.privy.io https://verify.walletconnect.com https://verify.walletconnect.org https://challenges.cloudflare.com https://oauth.telegram.org",
+    "connect-src 'self' https://auth.privy.io wss://relay.walletconnect.com wss://relay.walletconnect.org wss://www.walletlink.org https://*.rpc.privy.systems https://explorer-api.walletconnect.com https://rpc.mantle.xyz https://api.coingecko.com https://api.dexscreener.com https://coins.llama.fi https://api.fluxion.finance https://fluxion-backend-707185012543.us-central1.run.app https://query1.finance.yahoo.com https://api.allorigins.win",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'none'"
+  ].join('; ');
+
+  res.setHeader('Content-Security-Policy', privyCsp);
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
