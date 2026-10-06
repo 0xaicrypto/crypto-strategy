@@ -1,5 +1,5 @@
 {
-  "timestamp": 1791218624088,
+  "timestamp": 1791272671197,
   "candidates": [
     {
       "symbol": "CHIP",
@@ -7,16 +7,16 @@
       "coingeckoId": "chip-2",
       "category": "DEFI",
       "assetType": "CRYPTO",
-      "currentPrice": 0.04907584,
-      "marketCap": 99258163.23470522,
+      "currentPrice": 0.053714,
+      "marketCap": 106727168.81277399,
       "fdv": 0,
       "volume24h": 0,
-      "tvl": 336203674,
-      "tvlGrowth30dPct": 53.8,
+      "tvl": 338930236,
+      "tvlGrowth30dPct": 46.6,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "链上 TVL 7天资金爆发：净增长 +53.8%（锁定资金达 $336.2M）",
+        "链上 TVL 7天资金爆发：净增长 +46.6%（锁定资金达 $338.9M）",
         "属于 RWA 赛道资金净流入活跃龙头"
       ],
       "safetyRating": "HIGH"
@@ -31,12 +31,12 @@
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "tvl": 11665551055,
-      "tvlGrowth30dPct": 45.5,
+      "tvl": 11685618501,
+      "tvlGrowth30dPct": 46.3,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "链上 TVL 7天资金爆发：净增长 +45.5%（锁定资金达 $11665.6M）",
+        "链上 TVL 7天资金爆发：净增长 +46.3%（锁定资金达 $11685.6M）",
         "属于 Bridge 赛道资金净流入活跃龙头"
       ],
       "safetyRating": "HIGH"
@@ -51,33 +51,51 @@
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "tvl": 31565190,
-      "tvlGrowth30dPct": 41.3,
+      "tvl": 31468696,
+      "tvlGrowth30dPct": 41,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "链上 TVL 7天资金爆发：净增长 +41.3%（锁定资金达 $31.6M）",
+        "链上 TVL 7天资金爆发：净增长 +41.0%（锁定资金达 $31.5M）",
         "属于 Bridge 赛道资金净流入活跃龙头"
       ],
       "safetyRating": "MEDIUM"
     },
     {
-      "symbol": "ENA",
-      "name": "Ethena",
-      "coingeckoId": "ethena",
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "coingeckoId": "near",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 0.24405556497797348,
+      "currentPrice": 5.144301637767914,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 3.383775331259595,
+      "priceChange30d": -0.24061013236651177,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #38）",
-        "24H 涨跌幅 +3.4%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #21）",
+        "24H 涨跌幅 -0.2%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
+    },
+    {
+      "symbol": "PONS",
+      "name": "Pons",
+      "coingeckoId": "pons",
+      "category": "TRENDING",
+      "assetType": "CRYPTO",
+      "currentPrice": 0.378064831113533,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": -6.479075924413584,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #167）",
+        "24H 涨跌幅 -6.5%，具备主线叙事热度"
+      ],
+      "safetyRating": "RISKY"
     },
     {
       "symbol": "QNT",
@@ -85,35 +103,17 @@
       "coingeckoId": "quant-network",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 255.14929411086007,
+      "currentPrice": 254.6697090998546,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -0.5077728422076051,
+      "priceChange30d": -0.3796149968552673,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #33）",
-        "24H 涨跌幅 -0.5%，具备主线叙事热度"
+        "24H 涨跌幅 -0.4%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
-    },
-    {
-      "symbol": "PENGU",
-      "name": "Pudgy Penguins",
-      "coingeckoId": "pudgy-penguins",
-      "category": "TRENDING",
-      "assetType": "CRYPTO",
-      "currentPrice": 0.009502759182846583,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": 3.00767722220568,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #105）",
-        "24H 涨跌幅 +3.0%，具备主线叙事热度"
-      ],
-      "safetyRating": "RISKY"
     },
     {
       "symbol": "NVDA",
@@ -121,20 +121,21 @@
       "coingeckoId": "nvda",
       "category": "TECH_GROWTH",
       "assetType": "STOCK",
-      "currentPrice": 236.26,
+      "currentPrice": 238.9,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0.99,
+      "priceChange30d": 2.12,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "突破/逼近 52 周新高（距峰值仅 -0.7%）",
-        "站上 200 日牛熊线 1.18x（多头强动量加速）",
+        "突破/逼近 52 周新高（距峰值仅 -0.5%）",
+        "站上 200 日牛熊线 1.19x（多头强动量加速）",
+        "日内强势上涨 +2.1%",
         "股东净反稀释率 +1.1%（大额回购注销保护）"
       ],
       "safetyRating": "HIGH",
-      "ratioTo200d": 1.18,
-      "drawdownFromHighPct": -0.68,
+      "ratioTo200d": 1.19,
+      "drawdownFromHighPct": -0.5,
       "peRatio": 31.2
     },
     {
@@ -143,20 +144,20 @@
       "coingeckoId": "aapl",
       "category": "TECH_GROWTH",
       "assetType": "STOCK",
-      "currentPrice": 334.44,
+      "currentPrice": 332.89,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0.23,
+      "priceChange30d": -0.24,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "突破/逼近 52 周新高（距峰值仅 -3.2%）",
-        "站上 200 日牛熊线 1.16x（多头强动量加速）",
+        "突破/逼近 52 周新高（距峰值仅 -3.6%）",
+        "站上 200 日牛熊线 1.15x（多头强动量加速）",
         "股东净反稀释率 +2.7%（大额回购注销保护）"
       ],
       "safetyRating": "HIGH",
-      "ratioTo200d": 1.16,
-      "drawdownFromHighPct": -3.16,
+      "ratioTo200d": 1.15,
+      "drawdownFromHighPct": -3.61,
       "peRatio": 27.5
     },
     {
@@ -165,21 +166,19 @@
       "coingeckoId": "msft",
       "category": "TECH_GROWTH",
       "assetType": "STOCK",
-      "currentPrice": 526.31,
+      "currentPrice": 525.18,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 1.7,
+      "priceChange30d": 1.48,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "突破/逼近 52 周新高（距峰值仅 -5.0%）",
-        "站上 200 日牛熊线 1.22x（多头强动量加速）",
-        "日内强势上涨 +1.7%",
+        "站上 200 日牛熊线 1.21x（多头强动量加速）",
         "股东净反稀释率 +0.6%（大额回购注销保护）"
       ],
       "safetyRating": "HIGH",
-      "ratioTo200d": 1.22,
-      "drawdownFromHighPct": -4.95,
+      "ratioTo200d": 1.21,
+      "drawdownFromHighPct": -5.15,
       "peRatio": 28
     },
     {
@@ -188,19 +187,20 @@
       "coingeckoId": "mstr",
       "category": "CRYPTO_PROXY",
       "assetType": "STOCK",
-      "currentPrice": 160.49,
+      "currentPrice": 164.43,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0.3,
+      "priceChange30d": 2.76,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "站上 200 日牛熊线 1.18x（多头强动量加速）",
+        "站上 200 日牛熊线 1.21x（多头强动量加速）",
+        "日内强势上涨 +2.8%",
         "华尔街核心加密强相关资产（Bitcoin Treasury Proxy）"
       ],
       "safetyRating": "MEDIUM",
-      "ratioTo200d": 1.18,
-      "drawdownFromHighPct": -56.06,
+      "ratioTo200d": 1.21,
+      "drawdownFromHighPct": -54.25,
       "peRatio": 65
     },
     {
@@ -209,18 +209,19 @@
       "coingeckoId": "coin",
       "category": "CRYPTO_PROXY",
       "assetType": "STOCK",
-      "currentPrice": 184.34,
+      "currentPrice": 188.22,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0.73,
+      "priceChange30d": 2.85,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
+        "日内强势上涨 +2.9%",
         "华尔街核心加密强相关资产（Crypto Infrastructure）"
       ],
       "safetyRating": "MEDIUM",
-      "ratioTo200d": 1,
-      "drawdownFromHighPct": -54.16,
+      "ratioTo200d": 1.02,
+      "drawdownFromHighPct": -53.2,
       "peRatio": 29.5
     },
     {
@@ -229,19 +230,20 @@
       "coingeckoId": "ibit",
       "category": "CRYPTO_PROXY",
       "assetType": "STOCK",
-      "currentPrice": 48.22,
+      "currentPrice": 48.56,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 1.03,
+      "priceChange30d": 1.74,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "站上 200 日牛熊线 1.15x（多头强动量加速）",
+        "站上 200 日牛熊线 1.16x（多头强动量加速）",
+        "日内强势上涨 +1.7%",
         "华尔街核心加密强相关资产（Spot Bitcoin ETF）"
       ],
       "safetyRating": "HIGH",
-      "ratioTo200d": 1.15,
-      "drawdownFromHighPct": -32.86,
+      "ratioTo200d": 1.16,
+      "drawdownFromHighPct": -31.61,
       "peRatio": 0
     },
     {
@@ -250,18 +252,18 @@
       "coingeckoId": "mara",
       "category": "CRYPTO_PROXY",
       "assetType": "STOCK",
-      "currentPrice": 10.85,
+      "currentPrice": 11.17,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -3.38,
+      "priceChange30d": -0.53,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "华尔街核心加密强相关资产（Bitcoin Mining & Power）"
       ],
       "safetyRating": "RISKY",
-      "ratioTo200d": 0.99,
-      "drawdownFromHighPct": -53.73,
+      "ratioTo200d": 1.02,
+      "drawdownFromHighPct": -52.37,
       "peRatio": 22
     },
     {
@@ -270,18 +272,18 @@
       "coingeckoId": "pltr",
       "category": "TECH_GROWTH",
       "assetType": "STOCK",
-      "currentPrice": 188.53,
+      "currentPrice": 189.4,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -0.11,
+      "priceChange30d": 0.34,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "站上 200 日牛熊线 1.24x（多头强动量加速）"
+        "站上 200 日牛熊线 1.25x（多头强动量加速）"
       ],
       "safetyRating": "MEDIUM",
-      "ratioTo200d": 1.24,
-      "drawdownFromHighPct": -9.15,
+      "ratioTo200d": 1.25,
+      "drawdownFromHighPct": -8.73,
       "peRatio": 68
     },
     {
@@ -290,18 +292,18 @@
       "coingeckoId": "tsla",
       "category": "TECH_GROWTH",
       "assetType": "STOCK",
-      "currentPrice": 378.33,
+      "currentPrice": 378.73,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 2.09,
+      "priceChange30d": 2.2,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "日内强势上涨 +2.1%"
+        "日内强势上涨 +2.2%"
       ],
       "safetyRating": "MEDIUM",
       "ratioTo200d": 0.96,
-      "drawdownFromHighPct": -24.16,
+      "drawdownFromHighPct": -24.08,
       "peRatio": 55
     }
   ]
