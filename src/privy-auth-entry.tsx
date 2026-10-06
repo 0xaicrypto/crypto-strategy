@@ -140,7 +140,12 @@ export function initPrivy(appId: string) {
 
 if (typeof window !== 'undefined') {
   window.initPrivyApp = initPrivy;
-  const savedAppId = localStorage.getItem('privy_app_id') || 'clpispdty00ycl80fpueukbhl';
+  const DEFAULT_PRIVY_APP_ID = 'cmuwkcbj500w40cjwqt4ywyut';
+  let savedAppId = localStorage.getItem('privy_app_id');
+  if (!savedAppId || savedAppId === 'clpispdty00ycl80fpueukbhl') {
+    savedAppId = DEFAULT_PRIVY_APP_ID;
+    localStorage.setItem('privy_app_id', DEFAULT_PRIVY_APP_ID);
+  }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => initPrivy(savedAppId));
   } else {

@@ -3070,7 +3070,12 @@
         }
       ];
 
-      const currentPrivyAppId = localStorage.getItem('privy_app_id') || 'clpispdty00ycl80fpueukbhl';
+      const DEFAULT_PRIVY_APP_ID = 'cmuwkcbj500w40cjwqt4ywyut';
+      let currentPrivyAppId = localStorage.getItem('privy_app_id');
+      if (!currentPrivyAppId || currentPrivyAppId === 'clpispdty00ycl80fpueukbhl') {
+        currentPrivyAppId = DEFAULT_PRIVY_APP_ID;
+        localStorage.setItem('privy_app_id', DEFAULT_PRIVY_APP_ID);
+      }
       const truncatedAppId = currentPrivyAppId.length > 14 ? (currentPrivyAppId.slice(0, 6) + '...' + currentPrivyAppId.slice(-4)) : currentPrivyAppId;
 
       listEl.innerHTML = `
@@ -3182,7 +3187,7 @@
     }
 
     function configurePrivyAppId() {
-      const current = localStorage.getItem('privy_app_id') || 'clpispdty00ycl80fpueukbhl';
+      const current = localStorage.getItem('privy_app_id') || 'cmuwkcbj500w40cjwqt4ywyut';
       const newId = prompt('请输入您的 Privy App ID (可在 https://dashboard.privy.io 创建/查看)：', current);
       if (newId && newId.trim() && newId.trim() !== current) {
         localStorage.setItem('privy_app_id', newId.trim());

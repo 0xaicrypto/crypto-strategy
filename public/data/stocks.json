@@ -1,11 +1,11 @@
 {
-  "timestamp": 1791283671238,
+  "timestamp": 1791284247085,
   "macroRates": {
-    "timestamp": 1791283671237,
+    "timestamp": 1791284247084,
     "us10yYield": 0.53,
     "us2yYield": 0.28,
     "yieldCurveSpread": 0.25,
-    "vixIndex": 15.38,
+    "vixIndex": 15.37,
     "sp500Pe": 22.4,
     "sp500EarningsYield": 4.46,
     "equityRiskPremiumPct": 3.93,
