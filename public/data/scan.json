@@ -1,26 +1,6 @@
 {
-  "timestamp": 1791272671197,
+  "timestamp": 1791277109593,
   "candidates": [
-    {
-      "symbol": "CHIP",
-      "name": "USD AI",
-      "coingeckoId": "chip-2",
-      "category": "DEFI",
-      "assetType": "CRYPTO",
-      "currentPrice": 0.053714,
-      "marketCap": 106727168.81277399,
-      "fdv": 0,
-      "volume24h": 0,
-      "tvl": 338930236,
-      "tvlGrowth30dPct": 46.6,
-      "priceChange30d": 0,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "链上 TVL 7天资金爆发：净增长 +46.6%（锁定资金达 $338.9M）",
-        "属于 RWA 赛道资金净流入活跃龙头"
-      ],
-      "safetyRating": "HIGH"
-    },
     {
       "symbol": "ZRO",
       "name": "LayerZero V2",
@@ -31,13 +11,33 @@
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "tvl": 11685618501,
-      "tvlGrowth30dPct": 46.3,
+      "tvl": 11725444763,
+      "tvlGrowth30dPct": 48,
       "priceChange30d": 0,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "链上 TVL 7天资金爆发：净增长 +46.3%（锁定资金达 $11685.6M）",
+        "链上 TVL 7天资金爆发：净增长 +48.0%（锁定资金达 $11725.4M）",
         "属于 Bridge 赛道资金净流入活跃龙头"
+      ],
+      "safetyRating": "HIGH"
+    },
+    {
+      "symbol": "CHIP",
+      "name": "USD AI",
+      "coingeckoId": "chip-2",
+      "category": "DEFI",
+      "assetType": "CRYPTO",
+      "currentPrice": 0.053404,
+      "marketCap": 107431187.82990934,
+      "fdv": 0,
+      "volume24h": 0,
+      "tvl": 338930236,
+      "tvlGrowth30dPct": 46.6,
+      "priceChange30d": 0,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "链上 TVL 7天资金爆发：净增长 +46.6%（锁定资金达 $338.9M）",
+        "属于 RWA 赛道资金净流入活跃龙头"
       ],
       "safetyRating": "HIGH"
     },
@@ -67,15 +67,15 @@
       "coingeckoId": "near",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 5.144301637767914,
+      "currentPrice": 5.304563512319763,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -0.24061013236651177,
+      "priceChange30d": 5.082986335045172,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #21）",
-        "24H 涨跌幅 -0.2%，具备主线叙事热度"
+        "24H 涨跌幅 +5.1%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },
@@ -85,33 +85,33 @@
       "coingeckoId": "pons",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 0.378064831113533,
+      "currentPrice": 0.39393176659156587,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -6.479075924413584,
+      "priceChange30d": -1.947993857557544,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #167）",
-        "24H 涨跌幅 -6.5%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #164）",
+        "24H 涨跌幅 -1.9%，具备主线叙事热度"
       ],
       "safetyRating": "RISKY"
     },
     {
-      "symbol": "QNT",
-      "name": "Quant",
-      "coingeckoId": "quant-network",
+      "symbol": "ONDO",
+      "name": "Ondo",
+      "coingeckoId": "ondo-finance",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 254.6697090998546,
+      "currentPrice": 0.49362787324680873,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": -0.3796149968552673,
+      "priceChange30d": -2.007281960567343,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #33）",
-        "24H 涨跌幅 -0.4%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #47）",
+        "24H 涨跌幅 -2.0%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },

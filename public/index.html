@@ -1440,21 +1440,28 @@
         <!-- Terminal Mode Switcher -->
         <div class="sub-toggle-group" style="margin-bottom: 18px; width: 100%;">
           <button class="sub-toggle-btn active" id="modalTabBtnDirect" style="flex: 1; text-align: center;" onclick="switchModalTab('direct')">
-            ⚡ 市价兑换 (Market Swap)
+            ⚡ 闪电市价兑换 (Market Swap)
           </button>
           <button class="sub-toggle-btn" id="modalTabBtnLimit" style="flex: 1; text-align: center;" onclick="switchModalTab('limit')">
             📜 Fluxion 限价单 (Limit Order)
-          </button>
-          <button class="sub-toggle-btn" id="modalTabBtnExternal" style="flex: 1; text-align: center;" onclick="switchModalTab('external')">
-            🌐 聚合路由 (Aggregators)
           </button>
         </div>
 
         <!-- Mode 1: In-App Direct Swap Terminal Container -->
         <div id="buyModalDirectContainer">
-          <!-- Optional Stock Token Notice -->
-          <div id="directSwapStockNotice" style="display: none; padding: 10px 14px; background: rgba(0, 212, 255, 0.08); border: 1px dashed rgba(0, 212, 255, 0.3); border-radius: 6px; margin-bottom: 14px; font-size: 12px; line-height: 1.5; color: var(--ice-cyan);">
-            💡 <b>美股代币直通提示</b>：美股代币基于 BackedFi 1:1 实体股票托管，通过 Fluxion Atomic RFQ 机构做市商撮合。您可在此直接兑换基础稳定币 (USDC/USDT)，或切换至【聚合路由】直连 Fluxion 机构询价单。
+          <!-- Optional Stock Token Notice & Direct RFQ Shortcut -->
+          <div id="directSwapStockNotice" style="display: none; padding: 12px 14px; background: rgba(0, 255, 147, 0.08); border: 1px solid rgba(0, 255, 147, 0.25); border-radius: 6px; margin-bottom: 14px; font-size: 12px; line-height: 1.5;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="color: var(--mint); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <span>🏆 官方推荐 | Mantle 原生 RWA 零滑点做市</span>
+              </span>
+              <button class="btn btn-primary" id="btnStockRfqShortcut" style="padding: 4px 12px; font-size: 11px; font-weight: 600;">
+                ⚡ 立即 RFQ 询价
+              </button>
+            </div>
+            <div style="color: var(--text-muted); font-size: 12px;">
+              BackedFi 实体股票映射代币通过 Fluxion 机构级 RFQ 直通 Bybit / Flowdesk 做市商，规避 AMM 浅池磨损，24/7 链上结算。您亦可切换至【📜 Fluxion 限价单】免 Gas 挂单。
+            </div>
           </div>
 
           <!-- Direct Swap Form -->
@@ -1510,8 +1517,8 @@
           <!-- Trade Metadata & Execution Details -->
           <div style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-main); border-radius: 6px; padding: 12px 14px; margin-bottom: 16px; font-size: 12px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-              <span style="color: var(--text-muted);">链上撮合协议：</span>
-              <span style="color: #FFFFFF; font-weight: 500;">Fluxion AMM V3 / Atomic RFQ</span>
+              <span style="color: var(--text-muted);">聚合执行协议：</span>
+              <span id="swapRouteBadge" style="color: var(--ice-cyan); font-weight: 600; font-family: 'JetBrains Mono', monospace;">Mantle DEX 智能最优路由</span>
             </div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
               <span style="color: var(--text-muted);">路由合约 (SwapRouter)：</span>
@@ -1532,8 +1539,26 @@
 
           <!-- Direct Execution Submit Button -->
           <button class="btn btn-primary" id="btnExecuteDirectSwap" onclick="executeDirectFluxionSwap()" style="width: 100%; padding: 12px; font-size: 15px; font-weight: 600; text-align: center;">
-            ⚡ 立即在 Mantle 链上买入 (MetaMask 签名)
+            ⚡ 立即在 Mantle 链上买入 (Web3 签名)
           </button>
+
+          <!-- External Aggregators Quick Reference Links -->
+          <div style="margin-top: 14px; padding: 8px 12px; background: rgba(255, 255, 255, 0.02); border: 1px dashed var(--border-main); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+            <span style="color: var(--text-dim);">🌐 外部多链聚合比价：</span>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <a href="https://app.openocean.finance/classic#/MANTLE" target="_blank" rel="noopener noreferrer" style="color: var(--ice-cyan); text-decoration: none; display: flex; align-items: center; gap: 3px;" title="在 OpenOcean 查看全网比价">
+                <span>OpenOcean</span><span style="font-size: 9px;">↗</span>
+              </a>
+              <span style="color: var(--border-main);">|</span>
+              <a href="https://kyberswap.com/swap/mantle" target="_blank" rel="noopener noreferrer" style="color: var(--ice-cyan); text-decoration: none; display: flex; align-items: center; gap: 3px;" title="在 KyberSwap 查看多链聚合">
+                <span>KyberSwap</span><span style="font-size: 9px;">↗</span>
+              </a>
+              <span style="color: var(--border-main);">|</span>
+              <a href="https://agni.finance/swap" target="_blank" rel="noopener noreferrer" style="color: var(--ice-cyan); text-decoration: none; display: flex; align-items: center; gap: 3px;" title="在 Agni 查看原生深度">
+                <span>Agni v3</span><span style="font-size: 9px;">↗</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Mode 2: Fluxion Limit Order & Atomic RFQ Terminal -->
@@ -1646,11 +1671,6 @@
           <button class="btn btn-primary" id="btnSubmitLimitOrder" onclick="buildAndSubmitFluxionLimitOrder()" style="width: 100%; padding: 12px; font-size: 15px; font-weight: 600; text-align: center; background: linear-gradient(135deg, #00D4FF 0%, #00FF93 100%); color: #030806;">
             📜 构建并签名限价挂单 (EIP-712 免 Gas)
           </button>
-        </div>
-
-        <!-- Mode 3: External Routes Container -->
-        <div id="buyModalRoutesContainer" style="display: none;">
-          <!-- Populated dynamically via JS in openBuyModal() -->
         </div>
 
         <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-main); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted);">
@@ -3645,21 +3665,19 @@
     function switchModalTab(tab) {
       const directContainer = document.getElementById('buyModalDirectContainer');
       const limitContainer = document.getElementById('buyModalLimitContainer');
-      const routesContainer = document.getElementById('buyModalRoutesContainer');
       const btnDirect = document.getElementById('modalTabBtnDirect');
       const btnLimit = document.getElementById('modalTabBtnLimit');
-      const btnExternal = document.getElementById('modalTabBtnExternal');
 
       if (directContainer) directContainer.style.display = tab === 'direct' ? 'block' : 'none';
       if (limitContainer) limitContainer.style.display = tab === 'limit' ? 'block' : 'none';
-      if (routesContainer) routesContainer.style.display = tab === 'external' ? 'block' : 'none';
 
       if (btnDirect) btnDirect.classList.toggle('active', tab === 'direct');
       if (btnLimit) btnLimit.classList.toggle('active', tab === 'limit');
-      if (btnExternal) btnExternal.classList.toggle('active', tab === 'external');
 
       if (tab === 'limit') {
         onLimitTokenChange();
+      } else if (tab === 'direct') {
+        onSwapTokenChange();
       }
     }
 
@@ -4569,8 +4587,9 @@
       const modal = document.getElementById('buyModal');
       const title = document.getElementById('buyModalTitle');
       const subtitle = document.getElementById('buyModalSubtitle');
-      const container = document.getElementById('buyModalRoutesContainer');
-      if (!modal || !title || !subtitle || !container) return;
+      const stockNotice = document.getElementById('directSwapStockNotice');
+      const stockRfqBtn = document.getElementById('btnStockRfqShortcut');
+      if (!modal || !title || !subtitle) return;
 
       const isStock = assetType === 'STOCK';
       const cleanSymbol = (symbol || '').toUpperCase();
@@ -4582,145 +4601,20 @@
 
       if (isStock) {
         title.innerHTML = `购买美股代币 <span style="color: var(--mint);">${xSymbol}</span> <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">(${name})</span>`;
-        subtitle.innerHTML = `在 Mantle 链上直接交易受监管的 BackedFi 实体股票映射代币 (1:1 锚定，瑞士 DLT 法律保护)`;
-
-        container.innerHTML = `
-          <!-- Route 1: Fluxion xChange Atomic RFQ (Highlighted Native RWA) -->
-          <div class="route-option-card highlight">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(0, 255, 147, 0.15); color: var(--mint); border-color: rgba(0, 255, 147, 0.4); margin-bottom: 6px; display: inline-block;">
-                  🏆 官方推荐 | Mantle 原生 RWA 交易所
-                </span>
-                <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
-                  <span>Fluxion xChange (Atomic RFQ)</span>
-                  <span style="font-size: 11px; background: rgba(0, 212, 255, 0.15); color: var(--ice-cyan); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;">0 滑点原子做市</span>
-                </div>
-              </div>
-              <button class="btn btn-primary" style="padding: 7px 18px; font-size: 12px; font-weight: 600;" onclick="executeRoute('https://app.fluxion.network/rfq?token=${xSymbol}')">
-                ⚡ 立即 RFQ 询价
-              </button>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
-              依托 Mantle 官方生态扶持的 Fluxion 机构级 RFQ 询价系统，直通 Flowdesk / Bybit 机构做市商报价。规避传统 AMM 浅流动性磨损，支持 USDT / USDC 零滑点兑换 <strong style="color: #FFFFFF;">${xSymbol}</strong>，24/7 全天候链上结算。
-            </p>
-            <div style="display: flex; gap: 14px; font-size: 11px; color: var(--text-dim); border-top: 1px dashed rgba(255, 255, 255, 0.08); padding-top: 8px;">
-              <span>• 底层资产: BackedFi 1:1 美股托管</span>
-              <span>• 合规标准: 瑞士 DLT 证券法</span>
-              <span>• 预估 Gas: &lt; $0.02 (Mantle L2)</span>
-            </div>
-          </div>
-
-          <!-- Route 2: OpenOcean Aggregator -->
-          <div class="route-option-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(0, 212, 255, 0.12); color: var(--ice-cyan); border-color: rgba(0, 212, 255, 0.3); margin-bottom: 6px; display: inline-block;">
-                  智能分拆路由
-                </span>
-                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">OpenOcean (Mantle)</div>
-              </div>
-              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://app.openocean.finance/classic#/MANTLE')">
-                前往 OpenOcean
-              </button>
-            </div>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              Web3 领先的跨 DEX 深度分流聚合器，提供全自动动态路由分拆与滑点保护。
-            </p>
-          </div>
-
-          <!-- Route 3: KyberSwap Meta-Aggregator -->
-          <div class="route-option-card" style="margin-bottom: 0;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border-color: var(--border-main); margin-bottom: 6px; display: inline-block;">
-                  多链聚合龙头
-                </span>
-                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">KyberSwap (Mantle)</div>
-              </div>
-              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://kyberswap.com/swap/mantle')">
-                前往 KyberSwap
-              </button>
-            </div>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              KyberSwap 官方多链聚合器，原生支持 Mantle L2，实时比对全网流动性提供最优报价。
-            </p>
-          </div>
-        `;
+        subtitle.innerHTML = `在 Mantle 链上交易受监管的 BackedFi 实体股票映射代币 (1:1 锚定，瑞士 DLT 法律保护)`;
+        if (stockNotice) stockNotice.style.display = 'block';
+        if (stockRfqBtn) {
+          stockRfqBtn.onclick = () => executeRoute(`https://app.fluxion.network/rfq?token=${xSymbol}`);
+        }
       } else {
-        // Crypto Asset Routes
         const tokenDisplay = cleanSymbol;
         title.innerHTML = `在 Mantle 链上买入 <span style="color: var(--mint);">${tokenDisplay}</span> <span style="font-size: 14px; color: var(--text-muted); font-weight: 400;">(${name})</span>`;
-        subtitle.innerHTML = `通过 Mantle 生态顶级 DEX 聚合器与原生流动性池极速交易`;
-
-        container.innerHTML = `
-          <!-- Route 1: OpenOcean DEX Aggregator (Highlighted) -->
-          <div class="route-option-card highlight">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(0, 255, 147, 0.15); color: var(--mint); border-color: rgba(0, 255, 147, 0.4); margin-bottom: 6px; display: inline-block;">
-                  🔥 推荐首选 | Mantle 核心 DEX 聚合器
-                </span>
-                <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
-                  <span>OpenOcean DEX Aggregator</span>
-                  <span style="font-size: 11px; background: rgba(0, 255, 147, 0.15); color: var(--mint); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;">全网比价</span>
-                </div>
-              </div>
-              <button class="btn btn-primary" style="padding: 7px 18px; font-size: 12px; font-weight: 600;" onclick="executeRoute('https://app.openocean.finance/classic#/MANTLE')">
-                ⚡ 最佳价格成交
-              </button>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
-              Mantle 生态头号 DEX 聚合终端，自动比对 Agni Finance、Merchant Moe、FusionX、Swapsicle 等全网流动性，提供最优滑点与最低 Gas。
-            </p>
-            <div style="display: flex; gap: 14px; font-size: 11px; color: var(--text-dim); border-top: 1px dashed rgba(255, 255, 255, 0.08); padding-top: 8px;">
-              <span>• 支持: MNT / USDT / USDC / WETH / WBTC 等</span>
-              <span>• Gas 费用: 极低 (&lt; $0.001)</span>
-            </div>
-          </div>
-
-          <!-- Route 2: KyberSwap Meta-Aggregator -->
-          <div class="route-option-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(0, 212, 255, 0.12); color: var(--ice-cyan); border-color: rgba(0, 212, 255, 0.3); margin-bottom: 6px; display: inline-block;">
-                  多链聚合龙头
-                </span>
-                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">KyberSwap (Mantle)</div>
-              </div>
-              <button class="btn btn-secondary" style="padding: 6px 16px; font-size: 12px;" onclick="executeRoute('https://kyberswap.com/swap/mantle')">
-                前往 KyberSwap
-              </button>
-            </div>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              业内久经考验的去中心化交易聚合协议，原生支持 Mantle 网络，精准路由优化并保障无额外抽成。
-            </p>
-          </div>
-
-          <!-- Route 3: Agni Finance & Merchant Moe (Native DEXes) -->
-          <div class="route-option-card" style="margin-bottom: 0;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <span class="badge-tag" style="background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border-color: var(--border-main); margin-bottom: 6px; display: inline-block;">
-                  Mantle 原生头部流动性池
-                </span>
-                <div style="font-size: 15px; font-weight: 600; color: #FFFFFF;">Agni Finance / Merchant Moe</div>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px;" onclick="executeRoute('https://agni.finance/swap')">
-                  Agni (v3)
-                </button>
-                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 11px;" onclick="executeRoute('https://merchantmoe.com/trade')">
-                  Merchant Moe
-                </button>
-              </div>
-            </div>
-            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              Mantle 原生 TVL 最大、流动性最聚集的 DEX 基础设施，分别采用集中流动性 (Uni v3) 与流动性账本 (Liquidity Book) 算法。
-            </p>
-          </div>
-        `;
+        subtitle.innerHTML = `智能聚合 Mantle 核心流动性池与订单簿最优报价极速交易`;
+        if (stockNotice) stockNotice.style.display = 'none';
       }
+
+      // Default to Direct Market Swap tab
+      switchModalTab('direct');
 
       // Initialize Direct Swap Terminal
       initDirectSwapModal(cleanSymbol, isStock);

@@ -1,12 +1,12 @@
 {
-  "timestamp": 1791272670008,
+  "timestamp": 1791277108398,
   "cycle": {
-    "currentPrice": 85471,
+    "currentPrice": 85977,
     "ma200w": 55508.85,
     "ma200d": 75043,
-    "ratioTo200w": 1.54,
-    "ratioTo200d": 1.14,
-    "mvrvProxy": 1.38,
+    "ratioTo200w": 1.55,
+    "ratioTo200d": 1.15,
+    "mvrvProxy": 1.39,
     "rsiWeekly": 85.1,
     "fearAndGreed": 73,
     "temperatureScore": 48,
@@ -25,11 +25,11 @@
     {
       "symbol": "STRK",
       "name": "Starknet",
-      "currentPrice": 0.051717,
+      "currentPrice": 0.052395,
       "dilutionRiskScore": 45,
-      "ecosystemTractionScore": 60,
+      "ecosystemTractionScore": 35,
       "relativeValuationScore": 80,
-      "compositeHealthScore": 63,
+      "compositeHealthScore": 55,
       "verdict": "ACCUMULATE_CONSERVATIVE",
       "maxPortfolioCapPct": 0.015,
       "dcaAllowed": true,
@@ -43,7 +43,7 @@
     {
       "symbol": "ARB",
       "name": "Arbitrum",
-      "currentPrice": 0.201867,
+      "currentPrice": 0.20259,
       "dilutionRiskScore": 45,
       "ecosystemTractionScore": 85,
       "relativeValuationScore": 80,
@@ -61,7 +61,7 @@
     {
       "symbol": "ZEC",
       "name": "Zcash",
-      "currentPrice": 1326,
+      "currentPrice": 1345.06,
       "dilutionRiskScore": 25,
       "ecosystemTractionScore": 50,
       "relativeValuationScore": 50,
@@ -79,7 +79,7 @@
     {
       "symbol": "NEAR",
       "name": "NEAR Protocol",
-      "currentPrice": 5.2,
+      "currentPrice": 5.3,
       "dilutionRiskScore": 25,
       "ecosystemTractionScore": 50,
       "relativeValuationScore": 50,
@@ -235,11 +235,11 @@
     "cash": 5000
   },
   "macroRates": {
-    "timestamp": 1791272670008,
+    "timestamp": 1791277108397,
     "us10yYield": 0.53,
     "us2yYield": 0.28,
     "yieldCurveSpread": 0.25,
-    "vixIndex": 15.5,
+    "vixIndex": 15.44,
     "sp500Pe": 22.4,
     "sp500EarningsYield": 4.46,
     "equityRiskPremiumPct": 3.93,
