@@ -1,5 +1,5 @@
 {
-  "timestamp": 1791284626122,
+  "timestamp": 1791285046955,
   "candidates": [
     {
       "symbol": "ZRO",
@@ -27,7 +27,7 @@
       "coingeckoId": "chip-2",
       "category": "DEFI",
       "assetType": "CRYPTO",
-      "currentPrice": 0.053058,
+      "currentPrice": 0.053301,
       "marketCap": 105623504.36097898,
       "fdv": 0,
       "volume24h": 0,
@@ -62,58 +62,58 @@
       "safetyRating": "MEDIUM"
     },
     {
+      "symbol": "PENGU",
+      "name": "Pudgy Penguins",
+      "coingeckoId": "pudgy-penguins",
+      "category": "TRENDING",
+      "assetType": "CRYPTO",
+      "currentPrice": 0.009592914842917365,
+      "marketCap": 0,
+      "fdv": 0,
+      "volume24h": 0,
+      "priceChange30d": -2.497349975219746,
+      "relativeStrengthVsBtc": 0,
+      "discoveryReasons": [
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #105）",
+        "24H 涨跌幅 -2.5%，具备主线叙事热度"
+      ],
+      "safetyRating": "RISKY"
+    },
+    {
       "symbol": "NEAR",
       "name": "NEAR Protocol",
       "coingeckoId": "near",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 5.24544877440435,
+      "currentPrice": 5.234687145290757,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 4.399679523858807,
+      "priceChange30d": 4.54824514364586,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
         "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #21）",
-        "24H 涨跌幅 +4.4%，具备主线叙事热度"
+        "24H 涨跌幅 +4.5%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
     },
     {
-      "symbol": "HYPE",
-      "name": "Hyperliquid",
-      "coingeckoId": "hyperliquid",
+      "symbol": "ONDO",
+      "name": "Ondo",
+      "coingeckoId": "ondo-finance",
       "category": "TRENDING",
       "assetType": "CRYPTO",
-      "currentPrice": 93.5976391990979,
+      "currentPrice": 0.49929229205794934,
       "marketCap": 0,
       "fdv": 0,
       "volume24h": 0,
-      "priceChange30d": 0.7526528172029445,
+      "priceChange30d": -0.9941927783278329,
       "relativeStrengthVsBtc": 0,
       "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #11）",
-        "24H 涨跌幅 +0.8%，具备主线叙事热度"
+        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #46）",
+        "24H 涨跌幅 -1.0%，具备主线叙事热度"
       ],
       "safetyRating": "MEDIUM"
-    },
-    {
-      "symbol": "PONS",
-      "name": "Pons",
-      "coingeckoId": "pons",
-      "category": "TRENDING",
-      "assetType": "CRYPTO",
-      "currentPrice": 0.3938353640217948,
-      "marketCap": 0,
-      "fdv": 0,
-      "volume24h": 0,
-      "priceChange30d": -0.6469024089406379,
-      "relativeStrengthVsBtc": 0,
-      "discoveryReasons": [
-        "CoinGecko 全网实时 Trending 热搜榜（市值 Rank #164）",
-        "24H 涨跌幅 -0.6%，具备主线叙事热度"
-      ],
-      "safetyRating": "RISKY"
     },
     {
       "symbol": "NVDA",
