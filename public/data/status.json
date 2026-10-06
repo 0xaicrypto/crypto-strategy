@@ -1,7 +1,7 @@
 {
-  "timestamp": 1791277108398,
+  "timestamp": 1791278346110,
   "cycle": {
-    "currentPrice": 85977,
+    "currentPrice": 85964,
     "ma200w": 55508.85,
     "ma200d": 75043,
     "ratioTo200w": 1.55,
@@ -25,7 +25,7 @@
     {
       "symbol": "STRK",
       "name": "Starknet",
-      "currentPrice": 0.052395,
+      "currentPrice": 0.051928,
       "dilutionRiskScore": 45,
       "ecosystemTractionScore": 35,
       "relativeValuationScore": 80,
@@ -43,7 +43,7 @@
     {
       "symbol": "ARB",
       "name": "Arbitrum",
-      "currentPrice": 0.20259,
+      "currentPrice": 0.202353,
       "dilutionRiskScore": 45,
       "ecosystemTractionScore": 85,
       "relativeValuationScore": 80,
@@ -61,7 +61,7 @@
     {
       "symbol": "ZEC",
       "name": "Zcash",
-      "currentPrice": 1345.06,
+      "currentPrice": 1347.98,
       "dilutionRiskScore": 25,
       "ecosystemTractionScore": 50,
       "relativeValuationScore": 50,
@@ -79,7 +79,7 @@
     {
       "symbol": "NEAR",
       "name": "NEAR Protocol",
-      "currentPrice": 5.3,
+      "currentPrice": 5.27,
       "dilutionRiskScore": 25,
       "ecosystemTractionScore": 50,
       "relativeValuationScore": 50,
@@ -235,11 +235,11 @@
     "cash": 5000
   },
   "macroRates": {
-    "timestamp": 1791277108397,
+    "timestamp": 1791278346110,
     "us10yYield": 0.53,
     "us2yYield": 0.28,
     "yieldCurveSpread": 0.25,
-    "vixIndex": 15.44,
+    "vixIndex": 15.43,
     "sp500Pe": 22.4,
     "sp500EarningsYield": 4.46,
     "equityRiskPremiumPct": 3.93,

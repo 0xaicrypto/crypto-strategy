@@ -450,6 +450,7 @@
     .tag-danger { background: rgba(255, 77, 109, 0.1); color: var(--danger); border: 1px solid rgba(255, 77, 109, 0.25); }
     .tag-purple { background: rgba(168, 85, 247, 0.1); color: #C084FC; border: 1px solid rgba(168, 85, 247, 0.25); }
     .tag-orange { background: rgba(249, 115, 22, 0.1); color: #FB923C; border: 1px solid rgba(249, 115, 22, 0.25); }
+    .tag-gray { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border-main); }
 
     .sub-toggle-group {
       display: inline-flex;
@@ -647,6 +648,35 @@
       border-color: rgba(0, 255, 147, 0.5);
       background: linear-gradient(180deg, rgba(0, 255, 147, 0.06) 0%, rgba(6, 20, 15, 0.6) 100%);
       box-shadow: 0 0 16px rgba(0, 255, 147, 0.1);
+    }
+
+    /* Multi-Wallet Selector Modal */
+    .wallet-option-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .wallet-option-card:hover {
+      background: rgba(0, 255, 147, 0.06);
+      border-color: rgba(0, 255, 147, 0.4);
+      transform: translateX(4px);
+    }
+    .wallet-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     /* Portfolio Terminal & Action Directives */
@@ -898,7 +928,7 @@
           <span id="refreshIcon">⟳</span> 刷新数据
         </button>
         <div id="walletContainer">
-          <button class="btn btn-wallet" id="connectWalletBtn" onclick="connectMetaMask()">
+          <button class="btn btn-wallet" id="connectWalletBtn" onclick="openWalletSelectModal()">
             <svg width="18" height="18" viewBox="0 0 318.6 318.6" style="vertical-align: middle;">
               <path fill="#E2761B" stroke="#E2761B" stroke-linecap="round" stroke-linejoin="round" d="m274.1 35.5-99.5 73.9L194 65.8z"/>
               <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m44.4 35.5 128.7 30.7-19.4 43.6z"/>
@@ -918,7 +948,7 @@
               <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m92.7 186.1 17.5 35.8 49.1-3.6-20.9-6.2z"/>
               <path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m225.9 186.1-45.7 26 49.1 3.6z"/>
             </svg>
-            <span>连接 MetaMask</span>
+            <span>连接 Web3 钱包</span>
           </button>
         </div>
       </div>
@@ -1041,7 +1071,7 @@
           </div>
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-secondary" onclick="enableDemoPortfolio()" style="font-size: 12px; padding: 5px 12px;">🌟 查看策略演示组合</button>
-            <button class="btn btn-primary" onclick="connectMetaMask()" style="font-size: 12px; padding: 5px 14px;">🦊 连接 MetaMask</button>
+            <button class="btn btn-primary" onclick="openWalletSelectModal()" style="font-size: 12px; padding: 5px 14px;">⚡ 连接 Web3 钱包</button>
           </div>
         </div>
 
@@ -1412,6 +1442,31 @@
 
         <div style="margin-top: 24px; padding-top: 16px 20px; background: rgba(0, 255, 147, 0.04); border: 1px solid rgba(0, 255, 147, 0.2); border-radius: 6px; font-size: 13px; color: var(--text-muted); line-height: 1.6;">
           💡 <strong style="color: var(--mint);">核心量化归因</strong>：传统定投在牛市高点持续投入推高综合成本，而在暴跌冰点期买量不足；AI 动态定投在 200 周线下方以 2.5x 乘数迅速累积低价筹码，大幅拉低综合成本并在大顶自动锁定利润。
+        </div>
+      </div>
+    </div>
+
+    <!-- Web3 Multi-Wallet Selector Modal (EIP-6963 + Injected Discovery) -->
+    <div id="walletSelectModal" class="modal-backdrop" style="display: none;" onclick="if(event.target===this) closeWalletSelectModal()">
+      <div class="modal-card" style="max-width: 480px; padding: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <div>
+            <div class="card-eyebrow" style="color: var(--mint);">Web3 Multi-Wallet Connect</div>
+            <h3 style="font-size: 18px; font-weight: 600; color: #FFFFFF; margin-top: 2px;">选择连接的 Web3 钱包</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">原生支持 EIP-6963 独立协议，解决多钱包扩展抢占与冲突</p>
+          </div>
+          <button class="modal-close-btn" onclick="closeWalletSelectModal()">&times;</button>
+        </div>
+
+        <!-- Wallets Grid -->
+        <div id="walletSelectList" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Explanatory Conflict Tip -->
+        <div style="padding: 12px 14px; background: rgba(0, 212, 255, 0.06); border: 1px dashed rgba(0, 212, 255, 0.25); border-radius: 6px; font-size: 11px; line-height: 1.5; color: var(--text-muted);">
+          <strong style="color: var(--ice-cyan); display: block; margin-bottom: 3px;">💡 为什么点击小狐狸有时会唤醒 Rainbow？</strong>
+          这是由于 Rainbow、Rabby 等扩展在安装时默认勾选了「Set as default browser wallet（设为浏览器默认钱包）」，接管了全局 <code>window.ethereum</code>。在上方列表中直接点击对应钱包即可<strong style="color: #FFFFFF;">独立唤起</strong>；您亦可在 Rainbow 扩展设置中关闭默认接管。
         </div>
       </div>
     </div>
@@ -2638,15 +2693,219 @@
       blockExplorerUrls: ['https://explorer.mantle.xyz']
     };
 
-    function getWalletProvider() {
+    // ==========================================
+    // Web3 Multi-Wallet Provider Manager (EIP-6963 + Injected Fallbacks)
+    // ==========================================
+    const eip6963Wallets = new Map();
+    let activeWalletProvider = null;
+    let activeWalletType = localStorage.getItem('active_wallet_type') || null;
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('eip6963:announceProvider', (event) => {
+        if (event && event.detail && event.detail.info && event.detail.provider) {
+          const info = event.detail.info;
+          const rdns = (info.rdns || info.name || '').toLowerCase();
+          eip6963Wallets.set(rdns, event.detail);
+          console.log(`[EIP-6963] Discovered wallet provider: ${info.name} (${info.rdns})`);
+          const modal = document.getElementById('walletSelectModal');
+          if (modal && modal.style.display === 'flex') {
+            updateWalletModalList();
+          }
+        }
+      });
+      window.dispatchEvent(new Event('eip6963:requestProvider'));
+    }
+
+    function getSpecificProvider(type) {
       if (typeof window === 'undefined') return null;
-      if (window.okxwallet && window.okxwallet.ethereum) return window.okxwallet.ethereum;
-      if (window.ethereum) return window.ethereum;
+
+      // 1. Check EIP-6963 Discovery Registry
+      for (const [rdns, item] of eip6963Wallets.entries()) {
+        const name = (item.info.name || '').toLowerCase();
+        if (type === 'metamask' && (rdns.includes('metamask') || name.includes('metamask'))) {
+          return item.provider;
+        }
+        if (type === 'okx' && (rdns.includes('okex') || rdns.includes('okx') || name.includes('okx'))) {
+          return item.provider;
+        }
+        if (type === 'rainbow' && (rdns.includes('rainbow') || name.includes('rainbow'))) {
+          return item.provider;
+        }
+        if (type === 'rabby' && (rdns.includes('rabby') || name.includes('rabby'))) {
+          return item.provider;
+        }
+      }
+
+      // 2. Multi-Injected Providers Array (e.g. window.ethereum.providers)
+      if (window.ethereum && Array.isArray(window.ethereum.providers) && window.ethereum.providers.length > 0) {
+        if (type === 'metamask') {
+          const p = window.ethereum.providers.find(p => p.isMetaMask && !p.isRainbow && !p.isBraveWallet && !p.isRabby && !p.isOkxWallet);
+          if (p) return p;
+        }
+        if (type === 'rainbow') {
+          const p = window.ethereum.providers.find(p => p.isRainbow);
+          if (p) return p;
+        }
+        if (type === 'okx') {
+          const p = window.ethereum.providers.find(p => p.isOkxWallet || p.isOKExWallet);
+          if (p) return p;
+        }
+        if (type === 'rabby') {
+          const p = window.ethereum.providers.find(p => p.isRabby);
+          if (p) return p;
+        }
+      }
+
+      // 3. Standalone Injected Globals
+      if (type === 'okx' && window.okxwallet && window.okxwallet.ethereum) {
+        return window.okxwallet.ethereum;
+      }
+      if (type === 'rabby' && window.rabby) {
+        return window.rabby;
+      }
+      if (type === 'rainbow') {
+        if (window.rainbow && window.rainbow.ethereum) return window.rainbow.ethereum;
+        if (window.ethereum && window.ethereum.isRainbow) return window.ethereum;
+      }
+      if (type === 'metamask') {
+        if (window.ethereum && window.ethereum.isMetaMask && !window.ethereum.isRainbow && !window.ethereum.isRabby) {
+          return window.ethereum;
+        }
+      }
+
+      // 4. Default Injected Provider
+      if (type === 'injected' && window.ethereum) {
+        return window.ethereum;
+      }
+
+      return null;
+    }
+
+    function isWalletInstalled(type) {
+      if (typeof window === 'undefined') return false;
+      return !!getSpecificProvider(type);
+    }
+
+    function getWalletDisplayName(type) {
+      const names = {
+        metamask: 'MetaMask',
+        okx: 'OKX Web3',
+        rainbow: 'Rainbow',
+        rabby: 'Rabby',
+        injected: '默认钱包'
+      };
+      return names[type] || 'Web3';
+    }
+
+    function getWalletProvider() {
+      if (activeWalletProvider) return activeWalletProvider;
+      if (activeWalletType) {
+        const prov = getSpecificProvider(activeWalletType);
+        if (prov) {
+          activeWalletProvider = prov;
+          return prov;
+        }
+      }
+      // Defaults: OKX if available, else window.ethereum
+      if (typeof window !== 'undefined') {
+        if (window.okxwallet && window.okxwallet.ethereum) return window.okxwallet.ethereum;
+        if (window.ethereum) return window.ethereum;
+      }
       return null;
     }
 
     function isMetaMaskAvailable() {
       return typeof window !== 'undefined' && !!getWalletProvider();
+    }
+
+    function updateWalletModalList() {
+      const listEl = document.getElementById('walletSelectList');
+      if (!listEl) return;
+
+      const hasMetaMask = isWalletInstalled('metamask');
+      const hasOkx = isWalletInstalled('okx');
+      const hasRainbow = isWalletInstalled('rainbow');
+      const hasRabby = isWalletInstalled('rabby');
+      const isRainbowDefault = typeof window !== 'undefined' && window.ethereum && window.ethereum.isRainbow;
+
+      const wallets = [
+        {
+          id: 'metamask',
+          name: 'MetaMask',
+          desc: '以太坊及 Mantle L2 核心主流钱包扩展',
+          badgeText: hasMetaMask ? '已检测到' : (isRainbowDefault ? '被 Rainbow 接管' : '推荐首选'),
+          badgeClass: hasMetaMask ? 'tag-green' : (isRainbowDefault ? 'tag-yellow' : 'tag-green'),
+          iconSvg: `<svg width="24" height="24" viewBox="0 0 318.6 318.6"><path fill="#E2761B" stroke="#E2761B" stroke-linecap="round" stroke-linejoin="round" d="m274.1 35.5-99.5 73.9L194 65.8z"/><path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m44.4 35.5 128.7 30.7-19.4 43.6z"/><path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m238.3 206.8-28.5 43.4 56.4 15.6 16.3-58.4z"/><path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m35.6 207.4 16.2 58.4 56.4-15.6-28.5-43.4z"/><path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m87.8 110.1 27.6 40.5-38.3 11.2z"/><path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m230.8 110.1-27.6 40.5 38.3 11.2z"/><path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m108.6 249.7 29.8 14.5-2.2-22.3z"/><path fill="#763D16" stroke="#763D16" stroke-linecap="round" stroke-linejoin="round" d="m210 249.7-27.6-7.8-2.2 22.3z"/><path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m180.2 264.2 29.8-14.5-27.6-7.8z"/><path fill="#F6851B" stroke="#F6851B" stroke-linecap="round" stroke-linejoin="round" d="m138.4 264.2-2.2-22.3-27.6 7.8z"/><path fill="#C0AD9E" stroke="#C0AD9E" stroke-linecap="round" stroke-linejoin="round" d="m182.4 241.9-23.1-6.7-23.1 6.7 2.2 22.3 20.9 14.3 20.9-14.3z"/></svg>`
+        },
+        {
+          id: 'okx',
+          name: 'OKX Web3 钱包',
+          desc: 'Mantle 官方生态深度推荐多链钱包',
+          badgeText: hasOkx ? '已检测到' : '未检测到',
+          badgeClass: hasOkx ? 'tag-green' : 'tag-gray',
+          iconSvg: `<svg width="24" height="24" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#000000"/><rect x="8" y="8" width="10" height="10" fill="#FFFFFF"/><rect x="22" y="8" width="10" height="10" fill="#FFFFFF"/><rect x="15" y="15" width="10" height="10" fill="#FFFFFF"/><rect x="8" y="22" width="10" height="10" fill="#FFFFFF"/><rect x="22" y="22" width="10" height="10" fill="#FFFFFF"/></svg>`
+        },
+        {
+          id: 'rainbow',
+          name: 'Rainbow 钱包',
+          desc: '极简色彩与现代多链交互钱包',
+          badgeText: hasRainbow ? (isRainbowDefault ? '默认接管中' : '已检测到') : '未检测到',
+          badgeClass: hasRainbow ? 'tag-blue' : 'tag-gray',
+          iconSvg: `<svg width="24" height="24" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#1C1C1E"/><path d="M8 28C8 21.3726 13.3726 16 20 16C26.6274 16 32 21.3726 32 28" stroke="#FF4D4D" stroke-width="3" stroke-linecap="round"/><path d="M12 28C12 23.5817 15.5817 20 20 20C24.4183 20 28 23.5817 28 28" stroke="#FFA726" stroke-width="3" stroke-linecap="round"/><path d="M16 28C16 25.7909 17.7909 24 20 24C22.2091 24 24 25.7909 24 28" stroke="#00E676" stroke-width="3" stroke-linecap="round"/></svg>`
+        },
+        {
+          id: 'rabby',
+          name: 'Rabby 钱包',
+          desc: '专为 DeFi 交易者与多链安全打造',
+          badgeText: hasRabby ? '已检测到' : '未检测到',
+          badgeClass: hasRabby ? 'tag-green' : 'tag-gray',
+          iconSvg: `<svg width="24" height="24" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#8697FF"/><path d="M13 14C13 11 15 9 17 9C19 9 20 11 20 14V20C20 20 20 21 21 21C22 21 22 20 22 17C22 14 23 11 25 11C27 11 28 13 28 16V22C28 26.4 24.4 30 20 30C15.6 30 12 26.4 12 22V20C12 18 13 16 13 14Z" fill="#FFFFFF"/></svg>`
+        },
+        {
+          id: 'injected',
+          name: '浏览器默认注入钱包',
+          desc: '直接调用当前浏览器设为默认的 Web3 扩展',
+          badgeText: '通用接口',
+          badgeClass: 'tag-blue',
+          iconSvg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`
+        }
+      ];
+
+      listEl.innerHTML = wallets.map(w => `
+        <div class="wallet-option-card" onclick="connectSpecificWallet('${w.id}')">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="wallet-icon-box">
+              ${w.iconSvg}
+            </div>
+            <div>
+              <div style="font-size: 15px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
+                <span>${w.name}</span>
+                <span class="badge-tag ${w.badgeClass}" style="font-size: 11px; padding: 2px 8px;">${w.badgeText}</span>
+              </div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                ${w.desc}
+              </div>
+            </div>
+          </div>
+          <span style="font-size: 18px; color: var(--text-muted); padding-right: 4px;">→</span>
+        </div>
+      `).join('');
+    }
+
+    function openWalletSelectModal() {
+      const modal = document.getElementById('walletSelectModal');
+      if (!modal) return;
+      updateWalletModalList();
+      modal.style.display = 'flex';
+    }
+
+    function closeWalletSelectModal() {
+      const modal = document.getElementById('walletSelectModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function connectMetaMask() {
+      openWalletSelectModal();
     }
 
     async function checkExistingWalletConnection() {
@@ -2662,18 +2921,52 @@
       }
     }
 
-    async function connectMetaMask() {
-      const provider = getWalletProvider();
+    async function connectSpecificWallet(type) {
+      closeWalletSelectModal();
+      let provider = getSpecificProvider(type);
+
+      // Special conflict check: user wants MetaMask, but Rainbow hijacked window.ethereum and no separate MetaMask was discovered
+      if (type === 'metamask' && !provider && window.ethereum && window.ethereum.isRainbow) {
+        const proceedWithRainbow = confirm(
+          '⚠️ 检测到 Rainbow 钱包扩展已接管浏览器的全局接口 (window.ethereum)！\n\n' +
+          '• 若您希望使用 MetaMask：请打开 Rainbow 插件图标 -> ⚙️ 设置 -> 关闭「Default Wallet」(设为默认钱包)，然后刷新本页面即可独立唤起 MetaMask。\n' +
+          '• 若您希望直接使用 Rainbow 钱包连接，请点击【确定】。'
+        );
+        if (proceedWithRainbow) {
+          provider = window.ethereum;
+          type = 'rainbow';
+        } else {
+          return;
+        }
+      }
+
       if (!provider) {
-        showToast('🦊 未检测到 Web3 钱包插件，请安装 MetaMask 或 OKX Web3 钱包扩展！');
-        window.open('https://metamask.io/download/', '_blank');
+        if (type === 'metamask') {
+          showToast('🦊 未检测到独立 MetaMask 扩展，请确认已安装或在其他钱包设置中关闭默认接管！');
+          window.open('https://metamask.io/download/', '_blank');
+        } else if (type === 'okx') {
+          showToast('⬛ 未检测到 OKX Web3 钱包扩展！');
+          window.open('https://www.okx.com/web3', '_blank');
+        } else if (type === 'rainbow') {
+          showToast('🌈 未检测到 Rainbow 钱包扩展！');
+          window.open('https://rainbow.me/download', '_blank');
+        } else if (type === 'rabby') {
+          showToast('🐰 未检测到 Rabby 钱包扩展！');
+          window.open('https://rabby.io/', '_blank');
+        } else {
+          showToast('⚠️ 未检测到可用的 Web3 钱包插件！');
+        }
         return;
       }
+
+      activeWalletProvider = provider;
+      activeWalletType = type;
+      localStorage.setItem('active_wallet_type', type);
 
       const btn = document.getElementById('connectWalletBtn');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<span>🦊 连接中...</span>';
+        btn.innerHTML = `<span>⏳ 连接中...</span>`;
       }
 
       try {
@@ -3013,6 +3306,9 @@
 
     function disconnectWallet() {
       userWalletAddress = null;
+      activeWalletProvider = null;
+      activeWalletType = null;
+      localStorage.removeItem('active_wallet_type');
       userWalletBalance = '0.00';
       userOnChainHoldings = [];
       isDemoEnabledManually = false;
@@ -3021,7 +3317,7 @@
       renderWalletButton();
       updateWalletPortfolioSync();
       renderPortfolio();
-      showToast('🔌 MetaMask 钱包已断开连接');
+      showToast('🔌 Web3 钱包已断开连接');
     }
 
     function formatAddress(addr) {
@@ -3035,7 +3331,7 @@
 
       if (!userWalletAddress) {
         container.innerHTML = `
-          <button class="btn btn-wallet" id="connectWalletBtn" onclick="connectMetaMask()">
+          <button class="btn btn-wallet" id="connectWalletBtn" onclick="openWalletSelectModal()">
             <svg width="18" height="18" viewBox="0 0 318.6 318.6" style="vertical-align: middle;">
               <path fill="#E2761B" stroke="#E2761B" stroke-linecap="round" stroke-linejoin="round" d="m274.1 35.5-99.5 73.9L194 65.8z"/>
               <path fill="#E4761B" stroke="#E4761B" stroke-linecap="round" stroke-linejoin="round" d="m44.4 35.5 128.7 30.7-19.4 43.6z"/>
@@ -3060,6 +3356,7 @@
         `;
       } else {
         const chainName = isMantleChain(currentChainId) ? 'Mantle' : (CHAIN_NAMES[currentChainId] || 'EVM');
+        const walletName = getWalletDisplayName(activeWalletType || 'metamask');
         container.innerHTML = `
           <div class="wallet-connected-pill" onclick="toggleWalletMenu(event)" title="点击管理钱包">
             <span class="wallet-chain-badge">${chainName}</span>
@@ -3068,11 +3365,12 @@
             <span style="font-size: 10px; color: var(--text-dim); margin-left: 2px;">▼</span>
           </div>
           <div id="walletDropdown" class="wallet-dropdown" style="display: none;">
-            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;">已连接 Web3 账户</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;">已连接 Web3 账户 (${walletName})</div>
             <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; word-break: break-all; color: var(--mint); margin-bottom: 12px; padding: 8px; background: rgba(0, 255, 147, 0.05); border-radius: 4px; border: 1px solid rgba(0, 255, 147, 0.2);">${userWalletAddress}</div>
             <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">当前网络: <strong style="color: #FFFFFF;">${chainName}</strong> | 余额: <strong style="color: var(--ice-cyan);">${userWalletBalance} ${isMantleChain(currentChainId) ? 'MNT' : 'ETH'}</strong></div>
             <div style="display: flex; gap: 8px;">
               <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;" onclick="copyWalletAddress()">复制地址</button>
+              <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;" onclick="openWalletSelectModal()">切换钱包</button>
               <button class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px; color: var(--danger); border-color: rgba(255, 77, 109, 0.3);" onclick="disconnectWallet()">断开连接</button>
             </div>
           </div>
@@ -3905,11 +4203,14 @@
         // 2. Check ERC20 Allowance to Limit Order Protocol (0x11de6011345586785810e52448a44c6595eedc18)
         const allowanceData = '0xdd62ed3e' + padHex32(userWalletAddress) + padHex32(FLUXION_LOP_CONTRACT);
         let allowanceHex = null;
+        const provider = getWalletProvider() || window.ethereum;
         try {
-          allowanceHex = await window.ethereum.request({
-            method: 'eth_call',
-            params: [{ to: payTok.address, data: allowanceData }, 'latest']
-          });
+          if (provider) {
+            allowanceHex = await provider.request({
+              method: 'eth_call',
+              params: [{ to: payTok.address, data: allowanceData }, 'latest']
+            });
+          }
         } catch (e) {}
         if (!allowanceHex || allowanceHex === '0x') {
           allowanceHex = await callMantleRpc('eth_call', [{ to: payTok.address, data: allowanceData }, 'latest']);
@@ -3918,11 +4219,11 @@
 
         if (curAllowance < makingAmountWei) {
           if (statusBox) {
-            statusBox.innerHTML = `📝 正在向 Fluxion LOP 合约授权 <strong style="color: var(--mint);">${paySym}</strong>... 请在 MetaMask 中确认授权交易`;
+            statusBox.innerHTML = `📝 正在向 Fluxion LOP 合约授权 <strong style="color: var(--mint);">${paySym}</strong>... 请在 Web3 钱包中确认授权交易`;
           }
           const maxUint = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
           const approveData = '0x095ea7b3' + padHex32(FLUXION_LOP_CONTRACT) + padHex32(maxUint);
-          const approveTx = await window.ethereum.request({
+          const approveTx = await provider.request({
             method: 'eth_sendTransaction',
             params: [{
               from: userWalletAddress,
@@ -3978,7 +4279,7 @@
         }
 
         if (statusBox) {
-          statusBox.innerHTML = `🦊 请在 MetaMask 中完成 <b>EIP-712 链下签名</b> (无需 Gas 费)...`;
+          statusBox.innerHTML = `📜 请在 Web3 钱包中完成 <b>EIP-712 链下签名</b> (无需 Gas 费)...`;
         }
 
         const eip712Payload = JSON.stringify({
@@ -3996,7 +4297,7 @@
           message
         });
 
-        const signature = await window.ethereum.request({
+        const signature = await provider.request({
           method: 'eth_signTypedData_v4',
           params: [userWalletAddress, eip712Payload]
         });
@@ -4155,10 +4456,11 @@
       }
 
       try {
-        showToast('⏳ 正在发送链上撤单请求，请在 MetaMask 中确认...');
+        showToast('⏳ 正在发送链上撤单请求，请在 Web3 钱包中确认...');
         // cancelOrder(uint256 makerTraits, bytes32 orderHash) selector: 0xb68fb020
         const data = '0xb68fb020' + padHex32(makerTraits) + padHex32(orderHash);
-        const txHash = await window.ethereum.request({
+        const provider = getWalletProvider() || window.ethereum;
+        const txHash = await provider.request({
           method: 'eth_sendTransaction',
           params: [{
             from: userWalletAddress,
@@ -4410,21 +4712,30 @@
         const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200);
 
         // 1. ERC20 Allowance Check if paying with ERC20
+        const provider = getWalletProvider() || window.ethereum;
         if (!payTok.isNative) {
           const allowanceData = '0xdd62ed3e' + padHex32(userWalletAddress) + padHex32(FLUXION_SWAP_ROUTER);
-          const allowanceHex = await window.ethereum.request({
-            method: 'eth_call',
-            params: [{ to: payTok.address, data: allowanceData }, 'latest']
-          });
+          let allowanceHex = null;
+          try {
+            if (provider) {
+              allowanceHex = await provider.request({
+                method: 'eth_call',
+                params: [{ to: payTok.address, data: allowanceData }, 'latest']
+              });
+            }
+          } catch (e) {}
+          if (!allowanceHex || allowanceHex === '0x') {
+            allowanceHex = await callMantleRpc('eth_call', [{ to: payTok.address, data: allowanceData }, 'latest']);
+          }
           const curAllowance = BigInt(allowanceHex || '0x0');
 
           if (curAllowance < amountInWei) {
             if (statusBox) {
-              statusBox.innerHTML = `📝 正在申请代币授权 (<strong style="color: var(--mint);">${paySym}</strong>)... 请在 MetaMask 中确认授权`;
+              statusBox.innerHTML = `📝 正在申请代币授权 (<strong style="color: var(--mint);">${paySym}</strong>)... 请在 Web3 钱包中确认授权`;
             }
             const maxUint = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
             const approveData = '0x095ea7b3' + padHex32(FLUXION_SWAP_ROUTER) + padHex32(maxUint);
-            const approveTx = await window.ethereum.request({
+            const approveTx = await provider.request({
               method: 'eth_sendTransaction',
               params: [{
                 from: userWalletAddress,
@@ -4474,10 +4785,10 @@
         }
 
         if (statusBox) {
-          statusBox.innerHTML = '🦊 请在 MetaMask 中确认交易签名... (免跳转直接在 Mantle 链上买入)';
+          statusBox.innerHTML = '⚡ 请在 Web3 钱包中确认交易签名... (免跳转直接在 Mantle 链上买入)';
         }
 
-        const txHash = await window.ethereum.request({
+        const txHash = await provider.request({
           method: 'eth_sendTransaction',
           params: [txParams]
         });
@@ -4633,7 +4944,10 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeBuyModal();
+      if (e.key === 'Escape') {
+        closeBuyModal();
+        closeWalletSelectModal();
+      }
     });
 
     // Initial Load & Silent Wallet Check
