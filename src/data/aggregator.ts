@@ -19,7 +19,7 @@ export async function collectComprehensiveSnapshot(): Promise<ComprehensiveMarke
   const activeAssets = getActiveAssets();
   const coinIds = Array.from(new Set(activeAssets.map((a) => a.coingeckoId)));
 
-  console.log(`🔄 Collecting multi-source data for ${activeAssets.length} active assets (${activeAssets.map((a) => a.symbol).join(', ')})...`);
+  console.log(`[FETCH] Collecting multi-source data for ${activeAssets.length} active assets (${activeAssets.map((a) => a.symbol).join(', ')})...`);
 
   // 1. Fetch sentiment, market prices, and BTC history in parallel
   const [sentiment, marketData, btcHistory] = await Promise.all([
@@ -55,7 +55,7 @@ export async function collectComprehensiveSnapshot(): Promise<ComprehensiveMarke
     tokenomics.set(asset.symbol, getTokenomics(asset.symbol, market?.marketCap, market?.fdv));
   }
 
-  console.log('✅ Multi-source data snapshot collected successfully.');
+  console.log('[OK] Multi-source data snapshot collected successfully.');
 
   return {
     timestamp: Date.now(),

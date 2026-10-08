@@ -18,7 +18,7 @@ export function generateAdvisorReport(data: AdvisorReportInput): string {
 
   const lines: string[] = [];
 
-  lines.push(`# 🚀 AI 加密资产宏观周期与动态定投决策周报`);
+  lines.push(`# AI 加密资产宏观周期与动态定投决策周报`);
   lines.push(`> 生成时间：**${now}** | 策略核心：**宏观周期温度计 + 动态价值定投 + 结构性风控**\n`);
 
   // Section 1: Cycle Thermometer
@@ -38,23 +38,23 @@ export function generateAdvisorReport(data: AdvisorReportInput): string {
   for (const alt of altcoinEvaluations) {
     lines.push(`### 资产：${alt.name} ($${alt.symbol}) - 评估结论：[${alt.verdict}]`);
     lines.push(`* **综合健康度得分**：\`${alt.compositeHealthScore} / 100\``);
-    lines.push(`* **稀释与解锁风险评分**：\`${alt.dilutionRiskScore} / 100\` ${alt.dilutionRiskScore > 70 ? '🚨 (极高抛压)' : '✅ (正常)'}`);
+    lines.push(`* **稀释与解锁风险评分**：\`${alt.dilutionRiskScore} / 100\` ${alt.dilutionRiskScore > 70 ? '[CRITICAL] (极高抛压)' : '[NORMAL] (正常)'}`);
     lines.push(`* **生态产品力得分**：\`${alt.ecosystemTractionScore} / 100\``);
     lines.push(`* **相对估值性价比**：\`${alt.relativeValuationScore} / 100\``);
     lines.push(`* **投资组合硬上限**：\`${(alt.maxPortfolioCapPct * 100).toFixed(1)}%\``);
-    lines.push(`* **当前是否允许开启定投**：**${alt.dcaAllowed ? '允许 (右侧小额)' : '⛔ 禁止定投 (防价值陷阱)'}**`);
+    lines.push(`* **当前是否允许开启定投**：**${alt.dcaAllowed ? '允许 (右侧小额)' : '[RESTRICTED] 禁止定投 (防价值陷阱)'}**`);
 
     if (alt.riskWarnings.length > 0) {
       lines.push(`* **风控告警项**：`);
       for (const w of alt.riskWarnings) {
-        lines.push(`  * ⚠️ ${w}`);
+        lines.push(`  * [WARN] ${w}`);
       }
     }
 
     if (alt.triggersForEntry.length > 0) {
       lines.push(`* **AI 观察进入条件（需满足右侧信号）**：`);
       for (const t of alt.triggersForEntry) {
-        lines.push(`  * 🔍 ${t}`);
+        lines.push(`  * [TRIGGER] ${t}`);
       }
     }
     lines.push('');
@@ -68,7 +68,7 @@ export function generateAdvisorReport(data: AdvisorReportInput): string {
   lines.push(`| :--- | :---: | :---: | :---: | :--- |`);
 
   for (const alloc of plan.allocations) {
-    const actionBadge = alloc.action === 'BUY' ? '🟢 BUY' : alloc.action === 'SELL' ? '🔴 SELL' : '⚪ HOLD';
+    const actionBadge = alloc.action === 'BUY' ? '[BUY]' : alloc.action === 'SELL' ? '[SELL]' : '[HOLD]';
     lines.push(`| **${alloc.symbol}** | ${actionBadge} | **$${alloc.amountUsd}** | ${alloc.weightPct}% | ${alloc.rationale} |`);
   }
   lines.push('');
@@ -85,7 +85,7 @@ export function generateAdvisorReport(data: AdvisorReportInput): string {
 
   // Section 5: Risk Reminders
   lines.push(`---`);
-  lines.push(`### 💡 核心风控军规：`);
+  lines.push(`### 核心风控军规：`);
   lines.push(`1. **严禁在牛市中途自作聪明卖飞底仓**：只有当大周期温度计触及 75 以上狂热分发区时，才开启阶梯分批逆向止盈。`);
   lines.push(`2. **杜绝将 VC 稀释代币（如 STRK）当成 BTC 长期重仓**：严格遵守单个山寨不超过 3%~5% 的上限，保护主本金安全。`);
   lines.push(`3. **坚持动态价值乘数**：跌破 200 周牛熊线时坚定加码，狂热泡沫期坚决不追高。`);
@@ -96,13 +96,13 @@ export function generateAdvisorReport(data: AdvisorReportInput): string {
 function formatRegimeBadge(regime: string): string {
   switch (regime) {
     case 'CAPITULATION':
-      return '❄️ 极度冰点恐慌期';
+      return '极度冰点恐慌期';
     case 'ACCUMULATION':
-      return '🌱 健康积累筑底期';
+      return '健康积累筑底期';
     case 'MARKUP':
-      return '🔥 主升浪发酵期';
+      return '主升浪发酵期';
     case 'DISTRIBUTION':
-      return '🌋 狂热泡沫分发期';
+      return '狂热泡沫分发期';
     default:
       return regime;
   }

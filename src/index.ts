@@ -12,8 +12,8 @@ async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'analyze';
 
-  console.log(`\n======================================================`);
-  console.log(`🤖 AI Crypto Investment & Cycle Position System (TS)`);
+  console.log(`======================================================`);
+  console.log(`[SYS] AI Crypto Investment & Cycle Position System (TS)`);
   console.log(`======================================================\n`);
 
   if (command === 'backtest') {
@@ -92,13 +92,13 @@ async function handleAnalysis() {
 }
 
 async function handleBacktest() {
-  console.log('⏳ Running multi-year historical backtest (Naive DCA vs AI Dynamic DCA)...');
+  console.log('Running multi-year historical backtest (Naive DCA vs AI Dynamic DCA)...');
   const btcHistory = await fetchHistoricalDailyPrices('bitcoin', 1400);
   const result = await runDcaBacktest(btcHistory, 500);
 
   console.log(`\n================ 回测对比结果 (1400 天完整周期) ================`);
-  console.log(`📅 回测天数: ${result.periodDays} 天 (约 3.8 年，跨越熊市与牛市)`);
-  console.log(`💵 基准定投: 每周 $500 USD\n`);
+  console.log(`回测天数: ${result.periodDays} 天 (约 3.8 年，跨越熊市与牛市)`);
+  console.log(`基准定投: 每周 $500 USD\n`);
 
   console.log(`[策略 A: 传统固定傻瓜定投 (Naive DCA)]`);
   console.log(`  - 累计投入总本金:   $${result.totalInvestedNaive.toLocaleString()}`);
@@ -113,8 +113,8 @@ async function handleBacktest() {
   console.log(`  - 最终综合回报率:   ${result.roiDynamicPct}%`);
   console.log(`----------------------------------------------------------------`);
 
-  console.log(`🏆 AI 动态定投超额收益率: +${result.outperformancePct}%`);
-  console.log(`💡 核心归因: AI 在 200 周线下方以 2.5x 乘数集中大量低价筹码，并在高估过热区自动定抛锁定利润。\n`);
+  console.log(`[ALPHA] AI 动态定投超额收益率: +${result.outperformancePct}%`);
+  console.log(`核心归因: AI 在 200 周线下方以 2.5x 乘数集中大量低价筹码，并在高估过热区自动定抛锁定利润。\n`);
 }
 
 main().catch((err) => {

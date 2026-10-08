@@ -548,7 +548,53 @@
     }
     .nav-tab .tab-icon {
       font-size: 16px;
+      display: inline-flex;
+      align-items: center;
     }
+
+    /* Vector Icon System */
+    .ui-icon {
+      display: inline-block;
+      width: 1.1em;
+      height: 1.1em;
+      vertical-align: -0.18em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .ui-icon-sm {
+      width: 0.9em;
+      height: 0.9em;
+      vertical-align: -0.1em;
+    }
+    .ui-icon-lg {
+      width: 1.3em;
+      height: 1.3em;
+      vertical-align: -0.22em;
+    }
+    .ui-icon-spin {
+      animation: ui-spin 1s linear infinite;
+    }
+    @keyframes ui-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    .dot-green { background: #00FF93; box-shadow: 0 0 6px rgba(0, 255, 147, 0.6); }
+    .dot-yellow { background: #FFD166; box-shadow: 0 0 6px rgba(255, 209, 102, 0.6); }
+    .dot-red { background: #EF4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.6); }
+    .dot-cyan { background: #00F0FF; box-shadow: 0 0 6px rgba(0, 240, 255, 0.6); }
 
     .tab-content, .main-tab-content { display: none; }
     .tab-content.active, .main-tab-content.active { display: block; animation: tabFadeIn 0.25s ease; }
@@ -1036,13 +1082,13 @@
     <!-- Main Navigation Tabs: 3 Core User Priorities -->
     <div class="tabs-wrapper main-nav-tabs">
       <button class="nav-tab active" id="tabBtn-discover" onclick="switchMainTab('tab-discover', this)">
-        <span class="tab-icon">🔍</span> 01 // 发现资产 (Discover)
+        <span class="tab-icon"><svg class="ui-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span> 01 // 发现资产 (Discover)
       </button>
       <button class="nav-tab" id="tabBtn-portfolio" onclick="switchMainTab('tab-portfolio', this)">
-        <span class="tab-icon">💼</span> 02 // Portfolio 管理 (Portfolio)
+        <span class="tab-icon"><svg class="ui-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></span> 02 // Portfolio 管理 (Portfolio)
       </button>
       <button class="nav-tab" id="tabBtn-trade" onclick="switchMainTab('tab-trade', this)">
-        <span class="tab-icon">⚡</span> 03 // 买入卖出 (Trade)
+        <span class="tab-icon"><svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> 03 // 买入卖出 (Trade)
       </button>
     </div>
 
@@ -1128,7 +1174,7 @@
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
             <button class="btn btn-secondary" id="rescanBtn" onclick="triggerScan()" style="font-size: 12px; padding: 6px 14px;">
-              <span id="scanIcon">⚡</span> 刷新全网雷达
+              <span id="scanIcon"><svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> 刷新全网雷达
             </button>
           </div>
         </div>
@@ -1136,16 +1182,16 @@
         <!-- Filter Pills Bar -->
         <div class="discovery-filter-bar">
           <button class="discovery-filter-btn active" id="df-all" onclick="setDiscoveryFilter('ALL', this)">
-            🔥 全部精选资产 (<span id="count-df-all">14</span>)
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"></path></svg> 全部精选资产 (<span id="count-df-all">14</span>)
           </button>
           <button class="discovery-filter-btn" id="df-stock" onclick="setDiscoveryFilter('STOCK', this)">
-            📈 美股 RWA 反稀释核心 (<span id="count-df-stock">8</span>)
+            <svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> 美股 RWA 反稀释核心 (<span id="count-df-stock">8</span>)
           </button>
           <button class="discovery-filter-btn" id="df-crypto" onclick="setDiscoveryFilter('CRYPTO', this)">
-            🪙 核心加密资产 (<span id="count-df-crypto">3</span>)
+            <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M14.8 9A2 2 0 0 0 13 8h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1-1.8-1"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg> 核心加密资产 (<span id="count-df-crypto">3</span>)
           </button>
           <button class="discovery-filter-btn" id="df-radar" onclick="setDiscoveryFilter('RADAR', this)">
-            📡 链上异动雷达 (<span id="count-df-radar">0</span>)
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 8a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"></path><line x1="12" y1="12" x2="19" y2="5"></line></svg> 链上异动雷达 (<span id="count-df-radar">0</span>)
           </button>
         </div>
 
@@ -1153,7 +1199,7 @@
         <div id="discoverStockSection" style="margin-bottom: 28px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border-main);">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 16px;">📈</span>
+              <svg class="ui-icon ui-icon-lg" style="color: var(--ice-cyan);" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
               <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin: 0;">美股核心资产与反稀释回购审计 (BackedFi RWA)</h4>
               <span class="badge-tag tag-cyan" style="font-size: 10px;">1:1 实体股票抵押</span>
             </div>
@@ -1195,7 +1241,7 @@
         <div id="discoverCryptoSection" style="margin-bottom: 28px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border-main);">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 16px;">🪙</span>
+              <svg class="ui-icon ui-icon-lg" style="color: var(--mint);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M14.8 9A2 2 0 0 0 13 8h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1-1.8-1"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
               <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin: 0;">加密货币核心资产与代币稀释审计</h4>
               <span class="badge-tag tag-green" style="font-size: 10px;">周期价值定投</span>
             </div>
@@ -1209,7 +1255,7 @@
         <div id="discoverRadarSection" style="margin-bottom: 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border-main);">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 16px;">📡</span>
+              <svg class="ui-icon ui-icon-lg" style="color: var(--ice-cyan);" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 8a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"></path><line x1="12" y1="12" x2="19" y2="5"></line></svg>
               <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin: 0;">全网潜力资产异动发现雷达 (DeFiLlama & 热门异动)</h4>
               <span class="badge-tag tag-blue" id="radarScanCountTag">0 个异动候选</span>
             </div>
@@ -1217,7 +1263,7 @@
           </div>
 
           <div id="radarScanProgress" style="display: none; padding: 12px 18px; margin-bottom: 16px; background: rgba(0, 255, 147, 0.06); border: 1px solid rgba(0, 255, 147, 0.3); border-radius: 6px; font-size: 13px; color: var(--ice-cyan); align-items: center; gap: 12px;">
-            <span class="loading-rotator">⚡</span>
+            <span class="loading-rotator"><svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>
             <span id="radarScanProgressText">正在连接全网多源节点扫描中...</span>
           </div>
 
@@ -1227,10 +1273,10 @@
               全部异动 (<span id="count-all">0</span>)
             </button>
             <button class="radar-filter-btn" id="rf-CRYPTO" onclick="setRadarFilter('CRYPTO', this)">
-              🌐 纯 Crypto (<span id="count-crypto">0</span>)
+              <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> 纯 Crypto (<span id="count-crypto">0</span>)
             </button>
             <button class="radar-filter-btn" id="rf-STOCK" onclick="setRadarFilter('STOCK', this)">
-              📈 美股概念股 (<span id="count-stock">0</span>)
+              <svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> 美股概念股 (<span id="count-stock">0</span>)
             </button>
           </div>
 
@@ -1260,18 +1306,18 @@
       <details class="panel-card" style="margin-bottom: 18px;">
         <summary style="display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; outline: none; list-style: none;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span>🛡️ 核心壁垒逻辑：科技巨头股票「真金白银回购注销」 vs 加密山寨币「恶性解锁增发稀释」</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><svg class="ui-icon" style="color: var(--mint);" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 核心壁垒逻辑：科技巨头股票「真金白银回购注销」 vs 加密山寨币「恶性解锁增发稀释」</span>
             <span class="badge-tag tag-green" style="font-size: 10px;">深度投研</span>
           </div>
           <span style="font-size: 12px; color: var(--text-muted);">展开详情 ▾</span>
         </summary>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-main); font-size: 13px; line-height: 1.6; cursor: default;">
           <div style="padding: 14px; background: rgba(0, 255, 147, 0.04); border-radius: 6px; border-left: 3px solid var(--mint);">
-            <strong style="color: var(--mint); display: block; margin-bottom: 4px;">✅ 标普科技巨头（通缩升值模型）：</strong>
+            <strong style="color: var(--mint); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><svg class="ui-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> 标普科技巨头（通缩升值模型）：</strong>
             Apple、Google、Microsoft 每年动用 500~1000 亿美元自由现金流在二级市场直接回购并注销股份。即便扣除管理层股权激励 (SBC)，流通总股本每年仍净减少 1%~3.5%（苹果十年注销 35%+ 股本），推动每股内含价值持续指数级扩张。
           </div>
           <div style="padding: 14px; background: rgba(255, 77, 109, 0.04); border-radius: 6px; border-left: 3px solid var(--danger);">
-            <strong style="color: var(--danger); display: block; margin-bottom: 4px;">⚠️ 机构山寨币（恶性稀释模型）：</strong>
+            <strong style="color: var(--danger); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> 机构山寨币（恶性稀释模型）：</strong>
             以 STRK、ARB 等为代表的低流通、高 FDV 代币，初期流通仅 10%~20%，后续面临团队与风投巨量线性解锁抛压（年均稀释 30%~70%）。即使协议生态有所增长，代币单价依然在持续增发中被极度摊薄。
           </div>
         </div>
@@ -1281,7 +1327,7 @@
       <details class="panel-card" style="margin-bottom: 24px;">
         <summary style="display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; outline: none; list-style: none;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span>📊 1400 天跨周期回测对比模拟器 (AI 动态定投 vs 传统傻瓜定投)</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><svg class="ui-icon" style="color: var(--ice-cyan);" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> 1400 天跨周期回测对比模拟器 (AI 动态定投 vs 传统傻瓜定投)</span>
             <span class="badge-tag tag-blue" style="font-size: 10px;">量化验证</span>
           </div>
           <span style="font-size: 12px; color: var(--text-muted);">展开详情 ▾</span>
@@ -1306,7 +1352,7 @@
                   <div class="card-eyebrow" style="color: var(--mint);">AI Model Driven</div>
                   <h4 style="font-size: 16px; font-weight: 700; color: var(--mint);">策略 B: AI 动态价值定投 (AI Dynamic Model Engine)</h4>
                 </div>
-                <span class="badge-tag tag-green">🏆 优胜策略</span>
+                <span class="badge-tag tag-green"><svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path></svg> 优胜策略</span>
               </div>
               <div class="stat-line"><span>动态乘数逻辑:</span><span class="stat-val">2.5x 底部重注 / 0x 避险</span></div>
               <div class="stat-line"><span>累计投入本金:</span><span class="stat-val" id="dynamicTotal">$143,750</span></div>
@@ -1326,8 +1372,8 @@
       <!-- Web3 Wallet Prompt Card (Shown when wallet is not connected and demo is not active) -->
       <div id="walletPromptCard" style="padding: 20px 24px; margin-bottom: 24px; background: rgba(0, 255, 147, 0.03); border: 1px dashed rgba(0, 255, 147, 0.25); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
         <div style="display: flex; align-items: center; gap: 14px;">
-          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(226, 118, 27, 0.15); border: 1px solid rgba(226, 118, 27, 0.4); display: flex; align-items: center; justify-content: center; font-size: 22px;">
-            🦊
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(226, 118, 27, 0.15); border: 1px solid rgba(226, 118, 27, 0.4); display: flex; align-items: center; justify-content: center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2761B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
           </div>
           <div>
             <div style="font-size: 16px; font-weight: 600; color: #FFFFFF;">连接 Web3 钱包管理当前持仓组合 (Portfolio)</div>
@@ -1337,8 +1383,12 @@
           </div>
         </div>
         <div style="display: flex; gap: 10px;">
-          <button class="btn btn-secondary" onclick="enableDemoPortfolio()" style="font-size: 13px; padding: 7px 16px;">🌟 查看策略演示组合</button>
-          <button class="btn btn-primary" onclick="openWalletSelectModal()" style="font-size: 13px; padding: 7px 18px;">⚡ 连接 Web3 钱包</button>
+          <button class="btn btn-secondary" onclick="enableDemoPortfolio()" style="font-size: 13px; padding: 7px 16px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 查看策略演示组合
+          </button>
+          <button class="btn btn-primary" onclick="openWalletSelectModal()" style="font-size: 13px; padding: 7px 18px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 连接 Web3 钱包
+          </button>
         </div>
       </div>
 
@@ -1361,33 +1411,37 @@
           <!-- Actions / Toggles -->
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             <div class="sub-toggle-group" style="margin-bottom: 0;">
-              <button class="sub-toggle-btn active" id="btnPortModeReal" onclick="setPortfolioSource('real')">🔗 链上资产</button>
-              <button class="sub-toggle-btn" id="btnPortModeDemo" onclick="setPortfolioSource('demo')">🌟 策略示范</button>
+              <button class="sub-toggle-btn active" id="btnPortModeReal" onclick="setPortfolioSource('real')">
+                <svg class="ui-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> 链上资产
+              </button>
+              <button class="sub-toggle-btn" id="btnPortModeDemo" onclick="setPortfolioSource('demo')">
+                <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 策略示范
+              </button>
             </div>
 
             <!-- Mask Button -->
             <button class="btn btn-secondary" id="btnPortfolioMask" onclick="togglePortfolioMask()" style="display: flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 12px;" title="隐藏或显示持仓金额">
-              <span id="maskIcon">👁️</span>
+              <span id="maskIcon"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
               <span id="maskBtnText">遮蔽金额 (Mask)</span>
             </button>
 
             <!-- Refresh Button -->
             <button class="btn btn-secondary" onclick="refreshPortfolioData(true)" style="padding: 5px 10px; font-size: 12px;" title="重新读取链上资产">
-              🔄 刷新
+              <svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> 刷新
             </button>
           </div>
         </div>
 
         <!-- Network Notice if not on Mantle -->
         <div id="portNetworkAlert" style="display: none; padding: 10px 14px; background: rgba(255, 184, 0, 0.08); border: 1px solid rgba(255, 184, 0, 0.3); border-radius: 6px; margin-bottom: 16px; font-size: 12px; color: #FFB800; align-items: center; justify-content: space-between; gap: 12px;">
-          <span>⚠️ 提示：MetaMask 当前不在 Mantle 网络，但系统已通过 Mantle 官方 RPC 节点精准读取您的 Mantle 资产。如需发起交易，请切网。</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> 提示：MetaMask 当前不在 Mantle 网络，但系统已通过 Mantle 官方 RPC 节点精准读取您的 Mantle 资产。如需发起交易，请切网。</span>
           <button class="btn btn-secondary" style="padding: 3px 10px; font-size: 11px; white-space: nowrap;" onclick="switchToMantleNetwork()">切至 Mantle</button>
         </div>
 
         <!-- Empty State Banner if Real Wallet has 0 USD -->
         <div id="portEmptyStateBanner" style="display: none; padding: 12px 16px; background: rgba(0, 212, 255, 0.05); border: 1px dashed rgba(0, 212, 255, 0.25); border-radius: 6px; margin-bottom: 16px; font-size: 12px; line-height: 1.6; color: var(--text-muted);">
-          💡 <strong style="color: #FFFFFF;">当前地址在 Mantle 链上尚未持有任何资产 (总额: $0.00)</strong>。
-          您可以点击右上角的 <strong style="color: var(--ice-cyan); cursor: pointer;" onclick="setPortfolioSource('demo')">【🌟 策略示范】</strong> 查看推荐资产配置模型，或切换至 <strong style="color: var(--mint); cursor: pointer;" onclick="switchMainTab('tab-trade')">【⚡ 买入卖出】</strong> 进行首笔建仓充值。
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><svg class="ui-icon" style="color: var(--ice-cyan);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> <strong style="color: #FFFFFF;">当前地址在 Mantle 链上尚未持有任何资产 (总额: $0.00)</strong>。</span>
+          您可以点击右上角的 <strong style="color: var(--ice-cyan); cursor: pointer;" onclick="setPortfolioSource('demo')">【策略示范】</strong> 查看推荐资产配置模型，或切换至 <strong style="color: var(--mint); cursor: pointer;" onclick="switchMainTab('tab-trade')">【买入卖出】</strong> 进行首笔建仓充值。
         </div>
 
         <!-- 4 Metrics Cards -->
@@ -1458,7 +1512,9 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
             <div>
               <div class="card-eyebrow" style="color: var(--mint);">Portfolio Action Directives</div>
-              <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px;">⚡ 当前持仓调仓与定投操作指令</h4>
+              <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px; display: flex; align-items: center; gap: 6px;">
+                <svg class="ui-icon" style="color: var(--mint);" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 当前持仓调仓与定投操作指令
+              </h4>
             </div>
             <span class="badge-tag tag-green" id="portDirectiveCountBadge">0 项操作指令</span>
           </div>
@@ -1474,18 +1530,20 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <div>
               <div class="card-eyebrow" style="color: var(--ice-cyan); margin-bottom: 0;">Fluxion Limit Orders & RFQ Protocol</div>
-              <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px;">📜 我的 Fluxion 链上活动挂单 (0 Gas 链下签名)</h4>
+              <h4 style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px; display: flex; align-items: center; gap: 6px;">
+                <svg class="ui-icon" style="color: var(--ice-cyan);" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> 我的 Fluxion 链上活动挂单 (0 Gas 链下签名)
+              </h4>
             </div>
             <div style="display: flex; gap: 8px; align-items: center;">
               <span id="portLimitOrdersCountBadge" class="badge-tag" style="background: rgba(0, 212, 255, 0.12); color: var(--ice-cyan); border-color: rgba(0, 212, 255, 0.3); font-size: 11px;">0 笔进行中挂单</span>
               <button class="btn btn-secondary" onclick="fetchFluxionActiveOrders(userWalletAddress, true)" style="font-size: 11px; padding: 4px 10px;" title="同步链下订单簿与结算状态">
-                🔄 同步挂单
+                <svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> 同步挂单
               </button>
             </div>
           </div>
           <div id="portLimitOrdersList">
             <div style="padding: 14px; background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--border-main); border-radius: 6px; font-size: 12px; color: var(--text-muted); text-align: center;">
-              暂无活动挂单。您可在上方持仓表点击【⚡ 买入】或切换到【⚡ 买入卖出】提交零 Gas 挂单。
+              暂无活动挂单。您可在上方持仓表点击【买入】或切换到【买入卖出】提交零 Gas 挂单。
             </div>
           </div>
         </div>
@@ -1507,8 +1565,12 @@
         <!-- Allocation Mode Selector -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
           <div class="sub-toggle-group">
-            <button class="sub-toggle-btn active" id="btnAllocCross" onclick="switchAllocView('cross')">🌐 全球大类资产配置 (美股55% + 加密25% + 卫星5% + 现金15%)</button>
-            <button class="sub-toggle-btn" id="btnAllocCrypto" onclick="switchAllocView('crypto')">🪙 加密货币专属定投 (BTC/ETH 核心)</button>
+            <button class="sub-toggle-btn active" id="btnAllocCross" onclick="switchAllocView('cross')">
+              <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> 全球大类资产配置 (美股55% + 加密25% + 卫星5% + 现金15%)
+            </button>
+            <button class="sub-toggle-btn" id="btnAllocCrypto" onclick="switchAllocView('crypto')">
+              <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M14.8 9A2 2 0 0 0 13 8h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1-1.8-1"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg> 加密货币专属定投 (BTC/ETH 核心)
+            </button>
           </div>
           <div id="allocViewSummary" style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
             跨大类资产动态再平衡中
@@ -1569,20 +1631,20 @@
         <!-- Direction Switcher (Buy vs Sell) -->
         <div style="display: flex; gap: 8px; margin-bottom: 14px;">
           <button type="button" class="sub-toggle-btn active" id="tradeDirBuyBtn" onclick="setTradeDirection('buy')" style="flex: 1; text-align: center; font-size: 14px; padding: 10px; font-weight: 600;">
-            ⚡ 我要买入 (Buy)
+            <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 我要买入 (Buy)
           </button>
           <button type="button" class="sub-toggle-btn" id="tradeDirSellBtn" onclick="setTradeDirection('sell')" style="flex: 1; text-align: center; font-size: 14px; padding: 10px; font-weight: 600;">
-            🔄 我要卖出 (Sell)
+            <svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> 我要卖出 (Sell)
           </button>
         </div>
 
         <!-- Terminal Mode Switcher (Swap vs Limit) -->
         <div class="sub-toggle-group" style="margin-bottom: 18px; width: 100%;">
           <button class="sub-toggle-btn active" id="modalTabBtnDirect" style="flex: 1; text-align: center;" onclick="switchModalTab('direct')">
-            ⚡ 闪电市价兑换 (Market Swap)
+            <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 闪电市价兑换 (Market Swap)
           </button>
           <button class="sub-toggle-btn" id="modalTabBtnLimit" style="flex: 1; text-align: center;" onclick="switchModalTab('limit')">
-            📜 Fluxion 限价单 (Limit Order - 0 Gas)
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Fluxion 限价单 (Limit Order - 0 Gas)
           </button>
         </div>
 
@@ -1592,14 +1654,14 @@
           <div id="directSwapStockNotice" style="display: none; padding: 12px 14px; background: rgba(0, 255, 147, 0.08); border: 1px solid rgba(0, 255, 147, 0.25); border-radius: 6px; margin-bottom: 14px; font-size: 12px; line-height: 1.5;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <span style="color: var(--mint); font-weight: 600; display: flex; align-items: center; gap: 6px;">
-                <span>🏆 官方推荐 | Mantle 原生 RWA 零滑点做市</span>
+                <svg class="ui-icon" style="color: var(--mint);" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 官方推荐 | Mantle 原生 RWA 零滑点做市
               </span>
-              <button class="btn btn-primary" id="btnStockRfqShortcut" style="padding: 4px 12px; font-size: 11px; font-weight: 600;">
-                ⚡ 立即 RFQ 询价
+              <button class="btn btn-primary" id="btnStockRfqShortcut" style="padding: 4px 12px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+                <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 立即 RFQ 询价
               </button>
             </div>
             <div style="color: var(--text-muted); font-size: 12px;">
-              BackedFi 实体股票映射代币通过 Fluxion 机构级 RFQ 直通 Bybit / Flowdesk 做市商，规避 AMM 浅池磨损，24/7 链上结算。您亦可切换至【📜 Fluxion 限价单】免 Gas 挂单。
+              BackedFi 实体股票映射代币通过 Fluxion 机构级 RFQ 直通 Bybit / Flowdesk 做市商，规避 AMM 浅池磨损，24/7 链上结算。您亦可切换至【Fluxion 限价单】免 Gas 挂单。
             </div>
           </div>
 
@@ -1686,13 +1748,15 @@
           <div id="directSwapStatusBox" style="display: none; padding: 12px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 13px; line-height: 1.5;"></div>
 
           <!-- Direct Execution Submit Button -->
-          <button class="btn btn-primary" id="btnExecuteDirectSwap" onclick="executeDirectFluxionSwap()" style="width: 100%; padding: 13px; font-size: 15px; font-weight: 600; text-align: center;">
-            ⚡ 立即在 Mantle 链上买入 (Web3 签名)
+          <button class="btn btn-primary" id="btnExecuteDirectSwap" onclick="executeDirectFluxionSwap()" style="width: 100%; padding: 13px; font-size: 15px; font-weight: 600; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 立即在 Mantle 链上买入 (Web3 签名)
           </button>
 
           <!-- External Aggregators Quick Reference Links -->
           <div style="margin-top: 14px; padding: 8px 12px; background: rgba(255, 255, 255, 0.02); border: 1px dashed var(--border-main); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
-            <span style="color: var(--text-dim);">🌐 外部多链聚合比价：</span>
+            <span style="color: var(--text-dim); display: inline-flex; align-items: center; gap: 5px;">
+              <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> 外部多链聚合比价：
+            </span>
             <div style="display: flex; gap: 10px; align-items: center;">
               <a href="https://app.openocean.finance/classic#/MANTLE" target="_blank" rel="noopener noreferrer" style="color: var(--ice-cyan); text-decoration: none; display: flex; align-items: center; gap: 3px;" title="在 OpenOcean 查看全网比价">
                 <span>OpenOcean</span><span style="font-size: 9px;">↗</span>
@@ -1711,8 +1775,11 @@
 
         <!-- Mode 2: Fluxion Limit Order & Atomic RFQ Terminal -->
         <div id="buyModalLimitContainer" style="display: none;">
-          <div style="padding: 10px 14px; background: rgba(0, 212, 255, 0.08); border: 1px dashed rgba(0, 212, 255, 0.3); border-radius: 6px; margin-bottom: 14px; font-size: 12px; line-height: 1.5; color: var(--ice-cyan);">
-            📜 <b>Fluxion Limit Order Protocol (LOP)</b>：链下 EIP-712 免 Gas 挂单！资产无需提前转入交易所，100% 留在您本人的钱包中，仅在到达您设定的期望价格且被做市商/Taker 撮合时才在 Mantle 链上结算。
+          <div style="padding: 10px 14px; background: rgba(0, 212, 255, 0.08); border: 1px dashed rgba(0, 212, 255, 0.3); border-radius: 6px; margin-bottom: 14px; font-size: 12px; line-height: 1.5; color: var(--ice-cyan); display: flex; align-items: flex-start; gap: 8px;">
+            <svg class="ui-icon" style="color: var(--ice-cyan); flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <div>
+              <b>Fluxion Limit Order Protocol (LOP)</b>：链下 EIP-712 免 Gas 挂单！资产无需提前转入交易所，100% 留在您本人的钱包中，仅在到达您设定的期望价格且被做市商/Taker 撮合时才在 Mantle 链上结算。
+            </div>
           </div>
 
           <!-- Limit Order Form -->
@@ -1818,8 +1885,8 @@
           <div id="limitOrderStatusBox" style="display: none; padding: 12px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 13px; line-height: 1.5;"></div>
 
           <!-- Submit Button -->
-          <button class="btn btn-primary" id="btnSubmitLimitOrder" onclick="buildAndSubmitFluxionLimitOrder()" style="width: 100%; padding: 13px; font-size: 15px; font-weight: 600; text-align: center; background: linear-gradient(135deg, #00D4FF 0%, #00FF93 100%); color: #030806;">
-            📜 构建并签名限价挂单 (EIP-712 免 Gas)
+          <button class="btn btn-primary" id="btnSubmitLimitOrder" onclick="buildAndSubmitFluxionLimitOrder()" style="width: 100%; padding: 13px; font-size: 15px; font-weight: 600; text-align: center; background: linear-gradient(135deg, #00D4FF 0%, #00FF93 100%); color: #030806; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> 构建并签名限价挂单 (EIP-712 免 Gas)
           </button>
         </div>
       </div>
@@ -1844,7 +1911,9 @@
 
         <!-- Explanatory Conflict Tip -->
         <div style="padding: 12px 14px; background: rgba(0, 212, 255, 0.06); border: 1px dashed rgba(0, 212, 255, 0.25); border-radius: 6px; font-size: 11px; line-height: 1.5; color: var(--text-muted);">
-          <strong style="color: var(--ice-cyan); display: block; margin-bottom: 3px;">💡 为什么点击小狐狸有时会唤醒 Rainbow？</strong>
+          <strong style="color: var(--ice-cyan); display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> 为什么点击 MetaMask 有时会唤醒 Rainbow？
+          </strong>
           这是由于 Rainbow、Rabby 等扩展在安装时默认勾选了「Set as default browser wallet（设为浏览器默认钱包）」，接管了全局 <code>window.ethereum</code>。在上方列表中直接点击对应钱包即可<strong style="color: #FFFFFF;">独立唤起</strong>；您亦可在 Rainbow 扩展设置中关闭默认接管。
         </div>
       </div>
@@ -1856,6 +1925,36 @@
   </main>
 
   <script>
+    // Global Vector Icon Assets (Pure Scalable SVGs matching high-contrast terminal theme)
+    const ICONS = {
+      bolt: '<svg class="ui-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+      check: '<svg class="ui-icon" style="color: var(--mint);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+      warn: '<svg class="ui-icon" style="color: var(--warning);" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+      error: '<svg class="ui-icon" style="color: var(--danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+      info: '<svg class="ui-icon" style="color: var(--ice-cyan);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
+      search: '<svg class="ui-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+      star: '<svg class="ui-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
+      trophy: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path></svg>',
+      refresh: '<svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>',
+      refreshSpin: '<svg class="ui-icon ui-icon-spin" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>',
+      eye: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
+      eyeOff: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>',
+      wallet: '<svg class="ui-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M16 12h.01"></path><path d="M2 10h20"></path></svg>',
+      doc: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>',
+      trendUp: '<svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>',
+      gear: '<svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>',
+      target: '<svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
+      flame: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17c1.38 0 2.5-1.12 2.5-2.5 0-1.63-1.07-2.91-1.83-4.04C11.12 9.67 11 8.87 11 8c0-.6.1-1.19.29-1.74A6.87 6.87 0 0 0 7 13.5c0 2.49 2.01 4.5 4.5 4.5 3.04 0 5.5-2.46 5.5-5.5 0-2.48-1.51-4.71-3.66-5.63.26 1.15.02 2.37-.64 3.32-.4.57-.9 1.14-1.4 1.71-.8 1-1.5 2.07-1.5 3.1z"></path></svg>',
+      copy: '<svg class="ui-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>',
+      disconnect: '<svg class="ui-icon" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>',
+      send: '<svg class="ui-icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>',
+      shield: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+      circleGreen: '<span class="status-dot dot-green"></span>',
+      circleYellow: '<span class="status-dot dot-yellow"></span>',
+      circleRed: '<span class="status-dot dot-red"></span>',
+      circleCyan: '<span class="status-dot dot-cyan"></span>'
+    };
+
     // 3 Core Main Navigation Tab Switching
     function switchMainTab(tabId, el) {
       document.querySelectorAll('.main-nav-tabs .nav-tab').forEach(b => b.classList.remove('active'));
@@ -2004,8 +2103,8 @@
           const tr = document.createElement('tr');
           const badgeClass = item.action === 'BUY' ? 'action-buy' : item.action === 'SELL' ? 'action-sell' : 'action-hold';
           const buyBtn = item.action === 'BUY'
-            ? `<button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap; font-weight: 500;" onclick="openBuyModal('${item.symbol}', '${(item.name || item.symbol).replace(/'/g, "\\'")}', '${item.assetType}')">
-                ${item.assetType === 'STOCK' ? '⚡ Fluxion RFQ' : '⚡ Mantle 买入'}
+            ? `<button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;" onclick="openBuyModal('${item.symbol}', '${(item.name || item.symbol).replace(/'/g, "\\'")}', '${item.assetType}')">
+                ${item.assetType === 'STOCK' ? ICONS.bolt + ' Fluxion RFQ' : ICONS.bolt + ' Mantle 买入'}
                </button>`
             : `<span style="color: var(--text-dim); font-size: 12px;">观望等待</span>`;
 
@@ -2036,8 +2135,8 @@
           const tr = document.createElement('tr');
           const badgeClass = item.action === 'BUY' ? 'action-buy' : item.action === 'SELL' ? 'action-sell' : 'action-hold';
           const buyBtn = item.action === 'BUY'
-            ? `<button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap; font-weight: 500;" onclick="openBuyModal('${item.symbol}', '${item.symbol}', 'CRYPTO')">
-                ⚡ Mantle 买入
+            ? `<button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;" onclick="openBuyModal('${item.symbol}', '${item.symbol}', 'CRYPTO')">
+                ${ICONS.bolt} Mantle 买入
                </button>`
             : `<span style="color: var(--text-dim); font-size: 12px;">观望等待</span>`;
 
@@ -2197,21 +2296,21 @@
 
           ${alt.riskWarnings.length > 0 ? `
             <div class="callout-box callout-danger">
-              ${alt.riskWarnings.map(w => `<div>⚠️ ${w}</div>`).join('')}
+              ${alt.riskWarnings.map(w => `<div style="display: flex; align-items: center; gap: 6px;">${ICONS.warn} <span>${w}</span></div>`).join('')}
             </div>
           ` : ''}
 
           ${alt.triggersForEntry.length > 0 ? `
             <div class="callout-box callout-mint">
-              <div style="font-weight: 600; margin-bottom: 4px; color: var(--mint);">🔍 AI 右侧观察准入信号：</div>
+              <div style="font-weight: 600; margin-bottom: 4px; color: var(--mint); display: flex; align-items: center; gap: 6px;">${ICONS.search} AI 右侧观察准入信号：</div>
               ${alt.triggersForEntry.map(t => `<div>• ${t}</div>`).join('')}
             </div>
           ` : ''}
 
           <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-main); display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 11px; color: var(--text-dim);">Mantle 链上交易</span>
-            <button class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; font-weight: 500;" onclick="openTradeForAsset('${alt.symbol}', '${alt.name.replace(/'/g, "\\'")}', 'CRYPTO', 'buy')">
-              ⚡ 立即买入
+            <button class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;" onclick="openTradeForAsset('${alt.symbol}', '${alt.name.replace(/'/g, "\\'")}', 'CRYPTO', 'buy')">
+              ${ICONS.bolt} 立即买入
             </button>
           </div>
         `;
@@ -2262,9 +2361,9 @@
 
         const badge = document.getElementById('macroRegimeBadge');
         if (badge) {
-          badge.innerText = macroRates.macroRegime === 'DEEP_VALUE' ? '💎 DEEP VALUE (重注底仓)'
-            : macroRates.macroRegime === 'FAIR_VALUE' ? '🌱 FAIR VALUE (基准定投)'
-            : macroRates.macroRegime === 'RICH_VALUATION' ? '⚠️ RICH VALUATION (防守增持现金)' : '🌋 EUPHORIC BUBBLE (极度泡沫)';
+          badge.innerHTML = macroRates.macroRegime === 'DEEP_VALUE' ? `${ICONS.star} DEEP VALUE (重注底仓)`
+            : macroRates.macroRegime === 'FAIR_VALUE' ? `${ICONS.check} FAIR VALUE (基准定投)`
+            : macroRates.macroRegime === 'RICH_VALUATION' ? `${ICONS.warn} RICH VALUATION (防守增持现金)` : `${ICONS.flame} EUPHORIC BUBBLE (极度泡沫)`;
         }
 
         const us10y = document.getElementById('macroUs10y');
@@ -2326,7 +2425,7 @@
           <div class="meter-block" style="background: rgba(4, 15, 11, 0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(30, 41, 37, 0.5);">
             <div class="meter-top">
               <span style="display: flex; align-items: center; gap: 6px;">
-                <strong>${isPositiveBurn ? '🔥 股票净回购注销率' : '⚠️ 股本内生稀释率'}</strong>
+                <strong style="display: inline-flex; align-items: center; gap: 4px;">${isPositiveBurn ? ICONS.flame + ' 股票净回购注销率' : ICONS.warn + ' 股本内生稀释率'}</strong>
                 <span style="font-size: 11px; color: var(--text-muted);">(回购 ${s.buybackYieldPct ?? 0}% - SBC激励 ${s.sbcDilutionRatePct ?? 0}%)</span>
               </span>
               <strong style="color: ${isPositiveBurn ? 'var(--mint)' : 'var(--danger)'}; font-family: monospace; font-size: 14px;">
@@ -2375,20 +2474,20 @@
 
           ${s.keyStrengths && s.keyStrengths.length > 0 ? `
             <div class="callout-box callout-mint">
-              <div style="font-weight: 600; margin-bottom: 4px; color: var(--mint);">🏆 核心投资护城河：</div>
+              <div style="font-weight: 600; margin-bottom: 4px; color: var(--mint); display: flex; align-items: center; gap: 6px;">${ICONS.trophy} 核心投资护城河：</div>
               ${s.keyStrengths.map(st => `<div>• ${st}</div>`).join('')}
             </div>
           ` : ''}
 
           ${s.riskWarnings && s.riskWarnings.length > 0 ? `
             <div class="callout-box callout-danger">
-              ${s.riskWarnings.map(w => `<div>⚠️ ${w}</div>`).join('')}
+              ${s.riskWarnings.map(w => `<div style="display: flex; align-items: center; gap: 6px;">${ICONS.warn} <span>${w}</span></div>`).join('')}
             </div>
           ` : ''}
 
           ${s.triggersForEntry && s.triggersForEntry.length > 0 ? `
             <div style="margin-top: 10px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-              <span style="color: var(--ice-cyan); font-weight: 500;">🎯 建仓与增持信号：</span> ${s.triggersForEntry.join('；')}
+              <span style="color: var(--ice-cyan); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">${ICONS.target} 建仓与增持信号：</span> ${s.triggersForEntry.join('；')}
             </div>
           ` : ''}
 
@@ -2396,8 +2495,8 @@
             <div style="font-size: 11px; color: var(--text-muted);">
               Mantle 链上代币化股票: <strong style="color: var(--mint);">${s.symbol}x</strong> (xStocks/BackedFi)
             </div>
-            <button class="btn btn-primary" style="padding: 5px 14px; font-size: 12px; white-space: nowrap;" onclick="openBuyModal('${s.symbol}', '${s.name.replace(/'/g, "\\'")}', 'STOCK')">
-              ⚡ 链上买入 (Fluxion RFQ)
+            <button class="btn btn-primary" style="padding: 5px 14px; font-size: 12px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;" onclick="openBuyModal('${s.symbol}', '${s.name.replace(/'/g, "\\'")}', 'STOCK')">
+              ${ICONS.bolt} 链上买入 (Fluxion RFQ)
             </button>
           </div>
         `;
@@ -2411,7 +2510,7 @@
       const candidates = [];
 
       // Step 1: Scan DeFiLlama for on-chain TVL explosion
-      if (updateStatusText) updateStatusText('🔄 [1/3] 正在检索 DeFiLlama 8,400+ 链上协议资金净流入爆发...');
+      if (updateStatusText) updateStatusText('[1/3] 正在检索 DeFiLlama 8,400+ 链上协议资金净流入爆发...');
       try {
         const res = await fetch('https://api.llama.fi/protocols', { signal: AbortSignal.timeout(6000) });
         if (res.ok) {
@@ -2451,7 +2550,7 @@
       }
 
       // Step 2: Scan CoinGecko Trending
-      if (updateStatusText) updateStatusText('🔄 [2/3] 正在分析 CoinGecko 实时 Trending Top 热榜与动量主线...');
+      if (updateStatusText) updateStatusText('[2/3] 正在分析 CoinGecko 实时 Trending Top 热榜与动量主线...');
       try {
         const res2 = await fetch('https://api.coingecko.com/api/v3/search/trending', { signal: AbortSignal.timeout(5000) });
         if (res2.ok) {
@@ -2502,7 +2601,7 @@
       }
 
       // Step 3: Scan US Equities & Crypto Proxies
-      if (updateStatusText) updateStatusText('🔄 [3/3] 正在扫描美股与加密概念股（突破 200 日线 / 52 周新高 / 加密影子股）...');
+      if (updateStatusText) updateStatusText('[3/3] 正在扫描美股与加密概念股（突破 200 日线 / 52 周新高 / 加密影子股）...');
       try {
         const stocksRes = await fetch('./data/stocks.json', { signal: AbortSignal.timeout(4000) });
         if (stocksRes.ok) {
@@ -2591,7 +2690,7 @@
 
         // 1. If running with Node server, try server API first
         if (!isStaticPages) {
-          if (progressText) progressText.innerText = '⚡ 正在请求后台多资产量化雷达扫描引擎 (/api/scan)...';
+          if (progressText) progressText.innerText = '正在请求后台多资产量化雷达扫描引擎 (/api/scan)...';
           try {
             const res = await fetch('/api/scan', { signal: AbortSignal.timeout(8000) });
             if (res.ok) {
@@ -2612,7 +2711,7 @@
 
         // 3. Fallback to cached scan.json if network failed
         if (candidates.length === 0) {
-          if (progressText) progressText.innerText = '🔄 加载本地缓存多资产雷达快照...';
+          if (progressText) progressText.innerText = '加载本地缓存多资产雷达快照...';
           const fallback = await fetch('./data/scan.json').then(r => r.json());
           candidates = fallback.candidates || [];
         }
@@ -2624,10 +2723,10 @@
         const timeEl = document.getElementById('radarLastScanTime');
         if (timeEl) timeEl.innerText = `上次扫描: ${nowStr}`;
 
-        showToast(`⚡ 全网异动雷达扫描完成！发现 ${candidates.length} 个资金与热点标的（含 Crypto 与美股概念）`);
+        showToast(`全网异动雷达扫描完成！发现 ${candidates.length} 个资金与热点标的（含 Crypto 与美股概念）`, 'success');
       } catch (err) {
         console.error('Scan error:', err);
-        showToast('⚠️ 扫描请求异常，已保留现有雷达列表');
+        showToast('扫描请求异常，已保留现有雷达列表', 'warn');
       } finally {
         if (btn) btn.disabled = false;
         if (icon) icon.classList.remove('loading-rotator');
@@ -2679,7 +2778,7 @@
         const isStock = c.assetType === 'STOCK' || c.category === 'CRYPTO_PROXY' || c.category === 'TECH_GROWTH' || c.category === 'STOCK';
         const tr = document.createElement('tr');
         const badgeColor = c.safetyRating === 'HIGH' ? 'tag-green' : c.safetyRating === 'MEDIUM' ? 'tag-yellow' : 'tag-danger';
-        const safetyText = c.safetyRating === 'HIGH' ? '🟢 稳健' : c.safetyRating === 'MEDIUM' ? '🟡 中等' : '🔴 投机';
+        const safetyText = c.safetyRating === 'HIGH' ? `${ICONS.circleGreen} 稳健` : c.safetyRating === 'MEDIUM' ? `${ICONS.circleYellow} 中等` : `${ICONS.circleRed} 投机`;
         const isWatched = watchedSet.has(c.symbol.toUpperCase());
 
         let priceDisplay = '--';
@@ -2696,8 +2795,8 @@
 
         let categoryTagHtml = '';
         if (isStock) {
-          const catLabel = c.category === 'CRYPTO_PROXY' ? '⚡ 加密影子股' : '🚀 科技动量股';
-          categoryTagHtml = `<span class="badge-tag" style="background: rgba(255, 215, 0, 0.12); color: #FFD700; border: 1px solid rgba(255, 215, 0, 0.35);">${catLabel}</span>`;
+          const catLabel = c.category === 'CRYPTO_PROXY' ? `${ICONS.bolt} 加密影子股` : `${ICONS.trendUp} 科技动量股`;
+          categoryTagHtml = `<span class="badge-tag" style="background: rgba(255, 215, 0, 0.12); color: #FFD700; border: 1px solid rgba(255, 215, 0, 0.35); display: inline-flex; align-items: center; gap: 4px;">${catLabel}</span>`;
         } else {
           categoryTagHtml = `<span class="badge-tag tag-blue">${c.category}</span>`;
         }
@@ -2706,11 +2805,11 @@
         const idSubtitle = isStock ? `美股代号: $${c.symbol}` : `ID: ${c.coingeckoId}`;
 
         const actionBtn = isWatched
-          ? `<button class="btn btn-secondary" disabled style="padding: 5px 10px; font-size: 11px; opacity: 0.7; cursor: default;">✓ 已监控</button>`
+          ? `<button class="btn btn-secondary" disabled style="padding: 5px 10px; font-size: 11px; opacity: 0.7; cursor: default; display: inline-flex; align-items: center; gap: 4px;">${ICONS.check} 已监控</button>`
           : `<button class="btn btn-secondary" id="btn-watch-${c.symbol}" style="padding: 5px 12px; font-size: 11px;" onclick="watchAsset('${c.symbol}', '${c.name.replace(/'/g, "\\'")}', '${c.coingeckoId}', '${c.category}', '${isStock ? 'STOCK' : 'CRYPTO'}')">＋ 关注</button>`;
 
-        const buyBtn = `<button class="btn btn-primary" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; font-weight: 500;" onclick="openBuyModal('${c.symbol}', '${c.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
-          ${isStock ? '⚡ Fluxion RFQ' : '⚡ Mantle 买入'}
+        const buyBtn = `<button class="btn btn-primary" style="padding: 5px 12px; font-size: 11px; white-space: nowrap; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;" onclick="openBuyModal('${c.symbol}', '${c.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
+          ${isStock ? ICONS.bolt + ' Fluxion RFQ' : ICONS.bolt + ' Mantle 买入'}
         </button>`;
 
         tr.innerHTML = `
@@ -2722,7 +2821,7 @@
             <div style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #FFFFFF;">${priceDisplay} ${changeDisplay}</div>
           </td>
           <td>${categoryTagHtml}</td>
-          <td><span class="badge-tag ${badgeColor}">${safetyText}</span></td>
+          <td><span class="badge-tag ${badgeColor}" style="display: inline-flex; align-items: center; gap: 4px;">${safetyText}</span></td>
           <td style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">${c.discoveryReasons.join('；')}</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-size: 13px;">${c.safetyRating === 'HIGH' ? '3%~5%' : c.safetyRating === 'MEDIUM' ? '2%' : '1% (轻仓)'}</td>
           <td>
@@ -2757,12 +2856,12 @@
             window.activeAssetSymbols.add(symbol.toUpperCase());
           }
           const typeLabel = assetType === 'STOCK' ? '美股/概念标的' : 'Crypto 资产';
-          showToast(`🎉 成功关注${typeLabel} $${symbol}！已保存在本地浏览器监控中`);
+          showToast(`成功关注${typeLabel} $${symbol}！已保存在本地浏览器监控中`, 'success');
           if (btn) {
             btn.className = 'btn btn-secondary';
             btn.disabled = true;
             btn.style.opacity = '0.7';
-            btn.innerText = '✓ 已监控';
+            btn.innerHTML = `${ICONS.check} 已监控`;
           }
           return;
         } catch (e) {
@@ -2780,12 +2879,12 @@
 
         if (data.success) {
           const typeLabel = assetType === 'STOCK' ? '美股/概念标的' : 'Crypto 资产';
-          showToast(`🎉 成功关注${typeLabel} $${symbol}！已纳入多资产监控`);
+          showToast(`成功关注${typeLabel} $${symbol}！已纳入多资产监控`, 'success');
           if (btn) {
             btn.className = 'btn btn-secondary';
             btn.disabled = true;
             btn.style.opacity = '0.7';
-            btn.innerText = '✓ 已监控';
+            btn.innerHTML = `${ICONS.check} 已监控`;
           }
           if (window.activeAssetSymbols) {
             window.activeAssetSymbols.add(symbol.toUpperCase());
@@ -2799,22 +2898,29 @@
           }
         }
       } catch (err) {
-        showToast(`🎉 成功关注 $${symbol}！已保存在本地浏览器会话中`);
+        showToast(`成功关注 $${symbol}！已保存在本地浏览器会话中`, 'success');
         if (btn) {
           btn.className = 'btn btn-secondary';
           btn.disabled = true;
           btn.style.opacity = '0.7';
-          btn.innerText = '✓ 已监控';
+          btn.innerHTML = `${ICONS.check} 已监控`;
         }
       }
     }
 
-    function showToast(message) {
+    function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       if (!container) return;
       const toast = document.createElement('div');
       toast.className = 'toast';
-      toast.innerHTML = `<span>◆</span> <div>${message}</div>`;
+      const iconHtml = type === 'success' || message.includes('成功') || message.includes('已完成') || message.includes('已刷新')
+        ? ICONS.check
+        : type === 'error' || message.includes('失败') || message.includes('错误') || message.includes('异常')
+        ? ICONS.error
+        : type === 'warn' || message.includes('请') || message.includes('警告') || message.includes('注意')
+        ? ICONS.warn
+        : ICONS.info;
+      toast.innerHTML = `<span style="display:flex;align-items:center;">${iconHtml}</span> <div>${message}</div>`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.remove();
@@ -2841,10 +2947,10 @@
 
     function formatRegime(regime) {
       switch (regime) {
-        case 'CAPITULATION': return '❄️ CAPITULATION (极度冰点恐慌)';
-        case 'ACCUMULATION': return '🌱 ACCUMULATION (健康积累筑底)';
-        case 'MARKUP': return '🔥 MARKUP (主升浪发酵)';
-        case 'DISTRIBUTION': return '🌋 DISTRIBUTION (狂热泡沫分发)';
+        case 'CAPITULATION': return '[恐慌] CAPITULATION (极度冰点恐慌)';
+        case 'ACCUMULATION': return '[筑底] ACCUMULATION (健康积累筑底)';
+        case 'MARKUP': return '[主升] MARKUP (主升浪发酵)';
+        case 'DISTRIBUTION': return '[泡沫] DISTRIBUTION (狂热泡沫分发)';
         default: return regime;
       }
     }
@@ -3081,7 +3187,7 @@
       const truncatedAppId = currentPrivyAppId.length > 14 ? (currentPrivyAppId.slice(0, 6) + '...' + currentPrivyAppId.slice(-4)) : currentPrivyAppId;
 
       listEl.innerHTML = `
-        <!-- 🌟 Privy Embedded Wallet Card -->
+        <!-- Privy Embedded Wallet Card -->
         <div class="wallet-option-card" onclick="connectPrivy()" style="background: linear-gradient(135deg, rgba(0, 255, 147, 0.08) 0%, rgba(0, 212, 255, 0.08) 100%); border: 1px solid rgba(0, 255, 147, 0.35); box-shadow: 0 0 16px rgba(0, 255, 147, 0.08); cursor: pointer;">
           <div style="display: flex; align-items: center; gap: 14px;">
             <div class="wallet-icon-box" style="background: rgba(0, 255, 147, 0.15); border: 1px solid rgba(0, 255, 147, 0.35); display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 8px;">
@@ -3093,15 +3199,15 @@
             </div>
             <div style="flex: 1;">
               <div style="font-size: 15px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; gap: 8px;">
-                <span>🌟 Privy 极速免插件登录</span>
+                <span>Privy 极速免插件登录</span>
                 <span class="badge-tag tag-green" style="font-size: 11px; padding: 2px 8px;">无需插件 / 助记词</span>
               </div>
               <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">
-                支持 邮箱验证码、Google、Twitter/𝕏、Telegram 一键登录，自动生成 Mantle 嵌入式钱包
+                支持 邮箱验证码、Google、X、Telegram 一键登录，自动生成 Mantle 嵌入式钱包
               </div>
             </div>
           </div>
-          <span style="font-size: 13px; color: var(--mint); font-weight: 600; padding-right: 4px; white-space: nowrap;">⚡ 极速登录 →</span>
+          <span style="font-size: 13px; color: var(--mint); font-weight: 600; padding-right: 4px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">${ICONS.bolt} 极速登录 →</span>
         </div>
 
         <!-- Divider -->
@@ -3134,8 +3240,8 @@
 
         <!-- Footer Custom Config -->
         <div style="margin-top: 6px; display: flex; justify-content: flex-end; align-items: center;">
-          <button onclick="configurePrivyAppId()" style="background: none; border: none; color: var(--text-dim); font-size: 11px; cursor: pointer; text-decoration: underline; font-family: inherit;">
-            ⚙️ 自定义 Privy App ID (当前: ${truncatedAppId})
+          <button onclick="configurePrivyAppId()" style="background: none; border: none; color: var(--text-dim); font-size: 11px; cursor: pointer; text-decoration: underline; font-family: inherit; display: inline-flex; align-items: center; gap: 4px;">
+            ${ICONS.gear} 自定义 Privy App ID (当前: ${truncatedAppId})
           </button>
         </div>
       `;
@@ -3162,7 +3268,7 @@
     async function connectPrivy() {
       closeWalletSelectModal();
       if (typeof window.PrivyAuth === 'undefined') {
-        showToast('⏳ Privy 模块正在加载中，请稍候...');
+        showToast('Privy 模块正在加载中，请稍候...', 'info');
         return;
       }
       isPrivyUserInitiated = true;
@@ -3184,7 +3290,7 @@
       } catch (err) {
         isPrivyUserInitiated = false;
         console.error('Privy login error:', err);
-        showToast('❌ Privy 登录出错: ' + (err.message || '未知错误'));
+        showToast('Privy 登录出错: ' + (err.message || '未知错误'), 'error');
       }
     }
 
@@ -3193,7 +3299,7 @@
       const newId = prompt('请输入您的 Privy App ID (可在 https://dashboard.privy.io 创建/查看)：', current);
       if (newId && newId.trim() && newId.trim() !== current) {
         localStorage.setItem('privy_app_id', newId.trim());
-        showToast('✅ Privy App ID 已保存，正在重新加载页面...');
+        showToast('Privy App ID 已保存，正在重新加载页面...', 'success');
         setTimeout(() => window.location.reload(), 600);
       }
     }
@@ -3256,8 +3362,8 @@
       // Special conflict check: user wants MetaMask, but Rainbow hijacked window.ethereum and no separate MetaMask was discovered
       if (type === 'metamask' && !provider && window.ethereum && window.ethereum.isRainbow) {
         const proceedWithRainbow = confirm(
-          '⚠️ 检测到 Rainbow 钱包扩展已接管浏览器的全局接口 (window.ethereum)！\n\n' +
-          '• 若您希望使用 MetaMask：请打开 Rainbow 插件图标 -> ⚙️ 设置 -> 关闭「Default Wallet」(设为默认钱包)，然后刷新本页面即可独立唤起 MetaMask。\n' +
+          '[提示] 检测到 Rainbow 钱包扩展已接管浏览器的全局接口 (window.ethereum)！\n\n' +
+          '• 若您希望使用 MetaMask：请打开 Rainbow 插件图标 -> 设置 -> 关闭「Default Wallet」(设为默认钱包)，然后刷新本页面即可独立唤起 MetaMask。\n' +
           '• 若您希望直接使用 Rainbow 钱包连接，请点击【确定】。'
         );
         if (proceedWithRainbow) {
@@ -3270,19 +3376,19 @@
 
       if (!provider) {
         if (type === 'metamask') {
-          showToast('🦊 未检测到独立 MetaMask 扩展，请确认已安装或在其他钱包设置中关闭默认接管！');
+          showToast('未检测到独立 MetaMask 扩展，请确认已安装或在其他钱包设置中关闭默认接管！', 'warn');
           window.open('https://metamask.io/download/', '_blank');
         } else if (type === 'okx') {
-          showToast('⬛ 未检测到 OKX Web3 钱包扩展！');
+          showToast('未检测到 OKX Web3 钱包扩展！', 'warn');
           window.open('https://www.okx.com/web3', '_blank');
         } else if (type === 'rainbow') {
-          showToast('🌈 未检测到 Rainbow 钱包扩展！');
+          showToast('未检测到 Rainbow 钱包扩展！', 'warn');
           window.open('https://rainbow.me/download', '_blank');
         } else if (type === 'rabby') {
-          showToast('🐰 未检测到 Rabby 钱包扩展！');
+          showToast('未检测到 Rabby 钱包扩展！', 'warn');
           window.open('https://rabby.io/', '_blank');
         } else {
-          showToast('⚠️ 未检测到可用的 Web3 钱包插件！');
+          showToast('未检测到可用的 Web3 钱包插件！', 'warn');
         }
         return;
       }
@@ -3294,7 +3400,7 @@
       const btn = document.getElementById('connectWalletBtn');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = `<span>⏳ 连接中...</span>`;
+        btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">${ICONS.refreshSpin} 连接中...</span>`;
       }
 
       try {
@@ -3308,9 +3414,9 @@
       } catch (err) {
         console.error('Wallet connection error:', err);
         if (err.code === 4001) {
-          showToast('⚠️ 用户取消了钱包授权');
+          showToast('用户取消了钱包授权', 'warn');
         } else {
-          showToast('❌ 连接钱包失败: ' + (err.message || '未知错误'));
+          showToast('连接钱包失败: ' + (err.message || '未知错误'), 'error');
         }
       } finally {
         if (!userWalletAddress) {
@@ -3355,7 +3461,7 @@
       localStorage.setItem('portfolio_masked', isPortfolioMasked ? 'true' : 'false');
       updateMaskButtonState();
       renderPortfolio();
-      showToast(isPortfolioMasked ? '🙈 已开启持仓金额隐私遮蔽 (Mask 模式)' : '👁️ 已解除遮蔽，显示持仓金额');
+      showToast(isPortfolioMasked ? '已开启持仓金额隐私遮蔽 (Mask 模式)' : '已解除遮蔽，显示持仓金额', 'info');
     }
 
     function updateMaskButtonState() {
@@ -3363,10 +3469,10 @@
       const text = document.getElementById('maskBtnText');
       if (icon && text) {
         if (isPortfolioMasked) {
-          icon.innerText = '🙈';
+          icon.innerHTML = ICONS.eyeOff;
           text.innerText = '已隐藏金额 (点击显示)';
         } else {
-          icon.innerText = '👁️';
+          icon.innerHTML = ICONS.eye;
           text.innerText = '遮蔽金额 (Mask)';
         }
       }
@@ -3403,7 +3509,7 @@
         btnDemo.classList.add('active');
       }
       renderPortfolio();
-      showToast('🌟 已切换至策略示范持仓组合 (Demo Portfolio)');
+      showToast('已切换至策略示范持仓组合 (Demo Portfolio)', 'info');
     }
 
     function getAssetPrice(symbol, baseStock) {
@@ -3628,7 +3734,7 @@
 
       if (showSuccessToast) {
         const isMantle = isMantleChain(currentChainId);
-        showToast(`🎉 钱包连接成功: ${formatAddress(address)} (${userWalletBalance} ${isMantle ? 'MNT' : 'ETH'})`);
+        showToast(`钱包连接成功: ${formatAddress(address)} (${userWalletBalance} ${isMantle ? 'MNT' : 'ETH'})`, 'success');
       }
     }
 
@@ -3648,7 +3754,7 @@
       renderWalletButton();
       updateWalletPortfolioSync();
       renderPortfolio();
-      showToast('🔌 Web3 钱包已断开连接');
+      showToast('Web3 钱包已断开连接', 'info');
     }
 
     function formatAddress(addr) {
@@ -3725,7 +3831,7 @@
     function copyWalletAddress() {
       if (userWalletAddress) {
         navigator.clipboard.writeText(userWalletAddress);
-        showToast('📋 钱包地址已复制到剪贴板！');
+        showToast('钱包地址已复制到剪贴板！', 'success');
       }
     }
 
@@ -3772,19 +3878,25 @@
         if (addrEl) addrEl.innerText = formatAddress(userWalletAddress) + ` (${userWalletAddress.slice(0, 8)}...${userWalletAddress.slice(-6)})`;
         if (chainEl) chainEl.innerText = `Mantle Network (Chain ID: 5000)`;
         if (badgeEl) {
-          badgeEl.innerText = '⚡ Mantle 真实链上持仓';
+          badgeEl.innerHTML = `${ICONS.bolt} Mantle 真实链上持仓`;
           badgeEl.style.background = 'rgba(0, 255, 147, 0.12)';
           badgeEl.style.color = 'var(--mint)';
           badgeEl.style.borderColor = 'rgba(0, 255, 147, 0.4)';
+          badgeEl.style.display = 'inline-flex';
+          badgeEl.style.alignItems = 'center';
+          badgeEl.style.gap = '4px';
         }
       } else {
         if (addrEl) addrEl.innerText = hasWallet ? `${formatAddress(userWalletAddress)} (当前查看策略示范)` : '演示账户 (Demo Mode)';
         if (chainEl) chainEl.innerText = 'Mantle Network (Chain ID: 5000)';
         if (badgeEl) {
-          badgeEl.innerText = '🌟 策略示范组合 (模拟基准)';
+          badgeEl.innerHTML = `${ICONS.star} 策略示范组合 (模拟基准)`;
           badgeEl.style.background = 'rgba(0, 212, 255, 0.12)';
           badgeEl.style.color = 'var(--ice-cyan)';
           badgeEl.style.borderColor = 'rgba(0, 212, 255, 0.4)';
+          badgeEl.style.display = 'inline-flex';
+          badgeEl.style.alignItems = 'center';
+          badgeEl.style.gap = '4px';
         }
       }
 
@@ -3876,7 +3988,7 @@
       const gasUsdEl = document.getElementById('portGasReserveUsd');
       if (gasUsdEl) {
         if (mntAmount >= 50) {
-          gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | Gas 充裕 ⚡`;
+          gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | Gas 充裕`;
         } else if (mntAmount > 0) {
           gasUsdEl.innerHTML = `估值: <strong>${formatMoney(mntValue)}</strong> | 少量 Gas 可用`;
         } else {
@@ -3948,7 +4060,7 @@
           healthEl.innerHTML = `<span style="color: #FFB800;">需执行 ${directives.length} 项指令</span>`;
           healthSubEl.innerHTML = `最大偏离: <strong style="color: var(--danger);">${maxUnderweight ? maxUnderweight.symbol : 'MNT'} (${maxUnderweight ? maxUnderweight.deltaPct.toFixed(1) : '-8.0'}%)</strong>`;
         } else {
-          healthEl.innerHTML = `<span style="color: var(--mint);">✓ 组合配比健康</span>`;
+          healthEl.innerHTML = `<span style="color: var(--mint); display: inline-flex; align-items: center; gap: 4px;">${ICONS.check} 组合配比健康</span>`;
           healthSubEl.innerText = `各资产偏离度均在 ±1.5% 容差内`;
         }
       }
@@ -3974,7 +4086,7 @@
       if (barEl && legendEl) {
         if (totalUsd === 0) {
           barEl.innerHTML = '<div style="width: 100%; height: 100%; background: rgba(255,255,255,0.06); text-align: center; line-height: 14px; font-size: 10px; color: var(--text-dim);">当前真实钱包暂无资产持仓 ($0.00)</div>';
-          legendEl.innerHTML = '<div style="color: var(--text-muted); font-size: 11px;">💡 提示：当前显示的是您真实的 Mantle 链上资产。可点击右上角【🌟 策略示范】查看推荐配置。</div>';
+          legendEl.innerHTML = `<div style="color: var(--text-muted); font-size: 11px; display: flex; align-items: center; gap: 6px;">${ICONS.info} <span>提示：当前显示的是您真实的 Mantle 链上资产。可点击右上角【策略示范】查看推荐配置。</span></div>`;
         } else {
           let barHtml = '';
           let legendHtml = '';
@@ -4025,16 +4137,16 @@
 
           const isCash = it.type === 'CASH';
           const actionBtn = isCash ? `
-            <button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap;" onclick="openTradeForAsset('WETH', 'Wrapped Ether', 'CRYPTO', 'buy')">
-              ⚡ 去买资产
+            <button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;" onclick="openTradeForAsset('WETH', 'Wrapped Ether', 'CRYPTO', 'buy')">
+              ${ICONS.bolt} 去买资产
             </button>
           ` : `
             <div style="display: flex; gap: 6px;">
-              <button class="btn btn-primary" style="padding: 4px 9px; font-size: 11px; white-space: nowrap; font-weight: 500;" onclick="openTradeForAsset('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}', 'buy')" title="买入加仓 ${it.symbol}">
-                ⚡ 买入
+              <button class="btn btn-primary" style="padding: 4px 9px; font-size: 11px; white-space: nowrap; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;" onclick="openTradeForAsset('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}', 'buy')" title="买入加仓 ${it.symbol}">
+                ${ICONS.bolt} 买入
               </button>
-              <button class="btn btn-secondary" style="padding: 4px 9px; font-size: 11px; white-space: nowrap; font-weight: 500; border-color: rgba(255, 77, 109, 0.4); color: #FF4D6D;" onclick="openTradeForAsset('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}', 'sell')" title="卖出减仓 ${it.symbol}">
-                🔄 卖出
+              <button class="btn btn-secondary" style="padding: 4px 9px; font-size: 11px; white-space: nowrap; font-weight: 500; border-color: rgba(255, 77, 109, 0.4); color: #FF4D6D; display: inline-flex; align-items: center; gap: 4px;" onclick="openTradeForAsset('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}', 'sell')" title="卖出减仓 ${it.symbol}">
+                ${ICONS.refresh} 卖出
               </button>
             </div>
           `;
@@ -4065,8 +4177,8 @@
         dirContainer.innerHTML = '';
         if (directives.length === 0) {
           dirContainer.innerHTML = `
-            <div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--text-muted); background: rgba(0, 255, 147, 0.02); border: 1px dashed var(--border-main); border-radius: 8px;">
-              🎉 <strong>当前持仓配比高度健康</strong>：各资产均处于战略目标配比区间，无需强制再平衡，按计划执行周期定投即可。
+            <div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--text-muted); background: rgba(0, 255, 147, 0.02); border: 1px dashed var(--border-main); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              ${ICONS.check} <span><strong style="color: var(--mint);">当前持仓配比高度健康</strong>：各资产均处于战略目标配比区间，无需强制再平衡，按计划执行周期定投即可。</span>
             </div>
           `;
         } else {
@@ -4090,8 +4202,8 @@
               : '全网比价 | 智能多路径路由';
 
             const btnText = isStock
-              ? '⚡ 立即通过 Fluxion RFQ 执行'
-              : '⚡ 立即在 Mantle 聚合买入';
+              ? `${ICONS.bolt} 立即通过 Fluxion RFQ 执行`
+              : `${ICONS.bolt} 立即在 Mantle 聚合买入`;
 
             card.innerHTML = `
               <div>
@@ -4109,8 +4221,9 @@
                   </div>
                 </div>
 
-                <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
-                  💡 <strong style="color: #FFFFFF;">决策依据</strong>：${dir.rationale}
+                <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 6px;">
+                  <span style="flex-shrink: 0; margin-top: 1px;">${ICONS.info}</span>
+                  <span><strong style="color: #FFFFFF;">决策依据</strong>：${dir.rationale}</span>
                 </p>
 
                 <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 12px;">
@@ -4120,7 +4233,7 @@
 
               <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-main);">
                 <span style="font-size: 11px; color: var(--text-dim);">结算网络: Mantle Network L2</span>
-                <button class="btn btn-primary" style="padding: 5px 14px; font-size: 12px; font-weight: 600;" onclick="openBuyModal('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
+                <button class="btn btn-primary" style="padding: 5px 14px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;" onclick="openBuyModal('${cleanSym}', '${it.name.replace(/'/g, "\\'")}', '${isStock ? 'STOCK' : 'CRYPTO'}')">
                   ${btnText}
                 </button>
               </div>
@@ -4137,7 +4250,7 @@
       }
       renderPortfolio();
       if (showToastMsg) {
-        showToast('🔄 链上持仓数据已刷新同步！');
+        showToast('链上持仓数据已刷新同步！', 'success');
       }
     }
 
@@ -4147,7 +4260,7 @@
     async function switchToMantleNetwork() {
       const provider = getWalletProvider();
       if (!provider) {
-        showToast('🦊 请先安装并连接 Web3 钱包！');
+        showToast('请先安装并连接 Web3 钱包！', 'warn');
         window.open('https://metamask.io/download/', '_blank');
         return;
       }
@@ -4156,7 +4269,7 @@
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: MANTLE_CHAIN_ID_HEX }]
         });
-        showToast('✅ 已成功切换至 Mantle Network (Chain ID: 5000)');
+        showToast('已成功切换至 Mantle Network (Chain ID: 5000)', 'success');
         currentChainId = MANTLE_CHAIN_ID_HEX;
         updateMantleStatusIndicator(true);
         if (userWalletAddress) {
@@ -4170,7 +4283,7 @@
               method: 'wallet_addEthereumChain',
               params: [MANTLE_CHAIN_PARAMS]
             });
-            showToast('✅ Mantle Network 已成功添加到钱包并切换！');
+            showToast('Mantle Network 已成功添加到钱包并切换！', 'success');
             currentChainId = MANTLE_CHAIN_ID_HEX;
             updateMantleStatusIndicator(true);
             if (userWalletAddress) {
@@ -4178,11 +4291,11 @@
             }
           } catch (addError) {
             console.error('Failed to add Mantle network:', addError);
-            showToast('❌ 添加 Mantle 网络失败: ' + (addError.message || ''));
+            showToast('添加 Mantle 网络失败: ' + (addError.message || ''), 'error');
           }
         } else {
           console.error('Failed to switch to Mantle:', switchError);
-          showToast('❌ 切换网络失败: ' + (switchError.message || ''));
+          showToast('切换网络失败: ' + (switchError.message || ''), 'error');
         }
       }
     }
@@ -4197,8 +4310,8 @@
       if (isMantle) {
         dot.style.background = 'var(--mint)';
         dot.style.boxShadow = '0 0 10px var(--mint)';
-        text.innerHTML = '<span style="color: var(--mint); font-weight: 600;">已就绪</span>: Mantle Network (Chain ID: 5000) ⚡';
-        switchBtn.innerText = '✓ 当前在 Mantle';
+        text.innerHTML = '<span style="color: var(--mint); font-weight: 600;">已就绪</span>: Mantle Network (Chain ID: 5000) ' + ICONS.bolt;
+        switchBtn.innerHTML = ICONS.check + ' 当前在 Mantle';
         switchBtn.className = 'btn btn-secondary';
         switchBtn.disabled = true;
         switchBtn.style.opacity = '0.7';
@@ -4444,7 +4557,7 @@
         const rate = recPrice / payPrice;
         rateInput.value = rate < 0.001 ? rate.toFixed(6) : rate.toFixed(2);
         onLimitAmountInput();
-        showToast(`💡 已填入现价基准汇率: 1 ${recSelect.value} = ${rateInput.value} ${paySelect.value}`);
+        showToast(`已填入现价基准汇率: 1 ${recSelect.value} = ${rateInput.value} ${paySelect.value}`, 'info');
       }
     }
 
@@ -4458,7 +4571,7 @@
       const expirySelect = document.getElementById('limitExpirySelect');
 
       if (!isMetaMaskAvailable()) {
-        showToast('🦊 请先安装并连接 MetaMask 钱包！');
+        showToast('请先安装并连接 MetaMask 钱包！', 'warn');
         window.open('https://metamask.io/download/', '_blank');
         return;
       }
@@ -4467,7 +4580,7 @@
         try {
           await connectMetaMask();
         } catch (e) {
-          showToast('❌ 请连接钱包以继续挂单');
+          showToast('请连接钱包以继续挂单', 'error');
           return;
         }
       }
@@ -4476,7 +4589,7 @@
         try {
           await switchToMantleNetwork();
         } catch (e) {
-          showToast('❌ 请先切换至 Mantle Network');
+          showToast('请先切换至 Mantle Network', 'error');
           return;
         }
       }
@@ -4491,14 +4604,14 @@
       const expirySec = parseInt(expirySelect.value, 10) || 86400;
 
       if (payAmount <= 0 || recAmount <= 0) {
-        showToast('⚠️ 请输入有效的买卖数量与限价值');
+        showToast('请输入有效的买卖数量与限价值', 'warn');
         return;
       }
 
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.6';
-        submitBtn.innerText = '⏳ 正在构建 Fluxion 限价单...';
+        submitBtn.innerHTML = ICONS.refreshSpin + ' 正在构建 Fluxion 限价单...';
       }
 
       if (statusBox) {
@@ -4506,7 +4619,7 @@
         statusBox.style.background = 'rgba(0, 212, 255, 0.08)';
         statusBox.style.border = '1px solid rgba(0, 212, 255, 0.3)';
         statusBox.style.color = '#FFFFFF';
-        statusBox.innerHTML = '⚡ 正在请求 Fluxion 协议构建 EIP-712 订单参数并检查授权...';
+        statusBox.innerHTML = ICONS.refreshSpin + ' 正在请求 Fluxion 协议构建 EIP-712 订单参数并检查授权...';
       }
 
       try {
@@ -4562,7 +4675,7 @@
 
         if (curAllowance < makingAmountWei) {
           if (statusBox) {
-            statusBox.innerHTML = `📝 正在向 Fluxion LOP 合约授权 <strong style="color: var(--mint);">${paySym}</strong>... 请在 Web3 钱包中确认授权交易`;
+            statusBox.innerHTML = `${ICONS.doc} 正在向 Fluxion LOP 合约授权 <strong style="color: var(--mint);">${paySym}</strong>... 请在 Web3 钱包中确认授权交易`;
           }
           const maxUint = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
           const approveData = '0x095ea7b3' + padHex32(FLUXION_LOP_CONTRACT) + padHex32(maxUint);
@@ -4575,7 +4688,7 @@
             }]
           });
           if (statusBox) {
-            statusBox.innerHTML = `⏳ 授权已提交 (<a href="https://explorer.mantle.xyz/tx/${approveTx}" target="_blank" style="color: var(--ice-cyan); text-decoration: underline;">查看 TX</a>)，等待链上确认...`;
+            statusBox.innerHTML = `${ICONS.refreshSpin} 授权已提交 (<a href="https://explorer.mantle.xyz/tx/${approveTx}" target="_blank" style="color: var(--ice-cyan); text-decoration: underline;">查看 TX</a>)，等待链上确认...`;
           }
           await new Promise(resolve => setTimeout(resolve, 3500));
         }
@@ -4622,7 +4735,7 @@
         }
 
         if (statusBox) {
-          statusBox.innerHTML = `📜 请在 Web3 钱包中完成 <b>EIP-712 链下签名</b> (无需 Gas 费)...`;
+          statusBox.innerHTML = `${ICONS.doc} 请在 Web3 钱包中完成 <b>EIP-712 链下签名</b> (无需 Gas 费)...`;
         }
 
         const eip712Payload = JSON.stringify({
@@ -4651,7 +4764,7 @@
 
         // 4. Submit to Fluxion Orderbook API
         if (statusBox) {
-          statusBox.innerHTML = `📡 正在向 Fluxion 订单簿提交签名与挂单数据...`;
+          statusBox.innerHTML = `${ICONS.send} 正在向 Fluxion 订单簿提交签名与挂单数据...`;
         }
 
         const submitPayload = {
@@ -4686,7 +4799,7 @@
           statusBox.style.background = 'rgba(0, 255, 147, 0.08)';
           statusBox.style.border = '1px solid rgba(0, 255, 147, 0.4)';
           statusBox.innerHTML = `
-            🎉 <strong style="color: var(--mint);">Fluxion 限价挂单创建成功！</strong><br>
+            ${ICONS.check} <strong style="color: var(--mint);">Fluxion 限价挂单创建成功！</strong><br>
             <div style="margin-top: 6px; font-size: 12px; line-height: 1.6; color: #FFFFFF;">
               • 卖出: <strong style="color: var(--mint); font-family: 'JetBrains Mono', monospace;">${payAmount} ${paySym}</strong><br>
               • 获得: <strong style="color: var(--ice-cyan); font-family: 'JetBrains Mono', monospace;">${recAmount} ${recSym}</strong> (限价: ${(payAmount/recAmount).toFixed(4)} ${paySym}/${recSym})<br>
@@ -4694,12 +4807,12 @@
               • 有效期: <span style="color: var(--text-dim);">${expirySec / 3600} 小时</span>
             </div>
             <span style="font-size: 11px; color: var(--text-dim); margin-top: 6px; display: inline-block;">
-              ⚡ 链下挂单免 Gas 费，资金无需转出仍留在您的钱包内。当价格匹配时由做市商撮合成交，随时可在下方订单列表中撤单。
+              ${ICONS.bolt} 链下挂单免 Gas 费，资金无需转出仍留在您的钱包内。当价格匹配时由做市商撮合成交，随时可在下方订单列表中撤单。
             </span>
           `;
         }
 
-        showToast('🎉 Fluxion 限价挂单已成功广播到订单簿！');
+        showToast('Fluxion 限价挂单已成功广播到订单簿！', 'success');
         fetchFluxionActiveOrders(userWalletAddress, false);
 
       } catch (err) {
@@ -4711,14 +4824,14 @@
           statusBox.style.border = '1px solid rgba(255, 82, 82, 0.4)';
           statusBox.style.color = '#FF5252';
           statusBox.innerHTML = isUserReject
-            ? '❌ 用户已在 MetaMask 取消签名。'
-            : `❌ <b>限价单创建未完成</b>: ${err.message || '网络或协议异常'}`;
+            ? `${ICONS.error} 用户已在 MetaMask 取消签名。`
+            : `${ICONS.error} <b>限价单创建未完成</b>: ${err.message || '网络或协议异常'}`;
         }
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.style.opacity = '1';
-          submitBtn.innerText = '📜 构建并签名限价挂单 (EIP-712 免 Gas)';
+          submitBtn.innerHTML = ICONS.doc + ' 构建并签名限价挂单 (EIP-712 免 Gas)';
         }
       }
     }
@@ -4749,10 +4862,10 @@
         if (items.length === 0) {
           container.innerHTML = `
             <div style="padding: 14px; background: rgba(0, 0, 0, 0.2); border: 1px dashed var(--border-main); border-radius: 6px; font-size: 12px; color: var(--text-muted); text-align: center;">
-              暂无活动挂单。您可在上方资产列表点击【⚡ 立即买入】进入【📜 Fluxion 限价挂单】提交零 Gas 离线订单。
+              暂无活动挂单。您可在上方资产列表点击【立即买入】进入【Fluxion 限价挂单】提交零 Gas 离线订单。
             </div>
           `;
-          if (showToastMsg) showToast('📜 暂无活动中的限价挂单');
+          if (showToastMsg) showToast('暂无活动中的限价挂单', 'info');
           return;
         }
 
@@ -4784,11 +4897,11 @@
         html += '</div>';
         container.innerHTML = html;
 
-        if (showToastMsg) showToast(`✅ 已同步 ${items.length} 笔 Fluxion 活动挂单！`);
+        if (showToastMsg) showToast(`已同步 ${items.length} 笔 Fluxion 活动挂单！`, 'success');
 
       } catch (err) {
         console.warn('Failed to fetch Fluxion orders:', err);
-        if (showToastMsg) showToast('⚠️ 挂单同步失败，请检查网络');
+        if (showToastMsg) showToast('挂单同步失败，请检查网络', 'warn');
       }
     }
 
@@ -4799,7 +4912,7 @@
       }
 
       try {
-        showToast('⏳ 正在发送链上撤单请求，请在 Web3 钱包中确认...');
+        showToast('正在发送链上撤单请求，请在 Web3 钱包中确认...', 'info');
         // cancelOrder(uint256 makerTraits, bytes32 orderHash) selector: 0xb68fb020
         const data = '0xb68fb020' + padHex32(makerTraits) + padHex32(orderHash);
         const provider = getWalletProvider() || window.ethereum;
@@ -4811,13 +4924,13 @@
             data
           }]
         });
-        showToast(`✅ 撤单交易已广播 (<a href="https://explorer.mantle.xyz/tx/${txHash}" target="_blank">查看 TX</a>)`);
+        showToast(`撤单交易已广播 (<a href="https://explorer.mantle.xyz/tx/${txHash}" target="_blank">查看 TX</a>)`, 'success');
         setTimeout(() => {
           fetchFluxionActiveOrders(userWalletAddress, false);
         }, 4000);
       } catch (err) {
         console.error('Cancel order error:', err);
-        showToast('❌ 撤单失败: ' + (err.message || '用户取消交易'));
+        showToast('撤单失败: ' + (err.message || '用户取消交易'), 'error');
       }
     }
 
@@ -4914,7 +5027,7 @@
         return;
       }
 
-      if (rateText) rateText.innerText = '⚡ 实时询价中...';
+      if (rateText) rateText.innerHTML = ICONS.refreshSpin + ' 实时询价中...';
       recDisplay.value = '计算中...';
 
       try {
@@ -4978,7 +5091,7 @@
             statusBox.style.background = 'rgba(255, 184, 0, 0.08)';
             statusBox.style.border = '1px solid rgba(255, 184, 0, 0.3)';
             statusBox.style.color = '#FFB800';
-            statusBox.innerHTML = `⚠️ 当前币对在 Fluxion AMM 上池流动性受限，建议点击上方 <b>【聚合路由】</b> 使用 OpenOcean / KyberSwap 全网聚合买入。`;
+            statusBox.innerHTML = `${ICONS.warn} 当前币对在 Fluxion AMM 上池流动性受限，建议点击上方 <b>【聚合路由】</b> 使用 OpenOcean / KyberSwap 全网聚合买入。`;
           }
         }
       } catch (err) {
@@ -4996,7 +5109,7 @@
       const payInput = document.getElementById('swapPayAmountInput');
 
       if (!isMetaMaskAvailable()) {
-        showToast('🦊 请先安装并连接 MetaMask 钱包！');
+        showToast('请先安装并连接 MetaMask 钱包！', 'warn');
         window.open('https://metamask.io/download/', '_blank');
         return;
       }
@@ -5005,7 +5118,7 @@
         try {
           await connectMetaMask();
         } catch (e) {
-          showToast('❌ 请连接钱包以继续交易');
+          showToast('请连接钱包以继续交易', 'error');
           return;
         }
       }
@@ -5014,7 +5127,7 @@
         try {
           await switchToMantleNetwork();
         } catch (e) {
-          showToast('❌ 请先切换至 Mantle Network');
+          showToast('请先切换至 Mantle Network', 'error');
           return;
         }
       }
@@ -5026,19 +5139,19 @@
       const amountNum = parseFloat(payInput.value) || 0;
 
       if (amountNum <= 0) {
-        showToast('⚠️ 请输入有效的交易金额');
+        showToast('请输入有效的交易金额', 'warn');
         return;
       }
 
       if (!currentQuotedAmountOut || currentQuotedAmountOut <= 0n) {
-        showToast('⚠️ 请等待链上询价完成');
+        showToast('请等待链上询价完成', 'warn');
         return;
       }
 
       if (execBtn) {
         execBtn.disabled = true;
         execBtn.style.opacity = '0.6';
-        execBtn.innerText = '⚡ 链上交易处理中...';
+        execBtn.innerHTML = ICONS.refreshSpin + ' 链上交易处理中...';
       }
 
       if (statusBox) {
@@ -5046,7 +5159,7 @@
         statusBox.style.background = 'rgba(0, 212, 255, 0.08)';
         statusBox.style.border = '1px solid rgba(0, 212, 255, 0.3)';
         statusBox.style.color = '#FFFFFF';
-        statusBox.innerHTML = '⏳ 正在构建交易参数并检查授权...';
+        statusBox.innerHTML = ICONS.refreshSpin + ' 正在构建交易参数并检查授权...';
       }
 
       try {
@@ -5074,7 +5187,7 @@
 
           if (curAllowance < amountInWei) {
             if (statusBox) {
-              statusBox.innerHTML = `📝 正在申请代币授权 (<strong style="color: var(--mint);">${paySym}</strong>)... 请在 Web3 钱包中确认授权`;
+              statusBox.innerHTML = `${ICONS.doc} 正在申请代币授权 (<strong style="color: var(--mint);">${paySym}</strong>)... 请在 Web3 钱包中确认授权`;
             }
             const maxUint = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
             const approveData = '0x095ea7b3' + padHex32(FLUXION_SWAP_ROUTER) + padHex32(maxUint);
@@ -5087,7 +5200,7 @@
               }]
             });
             if (statusBox) {
-              statusBox.innerHTML = `⏳ 授权已提交 (<a href="https://explorer.mantle.xyz/tx/${approveTx}" target="_blank" style="color: var(--ice-cyan); text-decoration: underline;">查看 TX</a>)，等待链上确认...`;
+              statusBox.innerHTML = `${ICONS.refreshSpin} 授权已提交 (<a href="https://explorer.mantle.xyz/tx/${approveTx}" target="_blank" style="color: var(--ice-cyan); text-decoration: underline;">查看 TX</a>)，等待链上确认...`;
             }
             await new Promise(resolve => setTimeout(resolve, 3500));
           }
@@ -5128,7 +5241,7 @@
         }
 
         if (statusBox) {
-          statusBox.innerHTML = '⚡ 请在 Web3 钱包中确认交易签名... (免跳转直接在 Mantle 链上买入)';
+          statusBox.innerHTML = ICONS.bolt + ' 请在 Web3 钱包中确认交易签名... (免跳转直接在 Mantle 链上买入)';
         }
 
         const txHash = await provider.request({
@@ -5140,15 +5253,15 @@
           statusBox.style.background = 'rgba(0, 255, 147, 0.08)';
           statusBox.style.border = '1px solid rgba(0, 255, 147, 0.4)';
           statusBox.innerHTML = `
-            🎉 <strong style="color: var(--mint);">交易已在 Mantle 链上广播！</strong><br>
+            ${ICONS.check} <strong style="color: var(--mint);">交易已在 Mantle 链上广播！</strong><br>
             TX Hash: <a href="https://explorer.mantle.xyz/tx/${txHash}" target="_blank" style="color: var(--mint); text-decoration: underline; font-family: 'JetBrains Mono', monospace;">${txHash.slice(0, 10)}...${txHash.slice(-8)} ↗</a><br>
             <span style="font-size: 11px; color: var(--text-dim); margin-top: 6px; display: inline-block;">
-              ⚡ 免跳转直连买入已完成，底层资产将直接结算到您的钱包。
+              ${ICONS.bolt} 免跳转直连买入已完成，底层资产将直接结算到您的钱包。
             </span>
           `;
         }
 
-        showToast('🎉 Mantle 链上免跳转买入成功！');
+        showToast('Mantle 链上免跳转买入成功！', 'success');
         setTimeout(() => {
           refreshPortfolioData(false);
         }, 3000);
@@ -5162,15 +5275,15 @@
           statusBox.style.border = '1px solid rgba(255, 82, 82, 0.4)';
           statusBox.style.color = '#FF5252';
           statusBox.innerHTML = isUserReject
-            ? '❌ 用户已在 MetaMask 取消交易签名。'
-            : `❌ <b>交易未完成</b>: ${err.message || '链上执行异常'}`;
+            ? `${ICONS.error} 用户已在 MetaMask 取消交易签名。`
+            : `${ICONS.error} <b>交易未完成</b>: ${err.message || '链上执行异常'}`;
         }
-        showToast(isUserReject ? '已取消交易' : '❌ 交易失败: ' + (err.message || ''));
+        showToast(isUserReject ? '已取消交易' : '交易失败: ' + (err.message || ''), isUserReject ? 'info' : 'error');
       } finally {
         if (execBtn) {
           execBtn.disabled = false;
           execBtn.style.opacity = '1';
-          execBtn.innerText = '⚡ 立即在 Mantle 链上买入 (MetaMask 签名)';
+          execBtn.innerHTML = ICONS.bolt + ' 立即在 Mantle 链上买入 (MetaMask 签名)';
         }
       }
     }
@@ -5267,7 +5380,7 @@
           sellBtn.style.color = '';
           sellBtn.style.borderColor = '';
 
-          if (execBtn) execBtn.innerText = '⚡ 立即在 Mantle 链上买入 (Web3 签名)';
+          if (execBtn) execBtn.innerHTML = ICONS.bolt + ' 立即在 Mantle 链上买入 (Web3 签名)';
         } else {
           sellBtn.classList.add('active');
           sellBtn.style.background = 'rgba(255, 77, 109, 0.15)';
@@ -5279,7 +5392,7 @@
           buyBtn.style.color = '';
           buyBtn.style.borderColor = '';
 
-          if (execBtn) execBtn.innerText = '🔄 立即在 Mantle 链上卖出 (Web3 签名)';
+          if (execBtn) execBtn.innerHTML = ICONS.refresh + ' 立即在 Mantle 链上卖出 (Web3 签名)';
         }
       }
 

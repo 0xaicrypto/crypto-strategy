@@ -22,7 +22,7 @@ const DIST_DIR = path.join(ROOT_DIR, 'dist');
 const DATA_DIR = path.join(PUBLIC_DIR, 'data');
 
 async function buildStaticData() {
-  console.log('⚡ [1/4] Collecting live market snapshot & cycle temperature...');
+  console.log('[1/4] Collecting live market snapshot & cycle temperature...');
   const snapshot = await collectComprehensiveSnapshot();
   const btcMarket = snapshot.marketData.get('BTC');
   const btcPrice = btcMarket?.currentPrice ?? 65000;
@@ -57,7 +57,7 @@ async function buildStaticData() {
 
   const plan = computeAllocationPlan(cycle, altEvaluations, currentHoldings);
 
-  console.log('⚡ [1.5/4] Collecting US equities & macro rates...');
+  console.log('[1.5/4] Collecting US equities & macro rates...');
   let macroRates = null;
   let stockEvaluations: any[] = [];
   let crossAssetPlan = null;
@@ -90,14 +90,14 @@ async function buildStaticData() {
     crossAssetPlan,
   };
 
-  console.log('⚡ [2/4] Scanning market opportunities...');
+  console.log('[2/4] Scanning market opportunities...');
   const candidates = await scanMarketOpportunities();
   const scanData = {
     timestamp: Date.now(),
     candidates,
   };
 
-  console.log('⚡ [3/4] Running 1400-day historical DCA backtest...');
+  console.log('[3/4] Running 1400-day historical DCA backtest...');
   const btcHistory = await fetchHistoricalDailyPrices('bitcoin', 1400);
   const backtestData = runDcaBacktest(btcHistory, 500);
 
@@ -108,7 +108,7 @@ async function buildStaticData() {
   fs.mkdirSync(path.join(DIST_DIR, 'fonts'), { recursive: true });
 
   // Write static data files to public/data and dist/data
-  console.log('⚡ [4/4] Writing static JSON and copying web assets...');
+  console.log('[4/4] Writing static JSON and copying web assets...');
   fs.writeFileSync(path.join(DATA_DIR, 'status.json'), JSON.stringify(statusData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DATA_DIR, 'stocks.json'), JSON.stringify(stocksData, null, 2), 'utf-8');
   fs.writeFileSync(path.join(DATA_DIR, 'scan.json'), JSON.stringify(scanData, null, 2), 'utf-8');
@@ -139,10 +139,10 @@ async function buildStaticData() {
   fs.writeFileSync(path.join(DIST_DIR, 'CNAME'), 'alphanalyzor.trade\n', 'utf-8');
   fs.writeFileSync(path.join(PUBLIC_DIR, 'CNAME'), 'alphanalyzor.trade\n', 'utf-8');
 
-  console.log('✅ Static build complete in dist/ and public/data!');
+  console.log('[OK] Static build complete in dist/ and public/data!');
 }
 
 buildStaticData().catch((err) => {
-  console.error('❌ Build failed:', err);
+  console.error('[ERROR] Build failed:', err);
   process.exit(1);
 });

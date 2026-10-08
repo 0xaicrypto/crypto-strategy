@@ -53,7 +53,7 @@ interface CoinGeckoTrendingItem {
 }
 
 export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): Promise<DiscoveredCandidate[]> {
-  console.log('📡 正在全网雷达扫描：链上资金异动 (DeFiLlama) + 市场动量与热点 (CoinGecko)...');
+  console.log('[RADAR] 正在全网雷达扫描：链上资金异动 (DeFiLlama) + 市场动量与热点 (CoinGecko)...');
 
   const candidates: DiscoveredCandidate[] = [];
   const existingSymbols = new Set(WATCHED_ASSETS.map((a) => a.symbol.toUpperCase()));
@@ -183,7 +183,7 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
   }
 
   // 4. Scan US Equities & Crypto Proxies (Yahoo Finance)
-  console.log('📡 正在全网雷达扫描：美股高动量与加密影子股异动 (Yahoo Finance)...');
+  console.log('[RADAR] 正在全网雷达扫描：美股高动量与加密影子股异动 (Yahoo Finance)...');
   try {
     const liveStocks = await fetchAllWatchedStocks();
     for (const s of liveStocks) {
@@ -296,8 +296,8 @@ export async function scanMarketOpportunities(btc30dPerformance: number = 5.0): 
 export function formatDiscoveryReport(candidates: DiscoveredCandidate[]): string {
   const lines: string[] = [];
 
-  lines.push(`## 🔍 全网高潜力资产自动扫描雷达 (Automated Multi-Asset Discovery)`);
-  lines.push(`> 扫描策略：**过滤伪概念垃圾币 ➔ 识别链上真实 TVL 资金流入 ➔ 抓取全网热度突破 ➔ 监测美股与加密影子股强动量**\n`);
+  lines.push(`## 全网高潜力资产自动扫描雷达 (Automated Multi-Asset Discovery)`);
+  lines.push(`> 扫描策略：**过滤伪概念垃圾币 -> 识别链上真实 TVL 资金流入 -> 抓取全网热度突破 -> 监测美股与加密影子股强动量**\n`);
 
   if (candidates.length === 0) {
     lines.push(`暂未发现符合严苛风控标准的新候选资产。`);
@@ -308,8 +308,8 @@ export function formatDiscoveryReport(candidates: DiscoveredCandidate[]): string
   lines.push(`| :--- | :---: | :---: | :---: | :--- | :---: |`);
 
   for (const c of candidates) {
-    const safetyBadge = c.safetyRating === 'HIGH' ? '🟢 稳健' : c.safetyRating === 'MEDIUM' ? '🟡 中等' : '🔴 投机';
-    const typeBadge = c.assetType === 'STOCK' ? '📈 美股/概念' : '🌐 Crypto';
+    const safetyBadge = c.safetyRating === 'HIGH' ? '[稳健]' : c.safetyRating === 'MEDIUM' ? '[中等]' : '[投机]';
+    const typeBadge = c.assetType === 'STOCK' ? '美股/概念' : 'Crypto';
     const reasonSummary = c.discoveryReasons.join('；');
     const suggestedCap = c.safetyRating === 'HIGH' ? '3% ~ 5%' : c.safetyRating === 'MEDIUM' ? '2%' : '1% (轻仓)';
 
@@ -317,7 +317,7 @@ export function formatDiscoveryReport(candidates: DiscoveredCandidate[]): string
   }
 
   lines.push('');
-  lines.push(`### 💡 如何将扫描到的资产加入关注列表？`);
+  lines.push(`### 如何将扫描到的资产加入关注列表？`);
   lines.push(`- **Crypto 标的**：添加到 \`src/config/assets.ts\` 中的 \`WATCHED_ASSETS\` 数组；`);
   lines.push(`- **美股/概念股标的**：添加到 \`src/config/stock-assets.ts\` 中的 \`WATCHED_STOCKS\` 数组。`);
 

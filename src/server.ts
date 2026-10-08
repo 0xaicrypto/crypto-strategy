@@ -261,7 +261,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`\n======================================================`);
-  console.log(`🚀 AI Crypto Strategy Web Dashboard running at:`);
-  console.log(`👉 http://localhost:${PORT}`);
+  console.log(`[SERVER] AI Crypto Strategy Web Dashboard running at:`);
+  console.log(`  http://localhost:${PORT}`);
   console.log(`======================================================\n`);
 });
