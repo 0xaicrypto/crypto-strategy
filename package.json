@@ -11,6 +11,8 @@
     "backtest": "node --experimental-strip-types src/index.ts backtest",
     "web": "node --experimental-strip-types src/server.ts",
     "dev": "node --experimental-strip-types src/server.ts",
+    "mcp": "node mcp/dist/index.js",
+    "mcp:build": "cd mcp && npm run build",
     "build:pages": "node --experimental-strip-types src/build-static.ts",
     "build:privy": "esbuild src/privy-auth-entry.tsx --bundle --minify --format=iife --target=es2020 --define:process.env.NODE_ENV=\\\"production\\\" --define:global=\\\"window\\\" --external:@stripe/stripe-js --outfile=public/js/privy-bundle.js",
     "strk": "node --experimental-strip-types src/index.ts evaluate --asset STRK",
