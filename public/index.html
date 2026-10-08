@@ -1403,6 +1403,31 @@
             <span id="radarScanProgressText">正在连接全网多源节点扫描中...</span>
           </div>
 
+          <!-- Asset Discovery Quantitative Logic Explainer -->
+          <div class="discovery-logic-card" style="background: rgba(15, 23, 42, 0.45); border: 1px solid var(--border-main); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.6; color: var(--text-muted);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <strong style="color: #60A5FA; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                <svg class="ui-icon" style="color: #60A5FA;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                资产发现量化筛选机制 (Multi-Source Quantitative Radar)
+              </strong>
+              <span class="badge-tag tag-cyan" style="font-size: 10px;">确定性量化规则 · 零大模型幻觉</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 6px;">
+              <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 12px;">
+                <div style="color: #FFFFFF; font-weight: 600; margin-bottom: 2px;">1. 链上 TVL 资金流向 (DeFiLlama)</div>
+                <div>准入门槛：TVL > $25M 且 7日 TVL 净增速 > +10%，排除 CEX 平台币，捕捉真正获得链上资本净流入的 DeFi 与 Layer2 龙头。</div>
+              </div>
+              <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 12px;">
+                <div style="color: #FFFFFF; font-weight: 600; margin-bottom: 2px;">2. 全网动量热搜过滤 (CoinGecko)</div>
+                <div>抓取实时 Trending 榜单，自动过滤 Rank > 250 的微盘投机代币，仅保留具备真实流动性支撑与叙事热度的主线资产。</div>
+              </div>
+              <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 12px;">
+                <div style="color: #FFFFFF; font-weight: 600; margin-bottom: 2px;">3. 实体美股与反稀释审计 (Yahoo Finance)</div>
+                <div>监控站上 200 日线、逼近 52 周新高且年回购大于股权激励（净反稀释率 > 0）的优质股票及加密影子股（COIN、MSTR 等）。</div>
+              </div>
+            </div>
+          </div>
+
           <!-- Radar Sub-Filter Bar -->
           <div class="radar-filter-bar">
             <button class="radar-filter-btn active" id="rf-ALL" onclick="setRadarFilter('ALL', this)">
