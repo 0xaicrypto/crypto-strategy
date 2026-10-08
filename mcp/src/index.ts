@@ -1261,7 +1261,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const takingAmount = (makerAmount / limitRate).toFixed(4);
         const expirySec = expiryHours * 3600;
 
-        const bridgeUrl = `${WEB_BRIDGE_URL}/?action=sign-limit&maker=${encodeURIComponent(makerToken)}&taker=${encodeURIComponent(takerToken)}&amount=${encodeURIComponent(makerAmount)}&rate=${encodeURIComponent(limitRate)}&expiry=${encodeURIComponent(expirySec)}&source=Claude+Desktop+(MCP)&reason=${encodeURIComponent(reason)}`;
+        const clientSource = String(args?.source || "agy (IronMac Console)");
+        const bridgeUrl = `${WEB_BRIDGE_URL}/?action=sign-limit&maker=${encodeURIComponent(makerToken)}&taker=${encodeURIComponent(takerToken)}&amount=${encodeURIComponent(makerAmount)}&rate=${encodeURIComponent(limitRate)}&expiry=${encodeURIComponent(expirySec)}&source=${encodeURIComponent(clientSource)}&reason=${encodeURIComponent(reason)}`;
 
         return {
           content: [
@@ -1277,8 +1278,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 `• 签名机制: 0-Gas EIP-712 链下安全签名 (资金保留在用户钱包内)`,
                 `• 策略推演依据: ${reason}`,
                 ``,
-                `👉 【点击打开 Web 签名桥进行核准与签名】:`,
+                `👉 【IronMac 安全浏览器签名桥交互链接】:`,
                 `${bridgeUrl}`,
+                ``,
+                `• IronMac 控制台直接唤起命令:`,
+                `  open "${bridgeUrl}"`,
                 `======================================================`,
               ].join("\n"),
             },
