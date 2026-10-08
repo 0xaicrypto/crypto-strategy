@@ -14321,6 +14321,320 @@ async function fetchLocalApi(endpoint) {
   }
   return null;
 }
+var FALLBACK_STOCK_EVALUATIONS = [
+  {
+    symbol: "SPY",
+    name: "SPDR S&P 500 ETF Trust",
+    category: "INDEX",
+    sector: "Broad Market ETF",
+    currentPrice: 775.36,
+    change24hPct: -0.24,
+    ma200d: 722.47,
+    ratioTo200d: 1.07,
+    buybackYieldPct: 2.1,
+    sbcDilutionRatePct: 0.4,
+    netAntiDilutionYieldPct: 1.7,
+    fcfYieldPct: 3.4,
+    grossMarginPct: 35,
+    pegRatio: 1.8,
+    forwardPe: 22.4,
+    ttmPe: 27.2,
+    antiDilutionScore: 82,
+    cashFlowQualityScore: 51,
+    valuationScore: 70,
+    compositeHealthScore: 68,
+    verdict: "ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.35,
+    keyStrengths: ["\u51C0\u56DE\u8D2D\u901A\u7F29\u7387 +1.7% (\u5E74\u56DE\u8D2D 2.1% \u8FDC\u8D85 SBC \u7A00\u91CA)"],
+    riskWarnings: [],
+    triggersForEntry: ["\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u63D0\u4F9B\u5145\u8DB3\u5B89\u5168\u8FB9\u9645"]
+  },
+  {
+    symbol: "QQQ",
+    name: "Invesco QQQ Trust (Nasdaq 100)",
+    category: "INDEX",
+    sector: "Tech Index ETF",
+    currentPrice: 598.2,
+    change24hPct: 0.35,
+    ma200d: 556.1,
+    ratioTo200d: 1.08,
+    buybackYieldPct: 2.3,
+    sbcDilutionRatePct: 0.6,
+    netAntiDilutionYieldPct: 1.7,
+    fcfYieldPct: 3.2,
+    grossMarginPct: 48,
+    pegRatio: 1.9,
+    forwardPe: 25.8,
+    ttmPe: 31.5,
+    antiDilutionScore: 82,
+    cashFlowQualityScore: 58,
+    valuationScore: 70,
+    compositeHealthScore: 70,
+    verdict: "ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.3,
+    keyStrengths: ["\u51C0\u56DE\u8D2D\u901A\u7F29\u7387 +1.7% (\u5E74\u56DE\u8D2D 2.3% \u8FDC\u8D85 SBC \u7A00\u91CA)"],
+    riskWarnings: [],
+    triggersForEntry: ["\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u63D0\u4F9B\u5145\u8DB3\u5B89\u5168\u8FB9\u9645"]
+  },
+  {
+    symbol: "NVDA",
+    name: "NVIDIA Corporation",
+    category: "TECH_GROWTH",
+    sector: "Semiconductors & AI",
+    currentPrice: 118.2,
+    change24hPct: 1.15,
+    ma200d: 112.5,
+    ratioTo200d: 1.05,
+    buybackYieldPct: 1.8,
+    sbcDilutionRatePct: 0.7,
+    netAntiDilutionYieldPct: 1.1,
+    fcfYieldPct: 2.8,
+    grossMarginPct: 75.1,
+    pegRatio: 1.1,
+    forwardPe: 31.2,
+    ttmPe: 44.8,
+    antiDilutionScore: 76,
+    cashFlowQualityScore: 85,
+    valuationScore: 85,
+    compositeHealthScore: 82,
+    verdict: "STRONG_ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.12,
+    keyStrengths: [
+      "\u8D85\u9AD8\u6BDB\u5229\u7387 75.1%\uFF0C\u62E5\u6709\u4E0D\u53EF\u66FF\u4EE3\u7684\u5784\u65AD\u7EA7\u884C\u4E1A\u62A4\u57CE\u6CB3",
+      "\u5168\u7403 AI \u7B97\u529B\u4E0E GPU \u751F\u6001\u552F\u4E00\u5784\u65AD\u8005"
+    ],
+    riskWarnings: [],
+    triggersForEntry: ["\u56DE\u8E29 200 \u65E5\u7EBF\u5173\u952E\u652F\u6491\u4F4D\uFF0C\u9002\u5408\u5DE6\u4FA7\u5E95\u4ED3\u914D\u7F6E"]
+  },
+  {
+    symbol: "TSLA",
+    name: "Tesla Inc.",
+    category: "TECH_GROWTH",
+    sector: "Autonomous AI & Energy",
+    currentPrice: 218.4,
+    change24hPct: -1.2,
+    ma200d: 215.1,
+    ratioTo200d: 1.02,
+    buybackYieldPct: 0,
+    sbcDilutionRatePct: 1.5,
+    netAntiDilutionYieldPct: -1.5,
+    fcfYieldPct: 1.8,
+    grossMarginPct: 19.8,
+    pegRatio: 3.2,
+    forwardPe: 55,
+    ttmPe: 72,
+    antiDilutionScore: 40,
+    cashFlowQualityScore: 35,
+    valuationScore: 45,
+    compositeHealthScore: 40,
+    verdict: "HOLD",
+    dcaAllowed: false,
+    maxPortfolioCapPct: 0.08,
+    keyStrengths: ["\u5168\u7403\u81EA\u52A8\u9A7E\u9A76 FSD\u3001Robotaxi \u4E0E\u50A8\u80FD\u751F\u6001\u9886\u8DD1\u8005"],
+    riskWarnings: [
+      "\u80A1\u6743\u6FC0\u52B1\u7A00\u91CA\u7387 (1.5%) \u8D85\u8FC7\u56DE\u8D2D\u6CE8\u9500\u7387\uFF0C\u80A1\u672C\u5448\u73B0\u5185\u751F\u81A8\u80C0",
+      "PEG \u504F\u9AD8 (3.2)\uFF0C\u5F53\u524D\u4F30\u503C\u900F\u652F\u8F83\u591A"
+    ],
+    triggersForEntry: ["\u56DE\u8E29 200 \u65E5\u7EBF\u5173\u952E\u652F\u6491\u4F4D\uFF0C\u9002\u5408\u5DE6\u4FA7\u5E95\u4ED3\u914D\u7F6E"]
+  },
+  {
+    symbol: "AAPL",
+    name: "Apple Inc.",
+    category: "TECH_GROWTH",
+    sector: "Consumer Tech & Hardware",
+    currentPrice: 226.5,
+    change24hPct: 0.4,
+    ma200d: 208.3,
+    ratioTo200d: 1.09,
+    buybackYieldPct: 3.5,
+    sbcDilutionRatePct: 0.8,
+    netAntiDilutionYieldPct: 2.7,
+    fcfYieldPct: 3.8,
+    grossMarginPct: 46.2,
+    pegRatio: 2.4,
+    forwardPe: 27.5,
+    ttmPe: 33.4,
+    antiDilutionScore: 92,
+    cashFlowQualityScore: 68,
+    valuationScore: 60,
+    compositeHealthScore: 74,
+    verdict: "ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.12,
+    keyStrengths: [
+      "\u51C0\u56DE\u8D2D\u901A\u7F29\u7387 +2.7% (\u5E74\u56DE\u8D2D 3.5% \u8FDC\u8D85 SBC \u7A00\u91CA)",
+      "\u81EA\u7531\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u8FBE 3.8%\uFF0C\u73B0\u91D1\u9020\u8840\u673A\u5668",
+      "\u5341\u5E74\u9500\u6BC1\u8D85 35% \u603B\u80A1\u6570"
+    ],
+    riskWarnings: [],
+    triggersForEntry: ["\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u63D0\u4F9B\u5145\u8DB3\u5B89\u5168\u8FB9\u9645"]
+  },
+  {
+    symbol: "MSFT",
+    name: "Microsoft Corporation",
+    category: "TECH_GROWTH",
+    sector: "Cloud & Enterprise AI",
+    currentPrice: 428.1,
+    change24hPct: 0.85,
+    ma200d: 418.9,
+    ratioTo200d: 1.02,
+    buybackYieldPct: 1.2,
+    sbcDilutionRatePct: 0.6,
+    netAntiDilutionYieldPct: 0.6,
+    fcfYieldPct: 2.7,
+    grossMarginPct: 69.8,
+    pegRatio: 2.1,
+    forwardPe: 28,
+    ttmPe: 33.8,
+    antiDilutionScore: 71,
+    cashFlowQualityScore: 75,
+    valuationScore: 65,
+    compositeHealthScore: 71,
+    verdict: "ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.12,
+    keyStrengths: [
+      "\u8D85\u9AD8\u6BDB\u5229\u7387 69.8%\uFF0C\u62E5\u6709\u4E0D\u53EF\u66FF\u4EE3\u7684\u5784\u65AD\u7EA7\u884C\u4E1A\u62A4\u57CE\u6CB3",
+      "\u4F01\u4E1A\u4E91\u670D\u52A1\u4E0E\u751F\u6210\u5F0F AI \u843D\u5730\u9886\u8DD1\u8005"
+    ],
+    riskWarnings: [],
+    triggersForEntry: ["\u56DE\u8E29 200 \u65E5\u7EBF\u5173\u952E\u652F\u6491\u4F4D\uFF0C\u9002\u5408\u5DE6\u4FA7\u5E95\u4ED3\u914D\u7F6E"]
+  },
+  {
+    symbol: "GOOGL",
+    name: "Alphabet Inc.",
+    category: "TECH_GROWTH",
+    sector: "Search, Cloud & AI",
+    currentPrice: 178.6,
+    change24hPct: -0.1,
+    ma200d: 168.2,
+    ratioTo200d: 1.06,
+    buybackYieldPct: 3.2,
+    sbcDilutionRatePct: 1.1,
+    netAntiDilutionYieldPct: 2.1,
+    fcfYieldPct: 4.5,
+    grossMarginPct: 57.5,
+    pegRatio: 1.2,
+    forwardPe: 18.9,
+    ttmPe: 22.5,
+    antiDilutionScore: 86,
+    cashFlowQualityScore: 82,
+    valuationScore: 85,
+    compositeHealthScore: 84,
+    verdict: "STRONG_ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.12,
+    keyStrengths: [
+      "\u51C0\u56DE\u8D2D\u901A\u7F29\u7387 +2.1% (\u5E74\u56DE\u8D2D 3.2% \u8FDC\u8D85 SBC \u7A00\u91CA)",
+      "\u81EA\u7531\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u8FBE 4.5%\uFF0C\u73B0\u91D1\u9020\u8840\u673A\u5668",
+      "\u4F30\u503C\u5904\u4E8E\u79D1\u6280\u5DE8\u5934\u5386\u53F2\u6700\u4F4E\u5206\u4F4D\u6570\u4E4B\u4E00"
+    ],
+    riskWarnings: [],
+    triggersForEntry: ["\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u63D0\u4F9B\u5145\u8DB3\u5B89\u5168\u8FB9\u9645"]
+  },
+  {
+    symbol: "COIN",
+    name: "Coinbase Global Inc.",
+    category: "CRYPTO_PROXY",
+    sector: "Crypto Infrastructure",
+    currentPrice: 172.5,
+    change24hPct: 2.3,
+    ma200d: 195.4,
+    ratioTo200d: 0.88,
+    buybackYieldPct: 1,
+    sbcDilutionRatePct: 2.2,
+    netAntiDilutionYieldPct: -1.2,
+    fcfYieldPct: 3.1,
+    grossMarginPct: 84.5,
+    pegRatio: 1.6,
+    forwardPe: 29.5,
+    ttmPe: 38,
+    antiDilutionScore: 48,
+    cashFlowQualityScore: 82,
+    valuationScore: 80,
+    compositeHealthScore: 69,
+    verdict: "ACCUMULATE",
+    dcaAllowed: true,
+    maxPortfolioCapPct: 0.05,
+    keyStrengths: [
+      "\u8D85\u9AD8\u6BDB\u5229\u7387 84.5%\uFF0C\u62E5\u6709\u4E0D\u53EF\u66FF\u4EE3\u7684\u5784\u65AD\u7EA7\u884C\u4E1A\u62A4\u57CE\u6CB3",
+      "Base \u94FE\u751F\u6001\u7E41\u8363\u4E0E USDC \u5229\u606F\u6536\u76CA\u6784\u6210\u7B2C\u4E8C\u589E\u957F\u66F2\u7EBF"
+    ],
+    riskWarnings: ["\u80A1\u6743\u6FC0\u52B1\u7A00\u91CA\u7387 (2.2%) \u8D85\u8FC7\u56DE\u8D2D\u6CE8\u9500\u7387\uFF0C\u80A1\u672C\u5448\u73B0\u5185\u751F\u81A8\u80C0"],
+    triggersForEntry: [
+      "\u56DE\u8E29 200 \u65E5\u7EBF\u5173\u952E\u652F\u6491\u4F4D\uFF0C\u9002\u5408\u5DE6\u4FA7\u5E95\u4ED3\u914D\u7F6E",
+      "\u73B0\u91D1\u6D41\u6536\u76CA\u7387\u63D0\u4F9B\u5145\u8DB3\u5B89\u5168\u8FB9\u9645"
+    ]
+  },
+  {
+    symbol: "MSTR",
+    name: "MicroStrategy Inc.",
+    category: "CRYPTO_PROXY",
+    sector: "Bitcoin Treasury Proxy",
+    currentPrice: 145.8,
+    change24hPct: 3.5,
+    ma200d: 135.2,
+    ratioTo200d: 1.08,
+    buybackYieldPct: 0,
+    sbcDilutionRatePct: 2.5,
+    netAntiDilutionYieldPct: -2.5,
+    fcfYieldPct: -0.5,
+    grossMarginPct: 72,
+    pegRatio: 4.5,
+    forwardPe: 65,
+    ttmPe: 85,
+    antiDilutionScore: 25,
+    cashFlowQualityScore: 30,
+    valuationScore: 35,
+    compositeHealthScore: 30,
+    verdict: "HOLD",
+    dcaAllowed: false,
+    maxPortfolioCapPct: 0.05,
+    keyStrengths: ["\u534E\u5C14\u8857\u6760\u6746\u5316\u6BD4\u7279\u5E01\u50A8\u5907\u8F7D\u4F53\uFF0C\u9AD8\u8D1D\u5854\u5F39\u6027\u6807\u7684"],
+    riskWarnings: [
+      "\u80A1\u6743\u6FC0\u52B1\u7A00\u91CA\u7387 (2.5%) \u8F83\u9AD8\uFF0C\u4E14\u4F9D\u9760\u589E\u53D1\u53EF\u8F6C\u503A\u8D2D\u4E70 BTC",
+      "\u81EA\u7531\u73B0\u91D1\u6D41\u4E3A\u8D1F\uFF0C\u4F30\u503C\u9AD8\u5EA6\u4F9D\u8D56\u6BD4\u7279\u5E01\u725B\u5E02\u9884\u671F"
+    ],
+    triggersForEntry: ["\u6309\u5468\u671F\u4E58\u6570\u4E25\u683C\u5206\u6279\u6267\u884C"]
+  },
+  {
+    symbol: "PLTR",
+    name: "Palantir Technologies Inc.",
+    category: "TECH_GROWTH",
+    sector: "Enterprise AI & Defense",
+    currentPrice: 42.5,
+    change24hPct: 1.8,
+    ma200d: 31.2,
+    ratioTo200d: 1.36,
+    buybackYieldPct: 1,
+    sbcDilutionRatePct: 2,
+    netAntiDilutionYieldPct: -1,
+    fcfYieldPct: 2.5,
+    grossMarginPct: 81.5,
+    pegRatio: 2.8,
+    forwardPe: 68,
+    ttmPe: 95,
+    antiDilutionScore: 52,
+    cashFlowQualityScore: 78,
+    valuationScore: 35,
+    compositeHealthScore: 56,
+    verdict: "HOLD",
+    dcaAllowed: false,
+    maxPortfolioCapPct: 0.08,
+    keyStrengths: [
+      "\u8D85\u9AD8\u6BDB\u5229\u7387 81.5%\uFF0C\u62E5\u6709\u4E0D\u53EF\u66FF\u4EE3\u7684\u5784\u65AD\u7EA7\u884C\u4E1A\u62A4\u57CE\u6CB3",
+      "\u7F8E\u56FD\u56FD\u9632\u4E0E\u4F01\u4E1A\u7EA7 AIP \u5927\u6A21\u578B\u5E73\u53F0\u9886\u8DD1\u8005"
+    ],
+    riskWarnings: [
+      "\u80A1\u4EF7\u8F83 200 \u65E5\u725B\u718A\u7EBF\u6EA2\u4EF7\u504F\u9AD8 (1.36x)\uFF0C\u77ED\u671F\u52A8\u91CF\u8FC7\u70ED",
+      "\u80A1\u6743\u6FC0\u52B1\u7A00\u91CA\u7387 (2.0%) \u504F\u9AD8"
+    ],
+    triggersForEntry: ["\u7B49\u5F85\u5145\u5206\u56DE\u8C03\u540E\u53F3\u4FA7\u6302\u5355"]
+  }
+];
 var TOOLS = [
   {
     name: "get_cycle_thermometer",
@@ -14337,13 +14651,26 @@ var TOOLS = [
   },
   {
     name: "audit_asset_dilution",
-    description: "Performs an in-depth tokenomics and dilution risk audit for one or all watched assets. Audits circulating supply ratio (MCap/FDV), annual inflation rate, unvested token cliff schedules, BackedFi RWA 1:1 reserve status, and flags severe dilution hazards.",
+    description: "Performs an in-depth tokenomics and fundamental dilution risk audit for one or all watched assets. For crypto tokens: audits circulating supply ratio (MCap/FDV), annual inflation rate, and unlock cliffs. For equities and BackedFi RWAs: audits net anti-dilution yield (share buyback vs SBC dilution), free cash flow (FCF) yield safety margin, gross margin moat, key strengths, risk warnings, and entry triggers.",
     inputSchema: {
       type: "object",
       properties: {
         symbol: {
           type: "string",
-          description: "Asset symbol to audit (e.g. 'TSLAx', 'NVDAx', 'MNT', 'STRK', or 'all'). Defaults to 'all'"
+          description: "Asset symbol to audit (e.g. 'SPY', 'QQQ', 'TSLAx', 'NVDAx', 'MNT', 'STRK', or 'all'). Defaults to 'all'"
+        }
+      }
+    }
+  },
+  {
+    name: "get_asset_fundamentals",
+    description: "Queries deep financial fundamentals, SEC 10-K/10-Q metrics, net anti-dilution yield (share buyback vs SBC dilution), free cash flow (FCF) yield safety margin, gross margin moat, PEG valuation, key strengths, risk warnings, and entry triggers for US equities and BackedFi RWAs (e.g. SPY, QQQ, NVDAx, TSLAx, AAPLx, MSFT, GOOGL, MSTR, COIN, PLTR).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        symbol: {
+          type: "string",
+          description: "Asset symbol (e.g. 'SPY', 'QQQ', 'NVDA', 'NVDAx', 'TSLA', 'TSLAx', 'MSTR', 'COIN', or 'ALL'). Defaults to 'ALL'"
         }
       }
     }
@@ -14516,73 +14843,181 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
       case "audit_asset_dilution": {
-        const symbolArg = (typeof args?.symbol === "string" ? args.symbol : "all").toUpperCase();
-        const assetsAudit = [
-          {
-            symbol: "TSLAx",
-            name: "Tesla Inc (Backed)",
-            category: "STOCK_RWA",
-            dilutionRate: "0.00%",
-            mcapFdvRatio: "100.0%",
-            unvestedTokensCliff: "None (1:1 \u5B9E\u4F53\u80A1\u7968\u6CD5\u5E01\u6258\u7BA1)",
-            riskLevel: "LOW",
-            auditNotes: "\u7B26\u5408\u745E\u58EB DLT \u6CD5\u89C4\u7684\u62B5\u62BC\u4EE3\u5E01\uFF0C\u65E0\u56E2\u961F\u89E3\u9501\u4E0E\u901A\u80C0\u7A00\u91CA\u98CE\u9669\u3002"
-          },
-          {
-            symbol: "NVDAx",
-            name: "NVIDIA Corp (Backed)",
-            category: "STOCK_RWA",
-            dilutionRate: "0.00%",
-            mcapFdvRatio: "100.0%",
-            unvestedTokensCliff: "None (1:1 \u5B9E\u4F53\u80A1\u7968\u6CD5\u5E01\u6258\u7BA1)",
-            riskLevel: "LOW",
-            auditNotes: "100% \u50A8\u5907\u91D1\u4FDD\u969C\uFF0C\u4F01\u4E1A\u76C8\u5229\u9A71\u52A8\uFF0C\u65E0\u4EE3\u5E01\u91CA\u653E\u629B\u538B\u3002"
-          },
+        const symbolArg = (typeof args?.symbol === "string" ? args.symbol.trim() : "all").toUpperCase();
+        const [stocksData, statusData] = await Promise.all([
+          fetchLocalApi("/api/stocks"),
+          fetchLocalApi("/api/status")
+        ]);
+        const stockList = stocksData?.stockEvaluations || FALLBACK_STOCK_EVALUATIONS;
+        const stockAudits = stockList.map((s) => {
+          const isRwa = ["TSLA", "NVDA", "AAPL"].includes(s.symbol);
+          const displaySymbol = isRwa ? `${s.symbol}x` : s.symbol;
+          const netRate = typeof s.netAntiDilutionYieldPct === "number" ? s.netAntiDilutionYieldPct : parseFloat(s.netAntiDilutionYieldPct || 0);
+          let dilutionNature = "\u5185\u751F\u80A1\u672C\u7A00\u91CA (\u7BA1\u7406\u5C42 SBC \u7A00\u91CA\u7387\u8D85\u8FC7\u516C\u53F8\u56DE\u8D2D\u6CE8\u9500)";
+          if (netRate >= 1.5) {
+            dilutionNature = "\u5185\u751F\u901A\u7F29\u9500\u6BC1 (\u5E74\u80A1\u7968\u56DE\u8D2D\u6CE8\u9500\u7387\u663E\u8457\u8D85\u8D8A SBC \u80A1\u6743\u6FC0\u52B1\u7A00\u91CA)";
+          } else if (netRate >= 0) {
+            dilutionNature = "\u8F7B\u5EA6\u901A\u7F29 (\u56DE\u8D2D\u6CE8\u9500\u7565\u5927\u4E8E\u7BA1\u7406\u5C42\u80A1\u6743\u7A00\u91CA)";
+          }
+          return {
+            symbol: displaySymbol,
+            underlyingTicker: s.symbol,
+            name: s.name,
+            category: isRwa ? "STOCK_RWA" : s.category || "US_EQUITY",
+            currentPrice: `$${Number(s.currentPrice || 0).toFixed(2)}`,
+            dilutionStatus: {
+              netAntiDilutionYieldPct: `${netRate >= 0 ? "+" : ""}${netRate}%`,
+              annualBuybackYieldPct: `${s.buybackYieldPct}%`,
+              sbcDilutionRatePct: `${s.sbcDilutionRatePct}%`,
+              dilutionNature
+            },
+            financialMoat: {
+              fcfYieldPct: `${s.fcfYieldPct}%`,
+              grossMarginPct: `${s.grossMarginPct}%`,
+              pegRatio: s.pegRatio,
+              valuationPto200d: `${s.ratioTo200d}x`
+            },
+            scores: {
+              antiDilutionScore: `${s.antiDilutionScore}/100`,
+              cashFlowQualityScore: `${s.cashFlowQualityScore}/100`,
+              valuationScore: `${s.valuationScore}/100`,
+              compositeHealthScore: `${s.compositeHealthScore}/100`
+            },
+            verdict: s.verdict,
+            dcaAllowed: s.dcaAllowed,
+            keyStrengths: s.keyStrengths || [],
+            triggersForEntry: s.triggersForEntry || [],
+            riskWarnings: s.riskWarnings || [],
+            unvestedTokensCliff: isRwa ? "None (1:1 \u5B9E\u4F53\u80A1\u7968\u6CD5\u5E01\u9694\u79BB\u6258\u7BA1 / BackedFi DLT)" : "\u516C\u5F00\u5E02\u573A\u4EA4\u6613\u80A1\u7968",
+            auditNotes: `\u51C0\u6297\u7A00\u91CA\u7387: ${netRate >= 0 ? "+" : ""}${netRate}%, \u81EA\u7531\u73B0\u91D1\u6D41\u6536\u76CA\u7387: ${s.fcfYieldPct}%, \u6BDB\u5229\u7387: ${s.grossMarginPct}%`
+          };
+        });
+        const altEvaluations = statusData?.altEvaluations || [];
+        const strkEval = altEvaluations.find((a) => a.symbol === "STRK");
+        const cryptoAudits = [
           {
             symbol: "bIB01",
+            underlyingTicker: "IB01",
             name: "iShares 0-1yr US Treasury (Backed)",
             category: "BOND_RWA",
-            dilutionRate: "0.00%",
-            mcapFdvRatio: "100.0%",
+            currentPrice: "$108.50",
+            dilutionStatus: {
+              netAntiDilutionYieldPct: "+4.80%",
+              annualBuybackYieldPct: "4.80%",
+              sbcDilutionRatePct: "0.00%",
+              dilutionNature: "\u65E0\u7A00\u91CA (\u8D85\u77ED\u7AEF\u7F8E\u503A\u672C\u606F\u81EA\u52A8\u5F52\u96C6\u6EDA\u5B58\uFF0C\u6CD5\u5E01\u5168\u989D\u62B5\u62BC)"
+            },
+            financialMoat: {
+              fcfYieldPct: "4.80%",
+              grossMarginPct: "100.0%",
+              pegRatio: 1,
+              valuationPto200d: "1.00x"
+            },
+            scores: {
+              antiDilutionScore: "95/100",
+              cashFlowQualityScore: "95/100",
+              valuationScore: "90/100",
+              compositeHealthScore: "92/100"
+            },
+            verdict: "ACCUMULATE",
+            dcaAllowed: true,
+            keyStrengths: ["\u4EAB\u7EA6 4.8% \u7F8E\u503A\u5E74\u5316\u65E0\u98CE\u9669\u57FA\u51C6\u6536\u76CA\uFF0C100% \u50A8\u5907\u91D1\u4FDD\u969C"],
+            triggersForEntry: ["\u73B0\u91D1\u7BA1\u7406\u4E0E\u907F\u9669\u9632\u5B88\u9996\u9009"],
+            riskWarnings: [],
             unvestedTokensCliff: "None (\u7F8E\u503A\u672C\u606F\u5F52\u96C6)",
-            riskLevel: "LOW",
             auditNotes: "\u65E0\u7A00\u91CA\u98CE\u9669\uFF0C\u4EAB\u7EA6 4.8% \u7F8E\u503A\u5E74\u5316\u65E0\u98CE\u9669\u57FA\u51C6\u6536\u76CA\u3002"
           },
           {
             symbol: "MNT",
+            underlyingTicker: "MNT",
             name: "Mantle Network",
             category: "L2_GAS",
-            dilutionRate: "3.20%",
-            mcapFdvRatio: "52.4%",
+            currentPrice: "$0.642",
+            dilutionStatus: {
+              dilutionRate: "3.20%",
+              mcapFdvRatio: "52.4%",
+              dilutionNature: "\u751F\u6001\u6E29\u548C\u901A\u80C0 (\u4E3B\u8981\u7528\u4E8E L2 Gas \u6FC0\u52B1\u4E0E\u751F\u6001\u57FA\u91D1\u652F\u51FA)"
+            },
+            financialMoat: {
+              fcfYieldPct: "N/A",
+              grossMarginPct: "N/A",
+              pegRatio: 1.2,
+              valuationPto200d: "0.98x"
+            },
+            scores: {
+              dilutionRiskScore: "78/100",
+              ecosystemTractionScore: "85/100",
+              compositeHealthScore: "82/100"
+            },
+            verdict: "ACCUMULATE",
+            dcaAllowed: true,
+            keyStrengths: ["Mantle L2 Gas \u6D88\u8017\u573A\u666F\u4E0E\u751F\u6001\u91D1\u5E93\u8D4B\u80FD"],
+            triggersForEntry: ["L2 \u751F\u6001\u4F30\u503C\u4F4E\u5438\u533A\u95F4"],
+            riskWarnings: [],
             unvestedTokensCliff: "\u56FD\u5E93\u5E73\u7A33\u7EBF\u6027\u91CA\u653E\uFF0C\u751F\u6001\u57FA\u91D1\u652F\u6301",
-            riskLevel: "MODERATE",
             auditNotes: "\u4E3B\u8981\u7528\u4E8E L2 Gas \u4E0E\u6CBB\u7406\uFF0C\u751F\u6001\u901A\u80C0\u7387\u5904\u4E8E\u5065\u5EB7\u533A\u95F4\u3002"
           },
           {
             symbol: "STRK",
+            underlyingTicker: "STRK",
             name: "Starknet",
             category: "L2_GOV",
-            dilutionRate: "28.50%",
-            mcapFdvRatio: "18.2%",
+            currentPrice: `$${strkEval ? Number(strkEval.currentPrice).toFixed(4) : "0.0592"}`,
+            dilutionStatus: {
+              dilutionRate: "28.50%",
+              mcapFdvRatio: "18.2%",
+              dilutionNature: "\u9AD8\u901A\u80C0\u7A00\u91CA\u98CE\u9669 (\u6D41\u901A\u6BD4\u6781\u4F4E\uFF0C\u9762\u4E34\u6301\u7EED\u6708\u5EA6\u56E2\u961F\u4E0E\u6295\u8D44\u4EBA\u91CA\u653E)"
+            },
+            financialMoat: {
+              fcfYieldPct: "N/A",
+              grossMarginPct: "N/A",
+              pegRatio: 3.5,
+              valuationPto200d: "0.82x"
+            },
+            scores: {
+              dilutionRiskScore: `${strkEval?.dilutionRiskScore || 45}/100`,
+              ecosystemTractionScore: `${strkEval?.ecosystemTractionScore || 35}/100`,
+              compositeHealthScore: `${strkEval?.compositeHealthScore || 55}/100`
+            },
+            verdict: strkEval?.verdict || "ACCUMULATE_CONSERVATIVE",
+            dcaAllowed: strkEval?.dcaAllowed ?? true,
+            keyStrengths: ["\u4EE5\u592A\u574A\u4E3B\u6D41 ZK-Rollup \u6269\u5BB9\u4EE3\u8868\u9879\u76EE"],
+            triggersForEntry: strkEval?.triggersForEntry || ["\u4EC5\u5EFA\u8BAE\u6781\u5C0F\u4ED3\u4F4D\u63A2\u7D22\u6027\u53C2\u4E0E\uFF0C\u4E25\u5B88\u6B62\u635F\u7EAA\u5F8B\u3002"],
+            riskWarnings: strkEval?.riskWarnings || ["\u7ED3\u6784\u6027\u6708\u5EA6\u629B\u538B\u9AD8\u5371\uFF1A\u6BCF\u6708\u65B0\u589E\u89E3\u9501\u7EA6\u5360\u5F53\u524D\u6D41\u901A\u76D8\u7684 3.0%\uFF0C\u9700\u8981\u6781\u9AD8\u4E70\u76D8\u627F\u63A5\u3002"],
             unvestedTokensCliff: "\u6BCF\u6708\u5927\u989D\u56E2\u961F\u4E0E\u65E9\u671F\u6295\u8D44\u4EBA\u91CA\u653E",
-            riskLevel: "HIGH",
             auditNotes: "\u8B66\u60D5\uFF1A\u6D41\u901A\u6BD4\u4F4E\u4E8E 20%\uFF0C\u672A\u6765 12 \u4E2A\u6708\u9762\u4E34\u6301\u7EED\u91CA\u653E\u7A00\u91CA\u3002"
           }
         ];
-        let filtered = assetsAudit;
+        const allAudits = [...stockAudits, ...cryptoAudits];
+        let filtered = allAudits;
         if (symbolArg !== "ALL") {
-          filtered = assetsAudit.filter((a) => a.symbol === symbolArg || a.symbol === `${symbolArg}x` || a.symbol.replace(/x$/i, "") === symbolArg);
+          filtered = allAudits.filter((a) => {
+            const sym = a.symbol.toUpperCase();
+            const under = (a.underlyingTicker || "").toUpperCase();
+            return sym === symbolArg || under === symbolArg || sym === `${symbolArg}X` || sym.replace(/X$/i, "") === symbolArg;
+          });
           if (filtered.length === 0) {
-            filtered = [{
-              symbol: symbolArg,
-              name: `${symbolArg} Token`,
-              category: "UNKNOWN",
-              dilutionRate: "N/A",
-              mcapFdvRatio: "N/A",
-              unvestedTokensCliff: "\u672A\u6536\u5F55",
-              riskLevel: "UNKNOWN",
-              auditNotes: "\u8BF7\u5728 Web \u7EC8\u7AEF\u5173\u6CE8\u8BE5\u6807\u7684\u4EE5\u7EB3\u5165\u5168\u7F51\u76D1\u63A7\u4F53\u7CFB\u3002"
-            }];
+            filtered = [
+              {
+                symbol: symbolArg,
+                underlyingTicker: symbolArg,
+                name: `${symbolArg} Asset`,
+                category: "UNKNOWN",
+                currentPrice: "N/A",
+                dilutionStatus: {
+                  dilutionNature: "\u672A\u6536\u5F55"
+                },
+                financialMoat: {},
+                scores: {},
+                verdict: "HOLD",
+                dcaAllowed: false,
+                keyStrengths: [],
+                triggersForEntry: [],
+                riskWarnings: ["\u8BE5\u6807\u7684\u5C1A\u672A\u7EB3\u5165\u91CF\u5316\u8D22\u62A5\u6216\u94FE\u4E0A\u76D1\u63A7\u96F7\u8FBE\u4F53\u7CFB"],
+                unvestedTokensCliff: "\u672A\u6536\u5F55",
+                auditNotes: "\u8BF7\u5728 Web \u7EC8\u7AEF\u6216\u914D\u7F6E\u6587\u4EF6\u4E2D\u5173\u6CE8\u8BE5\u6807\u7684\u4EE5\u5F00\u542F\u5B9E\u65F6\u76D1\u63A7\u3002"
+              }
+            ];
           }
         }
         return {
@@ -14590,6 +15025,62 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: "text",
               text: JSON.stringify(filtered, null, 2)
+            }
+          ]
+        };
+      }
+      case "get_asset_fundamentals": {
+        const symbolArg = (typeof args?.symbol === "string" ? args.symbol.trim() : "ALL").toUpperCase();
+        const stocksData = await fetchLocalApi("/api/stocks");
+        const list = stocksData?.stockEvaluations || FALLBACK_STOCK_EVALUATIONS;
+        let filtered = list;
+        if (symbolArg !== "ALL") {
+          filtered = list.filter((s) => {
+            const sym = String(s.symbol || "").toUpperCase();
+            return sym === symbolArg || `${sym}X` === symbolArg || sym === symbolArg.replace(/X$/i, "");
+          });
+        }
+        const formatted = filtered.map((s) => {
+          const isRwa = ["TSLA", "NVDA", "AAPL"].includes(s.symbol);
+          const netRate = typeof s.netAntiDilutionYieldPct === "number" ? s.netAntiDilutionYieldPct : parseFloat(s.netAntiDilutionYieldPct || 0);
+          return {
+            symbol: s.symbol,
+            rwaTokenSymbol: isRwa ? `${s.symbol}x` : void 0,
+            name: s.name,
+            category: s.category,
+            sector: s.sector,
+            currentPrice: `$${Number(s.currentPrice || 0).toFixed(2)}`,
+            change24h: `${s.change24hPct >= 0 ? "+" : ""}${s.change24hPct}%`,
+            ratioTo200dMa: `${s.ratioTo200d}x`,
+            fundamentals: {
+              netAntiDilutionYieldPct: `${netRate >= 0 ? "+" : ""}${netRate}%`,
+              annualBuybackYieldPct: `${s.buybackYieldPct}%`,
+              sbcDilutionRatePct: `${s.sbcDilutionRatePct}%`,
+              fcfYieldPct: `${s.fcfYieldPct}%`,
+              grossMarginPct: `${s.grossMarginPct}%`,
+              pegRatio: s.pegRatio,
+              forwardPe: `${s.forwardPe}x`,
+              ttmPe: `${s.ttmPe}x`
+            },
+            scores: {
+              antiDilutionScore: `${s.antiDilutionScore}/100`,
+              cashFlowQualityScore: `${s.cashFlowQualityScore}/100`,
+              valuationScore: `${s.valuationScore}/100`,
+              compositeHealthScore: `${s.compositeHealthScore}/100`
+            },
+            verdict: s.verdict,
+            dcaAllowed: s.dcaAllowed,
+            maxPortfolioCapPct: `${Math.round((s.maxPortfolioCapPct || 0.1) * 100)}%`,
+            keyStrengths: s.keyStrengths || [],
+            triggersForEntry: s.triggersForEntry || [],
+            riskWarnings: s.riskWarnings || []
+          };
+        });
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(formatted, null, 2)
             }
           ]
         };

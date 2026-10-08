@@ -112,12 +112,13 @@ $$\text{Temperature Score} = 0.30 \cdot S_{200w} + 0.20 \cdot S_{200d} + 0.20 \c
 
 本项目内置了独立的 MCP Server（基于 `@modelcontextprotocol/sdk`），无需额外依赖，开箱即用。
 
-### 1. 已注册的 6 大核心 MCP 工具
+### 1. 已注册的 7 大核心 MCP 工具
 
 | 工具名称 (Tool Name) | 功能描述 |
 | :--- | :--- |
 | `get_cycle_thermometer` | 获取实时大周期温度 (0-100)、BTC 均线倍数、恐贪情绪与建议配置比重 |
-| `audit_asset_dilution` | 审查指定标的增发率、FDV/MCap 流通比及锁仓释放风险 |
+| `audit_asset_dilution` | 穿透审计标的净回购通缩率、SBC 股权稀释率、加密代币 FDV/MCap 流通比及锁仓释放风险 |
+| `get_asset_fundamentals` | 深度查询美股/RWA 标的 SEC 财报指标、自由现金流收益率 (FCF)、行业护城河与建仓安全边际 |
 | `scan_radar_opportunities` | 扫描价值洼地、动量异动与 RWA 收益机会 |
 | `analyze_portfolio_health` | 诊断钱包资产分布、现金储备健康度并输出再平衡操作建议 |
 | `quote_mantle_swap` | 查询 Mantle 聚合 DEX 最优兑换路由，输出估算结果与 Web 执行链接 |
