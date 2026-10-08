@@ -181,17 +181,22 @@ $$\text{Temperature Score} = 0.30 \cdot S_{200w} + 0.20 \cdot S_{200d} + 0.20 \c
 
 ---
 
-## 四、 旗舰最佳实践：IronMac 控制台 (agy) + MCP + 安全浏览器隔离签名
+## 四、 旗舰最佳实践：IronMac 内存无痕控制台 (agy) + MCP + Vault Browser 隔离签名
 
-在去中心化金融与自动化交易领域，**“私钥永不脱离受保护硬件”** 是不可妥协的安全红线。本项目推荐的旗舰级人机协作模式为：**在 IronMac 的 Console（终端控制台）中运行 `agy` (Google Antigravity CLI) 作为认知 Agent，通过 MCP 调度确定性量化模型，并无缝唤起 IronMac Console 内置的安全浏览器（Secure Browser）完成硬件级 0-Gas 离线签名。**
+在去中心化金融与自动化交易领域，**“私钥永不脱离受保护环境”** 是不可妥协的安全底线。本项目推荐的旗舰级人机协作模式为：**在 IronMac 的 Vault Console（内存无痕控制台）中运行 `agy` (Google Antigravity CLI) 作为认知 Agent，通过 MCP 调度确定性量化模型，并无缝唤起 IronMac 专用的 Vault Browser（防 AMOS 窃密隔离浏览器）完成 0-Gas 离线签名。**
 
-### 1. 架构核心：三层安全防护与三权分立 (Three-Tier Enclave Architecture)
+### 1. 架构本质：内存无痕工作区 + 独立清洁浏览器隔离 (Clean-Room Architecture)
+
+> **安全架构澄清**：IronMac Console 并非硬件 TEE（可信执行环境芯片），而是通过 macOS 底层系统机制实现的**两级纯软件安全防护堡垒**：
+> 1. **Vault Console（内存盘无痕终端）**：动态挂载 32MB 内存虚拟盘（`hdiutil attach ram://` 挂载至 `/Volumes/IronVault`）并强制重定向 `HISTFILE=/dev/null`。任何终端操作、临时私钥或 AI Scratch 脚本完全在 RAM 中运行，会话结束时触发 `trap cleanup` 自动安全擦除并卸载，**SSD 磁盘零物理残留，彻底杜绝 `~/.zsh_history` 历史命令泄露**。
+> 2. **Vault Browser（防 AMOS 隔离浏览器）**：独立将用户数据目录隔离至 `~/Library/Application Support/IronMacVault`，专门用于 Web3 钱包插件。**有效绕过 macOS 常见窃密木马（如 AMOS / Atomic Stealer）对 Chrome/Brave 默认路径的定向窃取**，同时与日常上网环境物理隔离，杜绝第三方插件对钱包 RPC 注入。
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 1. 认知推理层：IronMac Console 终端中运行的 agy (AI Agent 大脑)         │
+│ 1. 认知推理层：IronMac Console 内存无痕终端 (agy · AI Agent 大脑)       │
+│    • 运行于 32MB 临时 RAM 虚拟盘 (/Volumes/IronVault)，HISTFILE=/dev/null│
 │    • 负责多轮人机交互、宏观周期判断、资产筛选与策略决策                 │
-│    • 核心原则：零私钥接触 (Zero-Custody)，杜绝提示词注入 (Prompt Injection)│
+│    • 核心原则：零私钥接触 (Zero-Custody)，终端退出时内存盘自动粉碎销毁   │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │ 调度 MCP Tools / 提取 100% 镜像数据
                                     ▼
@@ -200,23 +205,27 @@ $$\text{Temperature Score} = 0.30 \cdot S_{200w} + 0.20 \cdot S_{200d} + 0.20 \c
 │    • 实时提供 10 项策略工具：全量大盘快照、财报通缩护城河、定投订单等   │
 │    • 组装标准 EIP-712 结构化挂单报文 (Maker/Taker/Rate/Expiry/Nonce)   │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ 返回标准 URL Action 与终端唤起命令
+                                    │ 返回标准 URL Action 与隔离浏览器启动指令
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 3. 硬件隔离执行层：IronMac Console 内置安全浏览器 (Secure Browser)      │
-│    • 运行于 IronMac 独立沙箱与安全硬件隔离区 (TEE / Secure Enclave)      │
-│    • 所见即所签 (WYSIWYS)：大字呈现交易方向、限价、有效期与策略理由     │
-│    • 经用户生物识别 (Touch ID) 或硬件按键核准签名，免密且 100% 物理防钓鱼│
-│    • 签名直连 Mantle 节点广播至 Fluxion 订单簿，完成 0-Gas 撮合闭环     │
+│ 3. 隔离签名层：IronMac Vault Browser (独立路径防 AMOS 专用浏览器)       │
+│    • 启动独立数据目录 ~/Library/Application Support/IronMacVault         │
+│    • 阻断 AMOS 针对默认 Chrome 路径的窃密，杜绝日常网页插件污染 RPC     │
+│    • 所见即所签 (WYSIWYS)：大字透明呈现交易方向、限价与策略理由         │
+│    • 用户在隔离钱包插件中核准 EIP-712 签名，广播至 Mantle 完成 0-Gas 撮合 │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 2. 标准人机协同交互流程 (End-to-End Workflow)
 
-#### Step 1: 控制台唤起 agy
-在 IronMac Console 终端中，用户输入自然语言目标：
+#### Step 1: 启动 IronMac 内存无痕控制台并运行 agy
+进入 IronMac 纯内存安全工作区，启动 `agy`：
 ```bash
-ironmac@console:~$ agy "分析当前宏观大盘，帮我挑选估值安全边际最高的美股 RWA 挂一笔折价定投单"
+# 启动 IronMac Ephemeral RAM Console
+ironmac console
+
+# 在无痕内存工作区中向 agy 发送投资意图
+ironmac@IronVault:~$ agy "分析当前宏观大盘，帮我挑选估值安全边际最高的美股 RWA 挂一笔折价定投单"
 ```
 
 #### Step 2: agy 自主感知与策略推演
@@ -225,7 +234,7 @@ ironmac@console:~$ agy "分析当前宏观大盘，帮我挑选估值安全边�
 2. **财报与护城河穿透**：调用 `audit_asset_dilution("TSLAx")` 审计其 1:1 实体股票法币托管状态及回购/SBC 稀释率，并确认支撑位在 $213.90；
 3. **订单载荷组装**：调用 `create_fluxion_order_payload()` 组装 0-Gas EIP-712 限价挂单报文，设定卖出 350 USDC，以折价限价 $213.90 买入 1.636 TSLAx。
 
-#### Step 3: 控制台生成清晰凭据并唤起安全浏览器
+#### Step 3: 控制台生成清晰凭据并唤起 Vault Browser 隔离浏览器
 `agy` 在控制台终端打印标准的 ASCII 挂单回执，并提供一键唤起指令：
 ```text
 ======================================================
@@ -237,19 +246,20 @@ ironmac@console:~$ agy "分析当前宏观大盘，帮我挑选估值安全边�
 • 签名机制: 0-Gas EIP-712 链下安全签名 (资金保留在用户钱包内)
 • 策略推演依据: 回踩 200 日线关键支撑位，现金流收益率提供充足安全边际
 
-👉 【IronMac 安全浏览器签名桥交互链接】:
+👉 【IronMac Vault Browser 隔离签名桥交互链接】:
 http://localhost:3456/?action=sign-limit&maker=USDC&taker=TSLAx&amount=350&rate=213.90&expiry=86400&source=agy+(IronMac+Console)&reason=%E5%9B%9E%E8%B8%A9200%E6%97%A5%E7%BA%BF%E6%94%AF%E6%92%91
 
-• IronMac 控制台直接唤起命令:
-  open "http://localhost:3456/?action=sign-limit&maker=USDC&taker=TSLAx&amount=350&rate=213.90&expiry=86400&source=agy+(IronMac+Console)"
+• IronMac 隔离浏览器唤起命令:
+  ironmac-vault-browser "http://localhost:3456/?action=sign-limit&maker=USDC&taker=TSLAx&amount=350&rate=213.90&expiry=86400&source=agy+(IronMac+Console)"
 ======================================================
 ```
 
-#### Step 4: IronMac 安全浏览器物理核准与签名 (WYSIWYS)
-1. 控制台自动调用系统浏览器（或用户点击链接）在 IronMac 安全沙箱中弹出签名界面；
+#### Step 4: 在 Vault Browser 中物理核准与签名 (WYSIWYS)
+1. 控制台自动调用 `ironmac-vault-browser` 唤起专用的隔离浏览器；
 2. 页面显示专用的黑曜石授权卡片，来源明确标明 `agy (IronMac Console)`，清晰罗列金额、资产、执行价；
-3. 用户在隔离沙箱中核验无误，轻触 Touch ID 或硬件按键核准签名；
+3. 用户在防木马窃密的清洁环境中核验无误，在钱包插件中核准 EIP-712 签名；
 4. 签名通过 RPC 提交至 Fluxion Relayer，**全程无需支付任何 Gas 费**，资金在订单撮合前始终保存在用户自有钱包中。
+5. 控制台完成任务退出时（输入 `exit`），32MB RAM 盘自动彻底卸载擦除，不留任何痕迹。
 
 ---
 

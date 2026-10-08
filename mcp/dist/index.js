@@ -15465,11 +15465,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 `\u2022 \u7B7E\u540D\u673A\u5236: 0-Gas EIP-712 \u94FE\u4E0B\u5B89\u5168\u7B7E\u540D (\u8D44\u91D1\u4FDD\u7559\u5728\u7528\u6237\u94B1\u5305\u5185)`,
                 `\u2022 \u7B56\u7565\u63A8\u6F14\u4F9D\u636E: ${reason}`,
                 ``,
-                `\u{1F449} \u3010IronMac \u5B89\u5168\u6D4F\u89C8\u5668\u7B7E\u540D\u6865\u4EA4\u4E92\u94FE\u63A5\u3011:`,
+                `\u{1F449} \u3010IronMac Vault Browser \u9694\u79BB\u7B7E\u540D\u6865\u4EA4\u4E92\u94FE\u63A5\u3011:`,
                 `${bridgeUrl}`,
                 ``,
-                `\u2022 IronMac \u63A7\u5236\u53F0\u76F4\u63A5\u5524\u8D77\u547D\u4EE4:`,
-                `  open "${bridgeUrl}"`,
+                `\u2022 IronMac \u9694\u79BB\u6D4F\u89C8\u5668\u5524\u8D77\u547D\u4EE4:`,
+                `  ironmac-vault-browser "${bridgeUrl}" || open "${bridgeUrl}"`,
                 `======================================================`
               ].join("\n")
             }
