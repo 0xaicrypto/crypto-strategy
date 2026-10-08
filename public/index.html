@@ -2132,15 +2132,26 @@
 
         <!-- Available Tools List -->
         <div style="margin-top: 18px; margin-bottom: 18px;">
-          <div style="font-size: 12px; font-weight: 600; color: #FFFFFF; margin-bottom: 8px;">已注册的 MCP 核心策略工具 (7 Tools)：</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #FFFFFF;">已注册的 MCP 核心策略工具 (10 Tools · 100% 前端镜像对齐)：</div>
+            <span style="font-size: 10px; color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 4px; padding: 2px 6px;">AI-Frontend Parity</span>
+          </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px;">
             <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">get_dashboard_snapshot</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">一键获取当前页面所有宏观、利率、配置与订单完整快照</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
               <code style="color: #60A5FA; font-weight: 600;">get_cycle_thermometer</code>
-              <div style="color: var(--text-muted); margin-top: 2px;">宏观大周期温度计 (0-100) 与股债定投配比</div>
+              <div style="color: var(--text-muted); margin-top: 2px;">宏观大周期温度 (0-100) 与美债/美联储利率流动性</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">get_allocation_plan</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">跨资产大周期配置矩阵与本期动态定投执行计划</div>
             </div>
             <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
               <code style="color: #60A5FA; font-weight: 600;">audit_asset_dilution</code>
-              <div style="color: var(--text-muted); margin-top: 2px;">净回购通缩率、SBC 稀释率、代币 FDV 风险审计</div>
+              <div style="color: var(--text-muted); margin-top: 2px;">净回购通缩率、SBC 稀释率、代币 FDV 风险穿透审计</div>
             </div>
             <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
               <code style="color: #60A5FA; font-weight: 600;">get_asset_fundamentals</code>
@@ -2148,7 +2159,11 @@
             </div>
             <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
               <code style="color: #60A5FA; font-weight: 600;">scan_radar_opportunities</code>
-              <div style="color: var(--text-muted); margin-top: 2px;">价值洼地与动量因子机会雷达实时扫描</div>
+              <div style="color: var(--text-muted); margin-top: 2px;">DeFiLlama TVL 暴增、CoinGecko 趋势与折价雷达扫描</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">get_dca_backtest</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">4 年宏观大周期定投历史回测收益与超额回报对比</div>
             </div>
             <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
               <code style="color: #60A5FA; font-weight: 600;">analyze_portfolio_health</code>
@@ -2158,7 +2173,7 @@
               <code style="color: #60A5FA; font-weight: 600;">quote_mantle_swap</code>
               <div style="color: var(--text-muted); margin-top: 2px;">Mantle 聚合 DEX 最优兑换路由与价格估算</div>
             </div>
-            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px; grid-column: span 2;">
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
               <code style="color: #60A5FA; font-weight: 600;">create_fluxion_order_payload</code>
               <div style="color: var(--text-muted); margin-top: 2px;">组装 0-Gas EIP-712 限价挂单与一键 Web 签名桥 URL</div>
             </div>

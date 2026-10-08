@@ -112,14 +112,19 @@ $$\text{Temperature Score} = 0.30 \cdot S_{200w} + 0.20 \cdot S_{200d} + 0.20 \c
 
 本项目内置了独立的 MCP Server（基于 `@modelcontextprotocol/sdk`），无需额外依赖，开箱即用。
 
-### 1. 已注册的 7 大核心 MCP 工具
+### 1. 已注册的 10 大核心 MCP 工具（100% 前端镜像对齐 · AI-Frontend Parity）
+
+系统秉承 **AI-Frontend Parity** 架构设计原则：**凡是人类交易者在 Web 前端卡片、指标与图表中能够看到的数据，AI Agent 均能通过 MCP 工具 1:1 获取相同粒度的底层量化信息。**
 
 | 工具名称 (Tool Name) | 功能描述 |
 | :--- | :--- |
-| `get_cycle_thermometer` | 获取实时大周期温度 (0-100)、BTC 均线倍数、恐贪情绪与建议配置比重 |
+| **`get_dashboard_snapshot`** | **一键获取当前页面所有宏观大周期、美债利率流动性、目标配置比例、定投执行订单与异动雷达完整快照** |
+| `get_cycle_thermometer` | 获取实时大周期温度 (0-100)、BTC 均线倍数、恐贪情绪、建议配置比重与 10Y 美债/美联储利率 |
+| `get_allocation_plan` | 获取跨资产大周期配置矩阵、本期分配预算 ($1400) 与动态定投具体执行订单及推演依据 (Rationale) |
 | `audit_asset_dilution` | 穿透审计标的净回购通缩率、SBC 股权稀释率、加密代币 FDV/MCap 流通比及锁仓释放风险 |
-| `get_asset_fundamentals` | 深度查询美股/RWA 标的 SEC 财报指标、自由现金流收益率 (FCF)、行业护城河与建仓安全边际 |
-| `scan_radar_opportunities` | 扫描价值洼地、动量异动与 RWA 收益机会 |
+| `get_asset_fundamentals` | 深度查询美股/RWA 标的 SEC 财报指标、自由现金流收益率 (FCF)、行业垄断护城河与建仓安全边际 |
+| `scan_radar_opportunities` | 扫描价值洼地、动量异动、CoinGecko 趋势榜与 DeFiLlama TVL 资金暴增发现雷达 |
+| `get_dca_backtest` | 获取 4 年宏观大周期定投历史回测结果（周期动态定投 vs 机械定投 vs 一次性买入收益与最大回撤） |
 | `analyze_portfolio_health` | 诊断钱包资产分布、现金储备健康度并输出再平衡操作建议 |
 | `quote_mantle_swap` | 查询 Mantle 聚合 DEX 最优兑换路由，输出估算结果与 Web 执行链接 |
 | **`create_fluxion_order_payload`** | **组装 Mantle Fluxion 0-Gas EIP-712 限价单报文并生成 Web 签名桥交互链接** |
