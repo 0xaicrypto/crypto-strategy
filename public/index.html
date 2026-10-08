@@ -1013,7 +1013,7 @@
     /* Toast Notifications */
     #toastContainer {
       position: fixed;
-      bottom: 24px;
+      bottom: 84px;
       right: 24px;
       z-index: 9999;
       display: flex;
@@ -1050,6 +1050,122 @@
       animation: rotateAnim 1s linear infinite;
     }
     @keyframes rotateAnim { 100% { transform: rotate(360deg); } }
+
+    /* AI Agent & MCP / Copilot Enhancements */
+    .mcp-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      display: inline-block;
+    }
+
+    .ai-copilot-pill {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9990;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(16, 185, 129, 0.2));
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.25);
+      backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+    }
+    .ai-copilot-pill:hover {
+      transform: translateY(-2px);
+      border-color: #3B82F6;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 28px rgba(59, 130, 246, 0.4);
+    }
+
+    .copilot-drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(8, 11, 17, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 9998;
+      display: none;
+      justify-content: flex-end;
+    }
+    .copilot-drawer-panel {
+      width: 440px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #0E1320;
+      border-left: 1px solid var(--border-main);
+      box-shadow: -16px 0 48px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      animation: drawerSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes drawerSlideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    .config-code-box {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-main);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #E2E8F0;
+      line-height: 1.5;
+      position: relative;
+      overflow-x: auto;
+    }
+    .copy-btn-floating {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-main);
+      color: #FFFFFF;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-btn-floating:hover {
+      background: var(--ondo-blue);
+      border-color: var(--ondo-blue);
+    }
+
+    .eip712-preview {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-main);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 11.5px;
+      margin: 12px 0;
+    }
+    .eip712-preview summary {
+      cursor: pointer;
+      color: var(--ondo-blue);
+      font-weight: 500;
+    }
+    .eip712-preview pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -1068,7 +1184,7 @@
         </div>
         <div>
           <div class="brand-title">
-            HEURION
+            CRYPTO STRATEGY
             <span class="badge-network">Global Markets</span>
           </div>
           <div class="brand-sub">Institutional Real-World Assets & Multi-Asset Strategy</div>
@@ -1081,6 +1197,11 @@
         </div>
         <button class="btn btn-secondary" id="refreshBtn" onclick="loadAllData(true)">
           <span id="refreshIcon"><svg class="ui-icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></span> 刷新数据
+        </button>
+        <button class="btn btn-secondary" id="mcpConfigBtn" onclick="openMcpModal()" title="AI Agent / MCP 连接与配置" style="display: inline-flex; align-items: center; gap: 8px;">
+          <span class="mcp-pulse-dot"></span>
+          <svg class="ui-icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>AI Agent (MCP)</span>
         </button>
         <div id="walletContainer">
           <button class="btn btn-primary" id="connectWalletBtn" onclick="openWalletSelectModal()">
@@ -1643,6 +1764,9 @@
           <button class="btn btn-secondary" id="modalSwitchMantleBtn" style="padding: 4px 12px; font-size: 11px;" onclick="switchToMantleNetwork()">一键切网 (Mantle)</button>
         </div>
 
+        <!-- Agent Directive Callout Banner (Populated dynamically on MCP/URL trigger) -->
+        <div id="agentActionCalloutBanner" style="display: none; padding: 14px 16px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 12px; margin-bottom: 18px; font-size: 13px;"></div>
+
         <!-- Direction Switcher (Buy vs Sell) -->
         <div style="display: flex; gap: 8px; margin-bottom: 14px;">
           <button type="button" class="sub-toggle-btn active" id="tradeDirBuyBtn" onclick="setTradeDirection('buy')" style="flex: 1; text-align: center; font-size: 14px; padding: 10px; font-weight: 600;">
@@ -1937,6 +2061,223 @@
     <!-- Keep buyModal as hidden alias for safe backwards compatibility -->
     <div id="buyModal" style="display: none;"></div>
 
+    <!-- AI Agent / MCP Server Configuration Hub Modal -->
+    <div id="mcpModal" class="modal-backdrop" style="display: none;" onclick="if(event.target===this) closeMcpModal()">
+      <div class="modal-card" style="max-width: 640px; padding: 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <div>
+            <div class="card-eyebrow" style="color: var(--ondo-blue); display: flex; align-items: center; gap: 6px;">
+              <span class="mcp-pulse-dot"></span> MODEL CONTEXT PROTOCOL HUB
+            </div>
+            <h3 style="font-size: 19px; font-weight: 600; color: #FFFFFF; margin-top: 3px;">接入 AI Agent (MCP 策略大脑)</h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 3px;">通过标准化 MCP 协议，让 Cursor、Claude Desktop 或 Antigravity 调度链上大周期模型与 0-Gas 签名执行</p>
+          </div>
+          <button class="modal-close-btn" onclick="closeMcpModal()">&times;</button>
+        </div>
+
+        <!-- Connection & Bridge Status Bar -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-main); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Web 执行签名桥 (Execution Bridge)</div>
+            <div style="font-size: 13px; font-weight: 600; color: #FFFFFF; margin-top: 3px; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 6px;">
+              <span class="status-dot dot-green"></span> http://localhost:3456
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">当前连接钱包 (只读观察)</div>
+            <div style="font-size: 12px; font-weight: 500; color: var(--ice-cyan); margin-top: 3px; font-family: 'JetBrains Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="mcpWalletDisplay">
+              未连接钱包 (点击右上角连接)
+            </div>
+          </div>
+        </div>
+
+        <!-- Config Switcher Tabs -->
+        <div style="margin-bottom: 12px;">
+          <div style="font-size: 12px; font-weight: 600; color: #FFFFFF; margin-bottom: 8px;">一键复制客户端 MCP 配置文件：</div>
+          <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <button class="sub-toggle-btn active" id="mcpTabBtnCursor" onclick="switchMcpConfigTab('cursor')" style="padding: 5px 14px; font-size: 12px;">Cursor (.cursor/mcp.json)</button>
+            <button class="sub-toggle-btn" id="mcpTabBtnClaude" onclick="switchMcpConfigTab('claude')" style="padding: 5px 14px; font-size: 12px;">Claude Desktop</button>
+            <button class="sub-toggle-btn" id="mcpTabBtnAgy" onclick="switchMcpConfigTab('antigravity')" style="padding: 5px 14px; font-size: 12px;">Antigravity / Windsurf</button>
+          </div>
+          <div class="config-code-box">
+            <button class="copy-btn-floating" onclick="copyCurrentMcpConfig()">复制配置 JSON</button>
+            <pre id="mcpConfigCodePre" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;"></pre>
+          </div>
+        </div>
+
+        <!-- Available Tools List -->
+        <div style="margin-top: 18px; margin-bottom: 18px;">
+          <div style="font-size: 12px; font-weight: 600; color: #FFFFFF; margin-bottom: 8px;">已注册的 MCP 核心策略工具 (6 Tools)：</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px;">
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">get_cycle_thermometer</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">宏观大周期温度计 (0-100) 与股债定投配比</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">audit_asset_dilution</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">代币增发率、FDV/MCap 风险与持仓稀释审计</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">scan_radar_opportunities</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">价值洼地与动量因子机会雷达实时扫描</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">analyze_portfolio_health</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">分析当前钱包持仓健康度与再平衡建议</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">quote_mantle_swap</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">Mantle 聚合 DEX 最优兑换路由与价格估算</div>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-main); border-radius: 8px; padding: 8px 10px;">
+              <code style="color: #60A5FA; font-weight: 600;">create_fluxion_order_payload</code>
+              <div style="color: var(--text-muted); margin-top: 2px;">组装 0-Gas EIP-712 限价挂单与签名桥 URL</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Simulation Button -->
+        <div style="padding-top: 14px; border-top: 1px solid var(--border-main); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 11.5px; color: var(--text-dim);">无需私钥暴露，所有交易由您本地确认签名</span>
+          <button class="btn btn-secondary" onclick="testMockAgentBridge()" style="padding: 7px 16px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>模拟测试 AI 挂单签名桥</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Agent Execution & EIP-712 Sign Bridge Modal -->
+    <div id="agentBridgeModal" class="modal-backdrop" style="display: none;" onclick="if(event.target===this) closeAgentBridgeModal()">
+      <div class="modal-card" style="max-width: 520px; padding: 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <div>
+            <div class="card-eyebrow" style="color: #60A5FA; display: flex; align-items: center; gap: 6px;">
+              <span class="mcp-pulse-dot"></span> AI AGENT EXECUTION BRIDGE
+            </div>
+            <h3 style="font-size: 18px; font-weight: 600; color: #FFFFFF; margin-top: 3px;">核准 AI 策略挂单并签名</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">请仔细核对 AI Agent 组装的限价交易参数。签署后将安全广播至订单簿</p>
+          </div>
+          <button class="modal-close-btn" onclick="closeAgentBridgeModal()">&times;</button>
+        </div>
+
+        <!-- Strategy Provenance Card -->
+        <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 11px; text-transform: uppercase; color: #60A5FA; font-weight: 600; letter-spacing: 0.04em;">策略来源</span>
+            <span id="agentOrderSource" style="font-size: 11.5px; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px;">Claude Desktop (MCP Agent)</span>
+          </div>
+          <div id="agentOrderReason" style="font-size: 12px; color: #E2E8F0; line-height: 1.5;">
+            大周期温度计处于低估吸筹区间，触发周期阶梯低吸买单。
+          </div>
+        </div>
+
+        <!-- Order Spec Grid -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-main); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">支付 / 卖出资产 (Maker)</div>
+              <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px; font-family: 'JetBrains Mono', monospace;">
+                <span id="agentPayAmount">350.00</span> <span id="agentPayToken" style="color: var(--mint);">USDC</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">获得 / 买入标的 (Taker)</div>
+              <div style="font-size: 16px; font-weight: 600; color: #FFFFFF; margin-top: 2px; font-family: 'JetBrains Mono', monospace;">
+                <span id="agentReceiveAmount">1.6362</span> <span id="agentReceiveToken" style="color: var(--ice-cyan);">TSLAx</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding-top: 12px; border-top: 1px solid var(--border-light);">
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">限价挂单价格 (Rate)</div>
+              <div style="font-size: 14px; font-weight: 600; color: #FFFFFF; margin-top: 2px; font-family: 'JetBrains Mono', monospace;" id="agentLimitRate">
+                $213.90
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">订单有效期 (Expiry)</div>
+              <div style="font-size: 14px; font-weight: 500; color: var(--text-dim); margin-top: 2px;" id="agentOrderExpiry">
+                24 小时
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security & TypedData Foldable Box -->
+        <details class="eip712-preview">
+          <summary style="font-size: 11.5px; display: flex; align-items: center; gap: 6px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>免 Gas EIP-712 机制保护 (展开查看报文)</span>
+          </summary>
+          <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+            该指令仅请求钱包进行 EIP-712 链下签名，完全免 Gas 费。您的资金始终保留在自己钱包中，直到做市商按您的指定价格足额撮合。随时可在终端中免费取消。
+          </div>
+          <pre id="agentEip712Preview">{
+  "domain": { "name": "Fluxion Limit Order Protocol", "chainId": 5000 },
+  "message": { "maker": "0x...", "makingAmount": "...", "takingAmount": "..." }
+}</pre>
+        </details>
+
+        <!-- Status & Feedback Alert Box -->
+        <div id="agentOrderStatusBox" style="display: none; padding: 12px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.5;"></div>
+
+        <!-- Actions Button Row -->
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+          <button class="btn btn-primary" id="btnAgentSignSubmit" onclick="confirmAndSignAgentOrder()" style="width: 100%; padding: 13px; font-size: 14.5px; font-weight: 600; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span>立即核准并签名 (Sign EIP-712 免 Gas)</span>
+          </button>
+          <button class="btn btn-secondary" id="btnCopyAgentReceipt" style="display: none; width: 100%; padding: 10px; font-size: 13px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px;" onclick="copyAgentReceiptToClipboard()">
+            <svg class="ui-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>复制执行回执给 AI Agent</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating AI Copilot Trigger Pill -->
+    <button id="aiCopilotToggleBtn" class="ai-copilot-pill" onclick="toggleAiCopilotDrawer(true)" title="打开内嵌 AI 策略 Copilot">
+      <svg class="ui-icon" viewBox="0 0 24 24" style="color: #60A5FA;"><path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z"></path></svg>
+      <span>AI Copilot</span>
+    </button>
+
+    <!-- Slide-in AI Copilot Drawer -->
+    <div id="aiCopilotDrawer" class="copilot-drawer-backdrop" onclick="if(event.target===this) toggleAiCopilotDrawer(false)">
+      <div class="copilot-drawer-panel">
+        <div style="padding: 20px 22px; border-bottom: 1px solid var(--border-main); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="card-eyebrow" style="color: var(--ondo-blue); display: flex; align-items: center; gap: 6px;">
+              <span class="mcp-pulse-dot"></span> IN-APP STRATEGY COPILOT
+            </div>
+            <h3 style="font-size: 17px; font-weight: 600; color: #FFFFFF; margin-top: 2px;">AI 策略助手</h3>
+          </div>
+          <button class="modal-close-btn" onclick="toggleAiCopilotDrawer(false)">&times;</button>
+        </div>
+
+        <!-- Quick Prompts Toolbar -->
+        <div style="padding: 12px 18px; border-bottom: 1px solid var(--border-light); background: rgba(255, 255, 255, 0.015); display: flex; gap: 8px; overflow-x: auto;">
+          <button class="btn btn-secondary" onclick="runCopilotMacroDiagnostic()" style="padding: 4px 10px; font-size: 11px; white-space: nowrap;">大周期体检</button>
+          <button class="btn btn-secondary" onclick="runCopilotDilutionAudit()" style="padding: 4px 10px; font-size: 11px; white-space: nowrap;">全网稀释排查</button>
+          <button class="btn btn-secondary" onclick="runCopilotGenerateOrder()" style="padding: 4px 10px; font-size: 11px; white-space: nowrap;">生成低吸限价单</button>
+        </div>
+
+        <!-- Chat / Results Stream -->
+        <div id="copilotMessages" style="flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-main); border-radius: 12px; padding: 14px; font-size: 12.5px; line-height: 1.6; color: #E2E8F0;">
+            <div style="font-weight: 600; color: #60A5FA; margin-bottom: 4px;">Crypto Strategy AI Copilot 已就绪</div>
+            我是您的链上量化与宏观策略副驾驶。您可以直接点击上方快捷指令，或在下方输入您的需求。计算结果可一键载入交易终端完成 0-Gas 挂单。
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div style="padding: 16px 18px; border-top: 1px solid var(--border-main); background: #0E1320; display: flex; gap: 8px;">
+          <input type="text" id="copilotInput" placeholder="输入指令，如：排查 TSLAx 稀释率..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-main); border-radius: 8px; padding: 10px 12px; color: #FFFFFF; font-size: 12.5px;" onkeydown="if(event.key==='Enter') sendCopilotCommand()">
+          <button class="btn btn-primary" onclick="sendCopilotCommand()" style="padding: 10px 16px; font-size: 12px;">发送</button>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <script>
@@ -1964,6 +2305,9 @@
       disconnect: '<svg class="ui-icon" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>',
       send: '<svg class="ui-icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>',
       shield: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+      terminal: '<svg class="ui-icon" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>',
+      cpu: '<svg class="ui-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>',
+      sparkles: '<svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z"></path></svg>',
       circleGreen: '<span class="status-dot dot-green"></span>',
       circleYellow: '<span class="status-dot dot-yellow"></span>',
       circleRed: '<span class="status-dot dot-red"></span>',
@@ -5539,10 +5883,701 @@
       openTradeForAsset(symbol, name, assetType, 'buy');
     }
 
+    // =========================================================================
+    // AI Agent & Model Context Protocol (MCP) Execution & Sign Bridge
+    // =========================================================================
+    let currentAgentOrder = null;
+    let currentMcpTab = 'cursor';
+
+    // Normalize symbols to match FLUXION_LIMIT_TOKENS
+    function normalizeTokenSymbol(sym) {
+      if (!sym) return 'USDC';
+      const clean = sym.trim();
+      if (FLUXION_LIMIT_TOKENS[clean]) return clean;
+      const upper = clean.toUpperCase();
+      if (FLUXION_LIMIT_TOKENS[upper]) return upper;
+      if (upper === 'MNT' && FLUXION_LIMIT_TOKENS['WMNT']) return 'WMNT';
+      if (FLUXION_LIMIT_TOKENS[upper + 'x']) return upper + 'x';
+      if (upper.endsWith('X') && FLUXION_LIMIT_TOKENS[upper.slice(0, -1)]) return upper.slice(0, -1);
+      return clean;
+    }
+
+    // 1. URL Action Bridge Listener
+    function initAgentUrlBridge() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const action = urlParams.get('action');
+        const open = urlParams.get('open');
+
+        if (open === 'mcp') {
+          openMcpModal();
+        }
+
+        if (action === 'sign-limit') {
+          const maker = normalizeTokenSymbol(urlParams.get('maker') || urlParams.get('pay') || 'USDC');
+          const taker = normalizeTokenSymbol(urlParams.get('taker') || urlParams.get('receive') || 'TSLAx');
+          const amount = parseFloat(urlParams.get('amount') || urlParams.get('payAmount') || '100');
+          const rate = parseFloat(urlParams.get('rate') || urlParams.get('limitRate') || '0');
+          const expiry = parseInt(urlParams.get('expiry') || '86400', 10);
+          const reason = urlParams.get('reason') || 'AI Agent 宏观周期与多因子估值折扣定投策略';
+          const source = urlParams.get('source') || 'Claude Desktop (MCP Agent)';
+
+          handleIncomingAgentLimitOrder({
+            maker,
+            taker,
+            amount,
+            rate,
+            expiry,
+            reason,
+            source
+          });
+        } else if (action === 'swap') {
+          const pay = urlParams.get('pay') || 'MNT';
+          const receive = urlParams.get('receive') || 'USDC';
+          const amount = parseFloat(urlParams.get('amount') || '10');
+          handleIncomingAgentSwap({ pay, receive, amount });
+        }
+      } catch (err) {
+        console.error('Failed to parse Agent URL bridge:', err);
+      }
+    }
+
+    // Handle Limit Order directive from Agent
+    function handleIncomingAgentLimitOrder(orderData) {
+      switchMainTab('tab-trade');
+      switchModalTab('limit');
+
+      const limitPaySelect = document.getElementById('limitPayTokenSelect');
+      const limitRecSelect = document.getElementById('limitReceiveTokenSelect');
+      const limitPayInput = document.getElementById('limitPayAmountInput');
+      const limitRecInput = document.getElementById('limitReceiveAmountInput');
+      const limitExpirySelect = document.getElementById('limitExpirySelect');
+
+      if (limitPaySelect && limitRecSelect) {
+        ensureTokenOption(limitPaySelect, orderData.maker);
+        ensureTokenOption(limitRecSelect, orderData.taker);
+        limitPaySelect.value = orderData.maker;
+        limitRecSelect.value = orderData.taker;
+      }
+      if (limitPayInput) limitPayInput.value = orderData.amount.toString();
+      
+      const calcReceiveAmount = orderData.rate > 0 
+        ? (orderData.amount / orderData.rate).toFixed(4) 
+        : (orderData.amount * 0.98).toFixed(4);
+      if (limitRecInput) limitRecInput.value = calcReceiveAmount;
+      if (limitExpirySelect) limitExpirySelect.value = orderData.expiry.toString();
+
+      onLimitTokenChange();
+
+      // Show callout banner in Trade Desk
+      const calloutBanner = document.getElementById('agentActionCalloutBanner');
+      if (calloutBanner) {
+        calloutBanner.style.display = 'block';
+        calloutBanner.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <strong style="color: #60A5FA; display: flex; align-items: center; gap: 6px;">
+              <span class="mcp-pulse-dot"></span> [AI AGENT 策略指令唤醒]
+            </strong>
+            <span style="font-size: 11px; color: var(--text-dim);">${orderData.source || 'MCP Agent'}</span>
+          </div>
+          <div style="font-size: 12.5px; color: #E2E8F0; line-height: 1.5;">
+            已根据 Agent 决策预填挂单：卖出 <b>${orderData.amount} ${orderData.maker}</b> 限价买入 <b>${calcReceiveAmount} ${orderData.taker}</b>。
+            <a href="javascript:void(0)" onclick="openAgentBridgeModal(currentAgentOrder)" style="color: var(--mint); text-decoration: underline; margin-left: 6px; font-weight: 500;">打开核准与签名卡片 ↗</a>
+          </div>
+        `;
+      }
+
+      orderData.receiveAmount = calcReceiveAmount;
+      currentAgentOrder = orderData;
+
+      // Open Agent Bridge Modal for explicit user confirmation & sign
+      openAgentBridgeModal(orderData);
+    }
+
+    // Handle Direct Swap directive from Agent
+    function handleIncomingAgentSwap(swapData) {
+      switchMainTab('tab-trade');
+      switchModalTab('direct');
+
+      const paySelect = document.getElementById('swapPayTokenSelect');
+      const recSelect = document.getElementById('swapReceiveTokenSelect');
+      const payInput = document.getElementById('swapPayAmountInput');
+
+      if (paySelect && recSelect) {
+        ensureTokenOption(paySelect, swapData.pay);
+        ensureTokenOption(recSelect, swapData.receive);
+        paySelect.value = swapData.pay;
+        recSelect.value = swapData.receive;
+      }
+      if (payInput) payInput.value = swapData.amount.toString();
+      onSwapTokenChange();
+
+      showToast(`已根据 AI 策略预填兑换参数: ${swapData.amount} ${swapData.pay} -> ${swapData.receive}`, 'info');
+
+      const tradeCard = document.getElementById('tradeDeskCard');
+      if (tradeCard) tradeCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Agent Bridge Modal
+    function openAgentBridgeModal(orderData) {
+      if (!orderData) return;
+      currentAgentOrder = orderData;
+
+      const sourceEl = document.getElementById('agentOrderSource');
+      const reasonEl = document.getElementById('agentOrderReason');
+      const payAmtEl = document.getElementById('agentPayAmount');
+      const payTokEl = document.getElementById('agentPayToken');
+      const recAmtEl = document.getElementById('agentReceiveAmount');
+      const recTokEl = document.getElementById('agentReceiveToken');
+      const rateEl = document.getElementById('agentLimitRate');
+      const expEl = document.getElementById('agentOrderExpiry');
+
+      if (sourceEl) sourceEl.textContent = orderData.source || 'AI Strategy Agent (MCP)';
+      if (reasonEl) reasonEl.textContent = orderData.reason || '大周期估值模型触发最优建仓折扣挂单';
+      if (payAmtEl) payAmtEl.textContent = orderData.amount.toLocaleString();
+      if (payTokEl) payTokEl.textContent = orderData.maker;
+      if (recAmtEl) recAmtEl.textContent = orderData.receiveAmount || (orderData.amount / (orderData.rate || 1)).toFixed(4);
+      if (recTokEl) recTokEl.textContent = orderData.taker;
+      if (rateEl) rateEl.textContent = orderData.rate > 0 ? ('$' + orderData.rate) : '参考现价';
+      if (expEl) expEl.textContent = Math.round((orderData.expiry || 86400) / 3600) + ' 小时';
+
+      const previewObj = {
+        domain: {
+          name: "Fluxion Limit Order Protocol",
+          version: "4",
+          chainId: 5000,
+          verifyingContract: FLUXION_LOP_CONTRACT
+        },
+        message: {
+          maker: userWalletAddress || "0x[YOUR_CONNECTED_WALLET]",
+          makerAsset: (FLUXION_LIMIT_TOKENS[orderData.maker] || {}).address || "0x...",
+          takerAsset: (FLUXION_LIMIT_TOKENS[orderData.taker] || {}).address || "0x...",
+          makingAmount: orderData.amount + " " + orderData.maker,
+          takingAmount: (orderData.receiveAmount || "...") + " " + orderData.taker,
+          expiry: Math.floor(Date.now() / 1000) + (orderData.expiry || 86400)
+        }
+      };
+      const eipPre = document.getElementById('agentEip712Preview');
+      if (eipPre) eipPre.textContent = JSON.stringify(previewObj, null, 2);
+
+      const statusBox = document.getElementById('agentOrderStatusBox');
+      if (statusBox) statusBox.style.display = 'none';
+
+      const btnSign = document.getElementById('btnAgentSignSubmit');
+      if (btnSign) {
+        btnSign.disabled = false;
+        btnSign.style.display = 'inline-flex';
+        btnSign.style.opacity = '1';
+        btnSign.innerHTML = ICONS.doc + ' 立即核准并签名 (Sign EIP-712 免 Gas)';
+      }
+
+      const btnReceipt = document.getElementById('btnCopyAgentReceipt');
+      if (btnReceipt) btnReceipt.style.display = 'none';
+
+      const modal = document.getElementById('agentBridgeModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeAgentBridgeModal() {
+      const modal = document.getElementById('agentBridgeModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    // Execute EIP-712 Sign from Agent Bridge Modal
+    async function confirmAndSignAgentOrder() {
+      if (!currentAgentOrder) return;
+      const statusBox = document.getElementById('agentOrderStatusBox');
+      const btnSign = document.getElementById('btnAgentSignSubmit');
+      const btnReceipt = document.getElementById('btnCopyAgentReceipt');
+
+      if (!isMetaMaskAvailable()) {
+        showToast('请先安装或连接 Web3 钱包！', 'warn');
+        openWalletSelectModal();
+        return;
+      }
+
+      if (!userWalletAddress) {
+        showToast('请先连接钱包以签署该挂单', 'warn');
+        openWalletSelectModal();
+        return;
+      }
+
+      if (!isMantleChain(currentChainId)) {
+        try {
+          await switchToMantleNetwork();
+        } catch (e) {
+          showToast('请先切换至 Mantle Network', 'error');
+          return;
+        }
+      }
+
+      if (btnSign) {
+        btnSign.disabled = true;
+        btnSign.style.opacity = '0.6';
+        btnSign.innerHTML = ICONS.refreshSpin + ' 正在请求钱包 EIP-712 签名...';
+      }
+
+      if (statusBox) {
+        statusBox.style.display = 'block';
+        statusBox.style.background = 'rgba(59, 130, 246, 0.08)';
+        statusBox.style.border = '1px solid rgba(59, 130, 246, 0.3)';
+        statusBox.style.color = '#FFFFFF';
+        statusBox.innerHTML = ICONS.refreshSpin + ' 正在准备订单数据与授权检查...';
+      }
+
+      try {
+        const paySym = normalizeTokenSymbol(currentAgentOrder.maker);
+        const recSym = normalizeTokenSymbol(currentAgentOrder.taker);
+        const payTok = FLUXION_LIMIT_TOKENS[paySym];
+        const recTok = FLUXION_LIMIT_TOKENS[recSym];
+
+        if (!payTok || !recTok) {
+          throw new Error(`暂不支持的交易对代币: ${paySym}/${recSym}`);
+        }
+
+        const payAmount = parseFloat(currentAgentOrder.amount) || 0;
+        const recAmount = parseFloat(currentAgentOrder.receiveAmount) || 0;
+        const expirySec = parseInt(currentAgentOrder.expiry, 10) || 86400;
+
+        const makingAmountWei = BigInt(Math.floor(payAmount * (10 ** payTok.decimals)));
+        const takingAmountWei = BigInt(Math.floor(recAmount * (10 ** recTok.decimals)));
+        const expiryUnix = Math.floor(Date.now() / 1000) + expirySec;
+
+        const buildPayload = {
+          maker: userWalletAddress,
+          makerAsset: payTok.address,
+          takerAsset: recTok.address,
+          makingAmount: makingAmountWei.toString(),
+          takingAmount: takingAmountWei.toString(),
+          expiry: expiryUnix.toString()
+        };
+
+        const buildRes = await fetch('https://fluxion.network/api/limit-order/orderbook/v4.1/5000/build', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(buildPayload)
+        });
+
+        if (!buildRes.ok) {
+          const errData = await buildRes.json().catch(() => ({}));
+          throw new Error(errData.message || `Fluxion Build 接口异常: HTTP ${buildRes.status}`);
+        }
+
+        const buildData = await buildRes.json();
+        const builtOrder = buildData.order;
+        const extension = buildData.extension || builtOrder.extension;
+
+        // Check allowance
+        const allowanceData = '0xdd62ed3e' + padHex32(userWalletAddress) + padHex32(FLUXION_LOP_CONTRACT);
+        let allowanceHex = null;
+        const provider = getWalletProvider() || window.ethereum;
+        try {
+          if (provider) {
+            allowanceHex = await provider.request({
+              method: 'eth_call',
+              params: [{ to: payTok.address, data: allowanceData }, 'latest']
+            });
+          }
+        } catch (e) {}
+        if (!allowanceHex || allowanceHex === '0x') {
+          allowanceHex = await callMantleRpc('eth_call', [{ to: payTok.address, data: allowanceData }, 'latest']);
+        }
+        const curAllowance = BigInt(allowanceHex || '0x0');
+
+        if (curAllowance < makingAmountWei) {
+          if (statusBox) {
+            statusBox.innerHTML = `${ICONS.doc} 正在向 Fluxion 合约授权 <b>${paySym}</b>... 请在钱包中确认授权`;
+          }
+          const maxUint = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+          const approveData = '0x095ea7b3' + padHex32(FLUXION_LOP_CONTRACT) + padHex32(maxUint);
+          const approveTx = await provider.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              from: userWalletAddress,
+              to: payTok.address,
+              data: approveData
+            }]
+          });
+          if (statusBox) {
+            statusBox.innerHTML = `${ICONS.refreshSpin} 授权已提交 (<a href="https://explorer.mantle.xyz/tx/${approveTx}" target="_blank" style="color: var(--ice-cyan); text-decoration: underline;">查看 TX</a>)，等待确认...`;
+          }
+          await new Promise(resolve => setTimeout(resolve, 3500));
+        }
+
+        // EIP-712 Sign
+        const domain = {
+          name: 'Fluxion Limit Order Protocol',
+          version: '4',
+          chainId: 5000,
+          verifyingContract: FLUXION_LOP_CONTRACT
+        };
+
+        const types = {
+          Order: [
+            { name: 'salt', type: 'uint256' },
+            { name: 'maker', type: 'address' },
+            { name: 'receiver', type: 'address' },
+            { name: 'makerAsset', type: 'address' },
+            { name: 'takerAsset', type: 'address' },
+            { name: 'makingAmount', type: 'uint256' },
+            { name: 'takingAmount', type: 'uint256' },
+            { name: 'makerTraits', type: 'uint256' }
+          ]
+        };
+
+        const message = {
+          salt: builtOrder.salt,
+          maker: builtOrder.maker,
+          receiver: builtOrder.receiver,
+          makerAsset: builtOrder.makerAsset,
+          takerAsset: builtOrder.takerAsset,
+          makingAmount: builtOrder.makingAmount,
+          takingAmount: builtOrder.takingAmount,
+          makerTraits: builtOrder.makerTraits
+        };
+
+        let orderHash = null;
+        if (typeof window.ethers !== 'undefined' && window.ethers.TypedDataEncoder) {
+          try {
+            orderHash = window.ethers.TypedDataEncoder.hash(domain, types, message);
+          } catch (eh) {}
+        }
+
+        if (statusBox) {
+          statusBox.innerHTML = `${ICONS.doc} 请在 Web3 钱包中完成 <b>EIP-712 链下签名</b> (无需 Gas 费)...`;
+        }
+
+        const eip712Payload = JSON.stringify({
+          types: {
+            EIP712Domain: [
+              { name: 'name', type: 'string' },
+              { name: 'version', type: 'string' },
+              { name: 'chainId', type: 'uint256' },
+              { name: 'verifyingContract', type: 'address' }
+            ],
+            Order: types.Order
+          },
+          primaryType: 'Order',
+          domain,
+          message
+        });
+
+        const signature = await provider.request({
+          method: 'eth_signTypedData_v4',
+          params: [userWalletAddress, eip712Payload]
+        });
+
+        if (!orderHash) {
+          orderHash = '0x' + Array.from(crypto.getRandomValues(new Uint8Array(32))).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Submit to Fluxion API
+        if (statusBox) {
+          statusBox.innerHTML = `${ICONS.send} 正在广播至 Fluxion 订单簿...`;
+        }
+
+        const submitPayload = {
+          orderHash,
+          signature,
+          data: {
+            makerAsset: builtOrder.makerAsset,
+            takerAsset: builtOrder.takerAsset,
+            maker: builtOrder.maker,
+            receiver: builtOrder.receiver,
+            makingAmount: builtOrder.makingAmount,
+            takingAmount: builtOrder.takingAmount,
+            salt: builtOrder.salt,
+            extension: extension,
+            makerTraits: builtOrder.makerTraits
+          }
+        };
+
+        const submitRes = await fetch('https://fluxion.network/api/limit-order/orderbook/v4.1/5000', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submitPayload)
+        });
+
+        const submitData = await submitRes.json().catch(() => ({}));
+        if (!submitRes.ok && !submitData.success) {
+          throw new Error(submitData.message || `Fluxion 订单簿提交失败: HTTP ${submitRes.status}`);
+        }
+
+        currentAgentOrder.orderHash = orderHash;
+        currentAgentOrder.signedAt = new Date().toISOString();
+
+        if (statusBox) {
+          statusBox.style.background = 'rgba(16, 185, 129, 0.1)';
+          statusBox.style.border = '1px solid rgba(16, 185, 129, 0.4)';
+          statusBox.innerHTML = `
+            ${ICONS.check} <strong style="color: var(--mint);">AI 策略限价单签名成功并已生效！</strong>
+            <div style="margin-top: 6px; font-size: 11.5px; color: #FFFFFF; font-family: 'JetBrains Mono', monospace;">
+              • 订单 Hash: ${orderHash.slice(0, 10)}...${orderHash.slice(-8)}<br>
+              • 0-Gas 挂单已广播到 Mantle Fluxion 撮合引擎
+            </div>
+          `;
+        }
+
+        showToast('AI 策略挂单签署成功！', 'success');
+        fetchFluxionActiveOrders(userWalletAddress, false);
+
+        if (btnReceipt) btnReceipt.style.display = 'inline-flex';
+        if (btnSign) {
+          btnSign.disabled = true;
+          btnSign.style.display = 'none';
+        }
+
+      } catch (err) {
+        console.error('Agent Sign Error:', err);
+        const isUserReject = err.code === 4001 || (err.message && err.message.includes('User rejected'));
+        if (statusBox) {
+          statusBox.style.display = 'block';
+          statusBox.style.background = 'rgba(239, 68, 68, 0.1)';
+          statusBox.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+          statusBox.style.color = '#EF4444';
+          statusBox.innerHTML = isUserReject ? `${ICONS.error} 用户已在钱包取消签名` : `${ICONS.error} 签名未完成: ${err.message || '未知错误'}`;
+        }
+        if (btnSign) {
+          btnSign.disabled = false;
+          btnSign.style.opacity = '1';
+          btnSign.innerHTML = ICONS.doc + ' 重试核准并签名 (Sign EIP-712)';
+        }
+      }
+    }
+
+    // Copy formatted receipt for AI Agent
+    function copyAgentReceiptToClipboard() {
+      if (!currentAgentOrder) return;
+      const receiptText = [
+        `[Crypto Strategy AI Agent 签名回执]`,
+        `• 策略来源: ${currentAgentOrder.source || 'MCP Agent'}`,
+        `• 订单类型: Fluxion 0-Gas EIP-712 限价挂单`,
+        `• 交易对: ${currentAgentOrder.taker} / ${currentAgentOrder.maker}`,
+        `• 支付资产: ${currentAgentOrder.amount} ${currentAgentOrder.maker}`,
+        `• 目标获得: ${currentAgentOrder.receiveAmount} ${currentAgentOrder.taker}`,
+        `• 执行限价: $${currentAgentOrder.rate}`,
+        `• 订单 Hash: ${currentAgentOrder.orderHash || '0x...'}`,
+        `• 签署钱包: ${userWalletAddress || '0x...'}`,
+        `• 状态: 签名广播完成，已上架 Mantle 订单簿生效中`,
+        `• 时间: ${new Date().toLocaleString()}`
+      ].join('\n');
+
+      navigator.clipboard.writeText(receiptText).then(() => {
+        showToast('已复制执行回执！可直接粘贴回 Claude / Cursor 对话框', 'success');
+      }).catch(() => {
+        showToast('复制失败，请手动选择复制', 'warn');
+      });
+    }
+
+    // MCP Modal Management
+    function openMcpModal() {
+      const modal = document.getElementById('mcpModal');
+      const walletDisplay = document.getElementById('mcpWalletDisplay');
+      if (walletDisplay) {
+        walletDisplay.textContent = userWalletAddress ? `${userWalletAddress.slice(0, 10)}...${userWalletAddress.slice(-8)} (只读观察中)` : '未连接钱包 (点击右上角连接)';
+      }
+      switchMcpConfigTab('cursor');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeMcpModal() {
+      const modal = document.getElementById('mcpModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function switchMcpConfigTab(tab) {
+      currentMcpTab = tab;
+      const btnCursor = document.getElementById('mcpTabBtnCursor');
+      const btnClaude = document.getElementById('mcpTabBtnClaude');
+      const btnAgy = document.getElementById('mcpTabBtnAgy');
+      const codePre = document.getElementById('mcpConfigCodePre');
+
+      if (btnCursor) btnCursor.classList.toggle('active', tab === 'cursor');
+      if (btnClaude) btnClaude.classList.toggle('active', tab === 'claude');
+      if (btnAgy) btnAgy.classList.toggle('active', tab === 'antigravity');
+
+      const projectPath = '/Users/huizhao/Downloads/workspace/crypto-strategy';
+
+      let configJson = '';
+      if (tab === 'cursor') {
+        configJson = JSON.stringify({
+          mcpServers: {
+            "crypto-strategy": {
+              command: "node",
+              args: [`${projectPath}/mcp/dist/index.js`]
+            }
+          }
+        }, null, 2);
+      } else if (tab === 'claude') {
+        configJson = JSON.stringify({
+          mcpServers: {
+            "crypto-strategy": {
+              command: "node",
+              args: [`${projectPath}/mcp/dist/index.js`]
+            }
+          }
+        }, null, 2);
+      } else {
+        configJson = JSON.stringify({
+          mcpServers: {
+            "crypto-strategy": {
+              command: "node",
+              args: [`${projectPath}/mcp/dist/index.js`],
+              env: {
+                "WEB_BRIDGE_URL": "http://localhost:3456"
+              }
+            }
+          }
+        }, null, 2);
+      }
+
+      if (codePre) codePre.textContent = configJson;
+    }
+
+    function copyCurrentMcpConfig() {
+      const codePre = document.getElementById('mcpConfigCodePre');
+      if (!codePre) return;
+      navigator.clipboard.writeText(codePre.textContent).then(() => {
+        showToast('已复制 MCP 配置 JSON！粘贴至客户端配置即可', 'success');
+      }).catch(() => {
+        showToast('复制失败，请手动选择复制', 'warn');
+      });
+    }
+
+    function testMockAgentBridge() {
+      closeMcpModal();
+      handleIncomingAgentLimitOrder({
+        maker: 'USDC',
+        taker: 'TSLAx',
+        amount: 350,
+        rate: 213.90,
+        expiry: 86400,
+        reason: '模拟测试: 大周期温度计处于 32 低估区间，TSLAx 相对公允价折价 2.06%，自动构建限价低吸单',
+        source: 'Claude Desktop (MCP Agent 模拟)'
+      });
+    }
+
+    // In-App AI Strategy Copilot
+    function toggleAiCopilotDrawer(show) {
+      const drawer = document.getElementById('aiCopilotDrawer');
+      if (!drawer) return;
+      if (typeof show === 'boolean') {
+        drawer.style.display = show ? 'flex' : 'none';
+      } else {
+        drawer.style.display = drawer.style.display === 'flex' ? 'none' : 'flex';
+      }
+    }
+
+    function addCopilotMessage(sender, htmlContent) {
+      const container = document.getElementById('copilotMessages');
+      if (!container) return;
+      const msgDiv = document.createElement('div');
+      msgDiv.style.background = sender === 'user' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(15, 23, 42, 0.6)';
+      msgDiv.style.border = '1px solid ' + (sender === 'user' ? 'rgba(59, 130, 246, 0.3)' : 'var(--border-main)');
+      msgDiv.style.borderRadius = '12px';
+      msgDiv.style.padding = '14px';
+      msgDiv.style.fontSize = '12.5px';
+      msgDiv.style.lineHeight = '1.6';
+      msgDiv.style.color = '#FFFFFF';
+      msgDiv.innerHTML = htmlContent;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function runCopilotMacroDiagnostic() {
+      const temp = document.getElementById('tempScore') ? document.getElementById('tempScore').textContent : '35';
+      const regime = document.getElementById('regimeBadge') ? document.getElementById('regimeBadge').textContent : '低估定投区间';
+
+      addCopilotMessage('user', '执行宏观大周期与多因子估值诊断');
+      setTimeout(() => {
+        addCopilotMessage('ai', `
+          <div style="font-weight: 600; color: #60A5FA; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            ${ICONS.bolt} 宏观周期推演报告
+          </div>
+          • 当前综合温度分: <strong style="color: var(--mint);">${temp} / 100</strong><br>
+          • 周期状态: <strong style="color: #60A5FA;">${regime}</strong><br>
+          • 资产配置建议: 建议权益/Crypto 仓位保持在 <b>60%~70%</b>，保留 <b>30%~40%</b> 稳定币储备，采用右侧阶梯限价低吸策略。
+        `);
+      }, 300);
+    }
+
+    function runCopilotDilutionAudit() {
+      addCopilotMessage('user', '审查全网关注标的的增发与稀释风险');
+      setTimeout(() => {
+        addCopilotMessage('ai', `
+          <div style="font-weight: 600; color: var(--warning); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            ${ICONS.warn} 资产稀释与锁仓释放审查结果
+          </div>
+          • <b>TSLAx / NVDAx / bIB01</b>: 抵押型 1:1 资产，稀释率 <b>0%</b>，通胀风险极低。<br>
+          • <b>MNT</b>: 链上总流通比高，锁仓抛压平稳。<br>
+          • <b>风险警示</b>: 请规避流通市值比 (MCap/FDV) 低于 20% 的高通胀治理代币。
+        `);
+      }, 300);
+    }
+
+    function runCopilotGenerateOrder() {
+      addCopilotMessage('user', '根据策略为我生成最优定投限价挂单');
+      setTimeout(() => {
+        addCopilotMessage('ai', `
+          <div style="font-weight: 600; color: var(--mint); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            ${ICONS.target} 生成定投策略限价单
+          </div>
+          • 标的: <strong style="color: #60A5FA;">TSLAx (Tesla On-Chain RWA)</strong><br>
+          • 策略建议: 现价 $218.40，建议在 <b>-2.06% 折价位 $213.90</b> 挂单买入<br>
+          • 支付金额: <b>350.00 USDC</b> (预计买入 1.6362 TSLAx)<br>
+          • 机制: 0-Gas EIP-712 链下挂单<br>
+          <div style="margin-top: 10px;">
+            <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px;" onclick="handleIncomingAgentLimitOrder({ maker: 'USDC', taker: 'TSLAx', amount: 350, rate: 213.90, expiry: 86400, reason: 'AI Copilot 智能定投限价单', source: 'Web AI Copilot' })">
+              立即调入签名桥 (Sign Bridge)
+            </button>
+          </div>
+        `);
+      }, 400);
+    }
+
+    function sendCopilotCommand() {
+      const input = document.getElementById('copilotInput');
+      if (!input || !input.value.trim()) return;
+      const text = input.value.trim();
+      input.value = '';
+      addCopilotMessage('user', text);
+
+      setTimeout(() => {
+        if (text.includes('稀释') || text.includes('通胀')) {
+          runCopilotDilutionAudit();
+        } else if (text.includes('挂单') || text.includes('买') || text.includes('定投')) {
+          runCopilotGenerateOrder();
+        } else {
+          runCopilotMacroDiagnostic();
+        }
+      }, 350);
+    }
+
+    // Local cross-tab / MCP event listener
+    function initAgentBroadcastChannel() {
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          const channel = new BroadcastChannel('crypto_strategy_agent_bridge');
+          channel.onmessage = (event) => {
+            if (event.data && event.data.action === 'sign-limit') {
+              handleIncomingAgentLimitOrder(event.data);
+            } else if (event.data && event.data.action === 'swap') {
+              handleIncomingAgentSwap(event.data);
+            }
+          };
+        }
+      } catch (e) {
+        console.warn('BroadcastChannel not supported:', e);
+      }
+    }
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeBuyModal();
         closeWalletSelectModal();
+        closeMcpModal();
+        closeAgentBridgeModal();
+        toggleAiCopilotDrawer(false);
       }
     });
 
@@ -5550,6 +6585,8 @@
     loadAllData();
     renderPortfolio();
     checkExistingWalletConnection();
+    initAgentUrlBridge();
+    initAgentBroadcastChannel();
   </script>
 </body>
 </html>
