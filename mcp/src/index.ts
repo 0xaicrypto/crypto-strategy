@@ -17,8 +17,8 @@ import {
   Tool,
 } from "@modelcontextprotocol/sdk/types.js";
 
-// Web Bridge Base URL (defaults to local dashboard)
-const WEB_BRIDGE_URL = process.env.WEB_BRIDGE_URL || "http://localhost:3456";
+// Web Bridge Base URL (defaults to production Alphanalyzor dashboard)
+const WEB_BRIDGE_URL = process.env.WEB_BRIDGE_URL || "https://alphanalyzor.trade";
 
 // Supported Fluxion Limit Order Tokens
 const SUPPORTED_TOKENS: Record<string, { symbol: string; decimals: number; address: string; type: string }> = {

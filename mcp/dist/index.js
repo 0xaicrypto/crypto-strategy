@@ -14307,7 +14307,7 @@ var StdioServerTransport = class {
 };
 
 // src/index.ts
-var WEB_BRIDGE_URL = process.env.WEB_BRIDGE_URL || "http://localhost:3456";
+var WEB_BRIDGE_URL = process.env.WEB_BRIDGE_URL || "https://alphanalyzor.trade";
 async function fetchLocalApi(endpoint) {
   try {
     const controller = new AbortController();

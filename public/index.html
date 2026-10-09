@@ -4138,6 +4138,15 @@
         const isMantle = isMantleChain(currentChainId);
         showToast(`钱包连接成功: ${formatAddress(address)} (${userWalletBalance} ${isMantle ? 'MNT' : 'ETH'})`, 'success');
       }
+
+      // If Agent Bridge Modal is active or pending, automatically update maker address and sign states
+      if (typeof currentAgentOrder !== 'undefined' && currentAgentOrder) {
+        const bridgeModal = document.getElementById('agentBridgeModal');
+        if (bridgeModal && bridgeModal.style.display === 'flex') {
+          openAgentBridgeModal(currentAgentOrder);
+          showToast('意图挂单参数已就绪，请核准并签名', 'success');
+        }
+      }
     }
 
     function disconnectWallet() {
@@ -6076,8 +6085,21 @@
       const rateEl = document.getElementById('agentLimitRate');
       const expEl = document.getElementById('agentOrderExpiry');
 
-      if (sourceEl) sourceEl.textContent = orderData.source || 'AI Strategy Agent (MCP)';
-      if (reasonEl) reasonEl.textContent = orderData.reason || '大周期估值模型触发最优建仓折扣挂单';
+      const isIronMac = orderData.source && (orderData.source.toLowerCase().includes('ironmac') || orderData.source.toLowerCase().includes('ironconsole'));
+      if (sourceEl) {
+        if (isIronMac) {
+          sourceEl.innerHTML = `<span style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px;">⚡ IRONMAC SECURE CO-SIGN</span>`;
+        } else {
+          sourceEl.textContent = orderData.source || 'AI Strategy Agent (MCP)';
+        }
+      }
+      if (reasonEl) {
+        if (isIronMac) {
+          reasonEl.innerHTML = `<div>${orderData.reason || '大周期估值模型触发最优建仓折扣挂单'}</div><div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px;"><span style="color: #10B981; font-family: monospace;">✓ EIP-55 校验和通过</span><span style="color: #10B981; font-family: monospace;">✓ 稀释与通胀穿透安全</span><span style="color: #10B981; font-family: monospace;">✓ 0-Gas 离线保护</span></div>`;
+        } else {
+          reasonEl.textContent = orderData.reason || '大周期估值模型触发最优建仓折扣挂单';
+        }
+      }
       if (payAmtEl) payAmtEl.textContent = orderData.amount.toLocaleString();
       if (payTokEl) payTokEl.textContent = orderData.maker;
       if (recAmtEl) recAmtEl.textContent = orderData.receiveAmount || (orderData.amount / (orderData.rate || 1)).toFixed(4);
@@ -6112,7 +6134,13 @@
         btnSign.disabled = false;
         btnSign.style.display = 'inline-flex';
         btnSign.style.opacity = '1';
-        btnSign.innerHTML = ICONS.doc + ' 立即核准并签名 (Sign EIP-712 免 Gas)';
+        if (!userWalletAddress) {
+          btnSign.innerHTML = ICONS.wallet + ' 连接钱包以核准签名 (Connect & Sign)';
+        } else if (!isMantleChain(currentChainId)) {
+          btnSign.innerHTML = ICONS.bolt + ' 切换至 Mantle Network 并签名 (Sign EIP-712)';
+        } else {
+          btnSign.innerHTML = ICONS.doc + ' 立即核准并签名 (Sign EIP-712 免 Gas)';
+        }
       }
 
       const btnReceipt = document.getElementById('btnCopyAgentReceipt');
@@ -6407,7 +6435,10 @@
       ].join('\n');
 
       navigator.clipboard.writeText(receiptText).then(() => {
-        showToast('已复制执行回执！可直接粘贴回 Claude / Cursor 对话框', 'success');
+        const targetPrompt = (currentAgentOrder && currentAgentOrder.source && (currentAgentOrder.source.toLowerCase().includes('ironmac') || currentAgentOrder.source.toLowerCase().includes('ironconsole')))
+          ? 'IronConsole / Antigravity'
+          : 'Claude / Cursor / 终端';
+        showToast(`已复制执行回执！可直接粘贴回 ${targetPrompt}`, 'success');
       }).catch(() => {
         showToast('复制失败，请手动选择复制', 'warn');
       });
